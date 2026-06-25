@@ -1,7 +1,5 @@
-import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcrypt';
-
-const prisma = new PrismaClient();
+import prisma from '../src/lib/prisma';
 
 async function seed(): Promise<void> {
   await prisma.dailySalesReport.deleteMany();
