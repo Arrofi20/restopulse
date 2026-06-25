@@ -1,0 +1,87 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model OwnerAccount {
+  id            String   @id @default(uuid())
+  username      String   @unique
+  password_hash String
+  outlet_id     String
+  created_at    DateTime @default(now())
+
+  outlet Outlet @relation(fields: [outlet_id], references: [id])
+}
+
+model Outlet {
+  id         String   @id @default(uuid())
+  name       String
+  timezone   String   @default("Asia/Jakarta")
+  created_at DateTime @default(now())
+
+  owner_accounts OwnerAccount[]
+  daily_sales    DailySales[]
+  sales_trends   SalesTrend[]
+  daily_reports  DailySalesReport[]
+}
+
+model DailySales {
+  id             String   @id @default(uuid())
+  date           DateTime
+  revenue        Float
+  top_menu_items String   // Stored as JSON string for SQLite compatibility
+  outlet_id      String
+  data_source    String   @default("REAL")
+  created_at     DateTime @default(now())
+  updated_at     DateTime @updatedAt
+
+  outlet Outlet @relation(fields: [outlet_id], references: [id])
+
+  @@unique([outlet_id, date])
+  @@index([outlet_id, date])
+}
+
+model SalesTrend {
+  id              String   @id @default(uuid())
+  date            DateTime
+  revenue         Float
+  menu_popularity String   // Stored as JSON string for SQLite compatibility
+  outlet_id       String
+  created_at      DateTime @default(now())
+  updated_at      DateTime @updatedAt
+
+  outlet Outlet @relation(fields: [outlet_id], references: [id])
+
+  @@index([outlet_id, date])
+}
+
+model StatusLog {
+  id          String  @id @default(uuid())
+  action      String
+  entity_type String
+  entity_id   String
+  old_value   String? // Stored as JSON string for SQLite compatibility
+  new_value   String? // Stored as JSON string for SQLite compatibility
+  actor_id    String
+  created_at  DateTime @default(now())
+
+  @@index([entity_type, entity_id])
+}
+
+model DailySalesReport {
+  id                 String   @id @default(uuid())
+  period_start       DateTime
+  period_end         DateTime
+  total_revenue      Float
+  transaction_count  Int
+  top_items          String   // Stored as JSON string for SQLite compatibility
+  generated_at       DateTime @default(now())
+  outlet_id          String
+
+  outlet Outlet @relation(fields: [outlet_id], references: [id])
+
+  @@index([outlet_id, period_start, period_end])
+}
