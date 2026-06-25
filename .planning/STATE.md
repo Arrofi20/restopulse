@@ -1,6 +1,6 @@
 ---
 gsd_state_version: '1.0'
-status: executing
+status: shipped
 progress:
   total_phases: 5
   completed_phases: 1
