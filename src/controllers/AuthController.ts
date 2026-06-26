@@ -2,6 +2,8 @@ import { Request, Response } from 'express';
 import { AuthService } from '../services/AuthService';
 import { OwnerRepository } from '../repositories/OwnerRepository';
 import { prisma } from '../lib/prisma';
+import { ZodError } from 'zod';
+import { registerSchema, loginSchema } from '../validation/auth.schema';
 
 export class AuthController {
   private authService: AuthService;
@@ -16,7 +18,7 @@ export class AuthController {
 
   async register(req: Request, res: Response) {
     try {
-      const { username, password } = req.body;
+      const { username, password } = registerSchema.parse(req.body);
 
       let outlet = await prisma.outlet.findFirst();
       if (!outlet) {
@@ -39,16 +41,27 @@ export class AuthController {
         },
       });
     } catch (error: any) {
-      res.status(400).json({
-        success: false,
-        error: { code: 'REGISTER_ERROR', message: error.message },
-      });
+      if (error instanceof ZodError) {
+        res.status(400).json({
+          success: false,
+          error: {
+            code: 'VALIDATION_ERROR',
+            message: 'Invalid request data',
+            details: error.issues,
+          },
+        });
+      } else {
+        res.status(400).json({
+          success: false,
+          error: { code: 'REGISTER_ERROR', message: error.message },
+        });
+      }
     }
   }
 
   async login(req: Request, res: Response) {
     try {
-      const { username, password } = req.body;
+      const { username, password } = loginSchema.parse(req.body);
       const { owner, token } = await this.authService.login(username, password);
 
       res.status(200).json({
@@ -59,10 +72,21 @@ export class AuthController {
         },
       });
     } catch (error: any) {
-      res.status(401).json({
-        success: false,
-        error: { code: 'LOGIN_ERROR', message: error.message },
-      });
+      if (error instanceof ZodError) {
+        res.status(400).json({
+          success: false,
+          error: {
+            code: 'VALIDATION_ERROR',
+            message: 'Invalid request data',
+            details: error.issues,
+          },
+        });
+      } else {
+        res.status(401).json({
+          success: false,
+          error: { code: 'LOGIN_ERROR', message: error.message },
+        });
+      }
     }
   }
 
