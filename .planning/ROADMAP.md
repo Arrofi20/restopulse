@@ -45,11 +45,11 @@ Plans:
 **Plans**: 5 plans
 
 Plans:
-- [ ] 02-01: Scaffold frontend (React 19 + Vite + Tailwind CSS + dark mode theme)
-- [ ] 02-02: Build dashboard layout, navigation, dan responsive grid
-- [ ] 02-03: Implementasi Line Chart tren omset harian (Chart.js, agregasi per tanggal, format Rupiah)
-- [ ] 02-04: Implementasi Pie Chart menu terlaris (Chart.js, agregasi per menu, limit top 10)
-- [ ] 02-05: Implementasi tooltip interaktif dan real-time data refresh (fetch polling atau SSE)
+- [ ] 02-01: Backend API — CORS fix + GET /api/dashboard endpoint (SalesTrend data + summary stats)
+- [ ] 02-02: Frontend scaffold — Vite + React 19 + Tailwind v4 + Chart.js + utilities + API client
+- [ ] 02-03: Auth flow + Login page + App shell + layout (Sidebar, Header, DashboardLayout)
+- [ ] 02-04: Dashboard data layer — usePolling, useDashboard, DateFilter, SummaryCards, DashboardPage shell
+- [ ] 02-05: Chart components — LineChart (decline detection), PieChart (top-10 tooltips), EmptyState, Spinner, RefreshButton
 
 ### Phase 3: E-Report Engine
 **Goal**: Sistem dapat menyaring data keuangan berdasarkan rentang tanggal dan mengekspor laporan ke PDF serta CSV.
@@ -111,7 +111,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Foundation | 0/5 | Not started | - |
-| 2. Dashboard | 0/5 | Not started | - |
+| 2. Dashboard | 0/5 | Planned | - |
 | 3. E-Report Engine | 0/4 | Not started | - |
 | 4. Quality Assurance | 0/5 | Not started | - |
 | 5. Deployment & Demo | 0/4 | Not started | - |
