@@ -5,16 +5,16 @@ milestone_name: milestone
 current_phase: 02
 current_phase_name: dashboard
 status: executing
-stopped_at: Completed 02-03-PLAN.md (Auth flow + Login + Layout)
-last_updated: "2026-06-26T03:40:48.104Z"
+stopped_at: Completed 02-04-PLAN.md (Dashboard data layer)
+last_updated: "2026-06-26T03:53:11.709Z"
 last_activity: 2026-06-26
 last_activity_desc: Phase 02 execution started
 progress:
   total_phases: 5
   completed_phases: 1
   total_plans: 10
-  completed_plans: 8
-  percent: 80
+  completed_plans: 9
+  percent: 90
 ---
 
 # Project State
@@ -29,11 +29,11 @@ See: .planning/PROJECT.md (updated 2026-06-25)
 ## Current Position
 
 Phase: 02 (dashboard) — EXECUTING
-Plan: 4 of 5
+Plan: 5 of 5
 Status: Ready to execute
 Last activity: 2026-06-26 — Phase 02 execution started
 
-Progress: [████████░░] 80%
+Progress: [█████████░] 90%
 
 ## Performance Metrics
 
@@ -51,6 +51,7 @@ Progress: [████████░░] 80%
 | Phase 02 P01 | 10min | 3 tasks | 5 files |
 | Phase 02 P02 | ~5 min | 3 tasks | 17 files |
 | Phase 02 P03 | 4min | 3 tasks | 8 files |
+| Phase 02 P04 | 7min | 3 tasks | 13 files |
 
 ## Accumulated Context
 
@@ -76,6 +77,9 @@ Progress: [████████░░] 80%
 - [Phase 02]: [Phase 02 P03]: AuthContext persists owner {id, username} in localStorage 'restopulse_user' alongside the token so the header username (D-17) survives page refresh; scoped to existing localStorage trust boundary T-02-11 (Rule 2 missing critical functionality)
 - [Phase 02]: [Phase 02 P03]: All auth redirects use window.location.href (login->dashboard, logout->login, already-authed->dashboard) for v1 simplicity + consistency with apiClient 401 handler; ProtectedRoute uses children-prop wrapping pattern (not react-router Outlet); chartConfig.ts import deferred to Plan 02-05
 - [Phase 02]: [Phase 02 P03]: DASH-03 (tooltip) left pending — this plan delivers auth + layout, not tooltips; requirements mark-complete run with DASH-01 DASH-02 only (both already complete from 02-01, no-op); DASH-03 ships in Plan 02-05
+- [Phase 02]: [Phase 02 P04]: Task 1 ran as TDD RED->GREEN — RED 7f6d1f0 added vitest+jsdom+testing-library (all 4 pkgs verified via npm view, T-02-06) + 7 failing tests vs no-op stubs; GREEN 8609de1 implemented usePolling (Page Visibility pause D-13) + useDashboard (30s poll D-10, refresh D-11, useCallback fetcher D-04); 7/7 tests pass
+- [Phase 02]: [Phase 02 P04]: defaultDateRange() exported from DateFilter and used by DashboardPage instead of the plan's inline new Date().toISOString() — the latter computes a UTC date that can differ from the '7 Hari' preset's date-fns local date by a day, leaving the preset un-highlighted on first paint (Rule 1 bug prevention); single-source date-fns local-date math
+- [Phase 02]: [Phase 02 P04]: D-16 chart grid resolved as grid-cols-1 (Line Chart above, Pie Chart below) per the plan's action text explicit code + acceptance criteria; the must_haves truth 'lg:grid-cols-2 side-by-side' is a stale outlier conflicting with both. vite.config.ts imports defineConfig from vitest/config (not vite) so tsc -b type-checks the test field under tsconfig.node.json types:['node'] (Rule 3 blocking). DASH-03 left pending — ships in 02-05
 
 ### Pending Todos
 
@@ -94,6 +98,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-06-26T03:40:46.541Z
+Last session: 2026-06-26T03:52:33.081Z
 Stopped at: Completed 02-03-PLAN.md (Auth flow + Login + Layout)
 Resume file: None
