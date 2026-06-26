@@ -4,17 +4,17 @@ milestone: v1.0
 milestone_name: milestone
 current_phase: 04
 current_phase_name: quality-assurance
-status: executing
+status: verifying
 stopped_at: Completed 04-04-PLAN.md
-last_updated: "2026-06-26T11:24:20.815Z"
+last_updated: "2026-06-26T11:30:17.364Z"
 last_activity: 2026-06-26
 last_activity_desc: Phase 04 execution started
 progress:
   total_phases: 5
-  completed_phases: 3
+  completed_phases: 4
   total_plans: 19
-  completed_plans: 18
-  percent: 60
+  completed_plans: 19
+  percent: 80
 ---
 
 # Project State
@@ -30,7 +30,7 @@ See: .planning/PROJECT.md (updated 2026-06-25)
 
 Phase: 04 (quality-assurance) — EXECUTING
 Plan: 5 of 5
-Status: Ready to execute
+Status: Phase complete — ready for verification
 Last activity: 2026-06-26 — Phase 04 execution started
 
 Progress: [██████████] 100% (10/10 plans; 2/5 phases)
@@ -60,6 +60,7 @@ Progress: [██████████] 100% (10/10 plans; 2/5 phases)
 | Phase 04-quality-assurance P01 | 15min | 2 tasks | 7 files |
 | Phase 04-quality-assurance P03 | 6min | 3 tasks | 10 files |
 | Phase 04-quality-assurance P04 | 25min | 2 tasks | 2 files |
+| Phase 04-quality-assurance P05 | 3min | 3 tasks | 4 files |
 
 ## Accumulated Context
 
@@ -103,6 +104,8 @@ Progress: [██████████] 100% (10/10 plans; 2/5 phases)
 - [Phase 04]: Touch target fix strategy: py-1.5→py-2.5 on preset/date-input/refresh buttons (36→44px), min-w-[44px] min-h-[44px] on icon-only buttons, py-3 on nav items (34→48px) — pattern-based approach without blanket min-h-[44px] to avoid layout breakage. — WCAG AA practical subset requires ≥44px touch targets. Applied targeted CSS fixes to 6 elements across 5 components.
 - [Phase ?]: [04-04] Auth routes (register/login) lack Zod input validation — username/password extracted directly from req.body without schema validation. Major severity per D-55.
 - [Phase ?]: [04-04] JWT verifyToken() checks signature + expiry but not payload shape — missing outletId in token passes authMiddleware. Minor severity.
+- [Phase ?]: Auto-approved UAT checkpoint under auto_advance mode — UAT session with restaurant owner must be conducted separately using uat-script.md and uat-checklist.md
+- [Phase ?]: 04-05: Only 1 Major bug across all 4 prior audits — Auth Zod validation fixed with registerSchema+loginSchema following SalesController pattern. No Critical bugs found.
 
 ### Pending Todos
 
@@ -121,6 +124,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-06-26T11:24:16.541Z
+Last session: 2026-06-26T11:29:53.904Z
 Stopped at: Completed 04-04-PLAN.md
 Resume file: None
