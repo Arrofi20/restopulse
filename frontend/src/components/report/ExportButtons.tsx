@@ -5,13 +5,15 @@
 // vertically (flex-col); on >=sm they sit at the right (sm:flex-row
 // sm:justify-end, sm:w-auto).
 //
-// The PDF export engine (Plan 03-03) is wired in directly here via
-// `generateReportPDF(data)` — when report data is present the PDF button is
-// enabled and triggers a client-side download (D-36). The CSV button stays
-// disabled as a placeholder until Plan 03-04 wires its handler.
+// Both export engines are wired in directly here:
+//  - PDF (Plan 03-03): `generateReportPDF(data)`
+//  - CSV (Plan 03-04): `generateReportCSV(data)`
+// When report data is present both buttons are enabled and trigger a
+// client-side download (D-36). No server round-trip.
 
 import type { ReportData } from '../../types/report';
 import { generateReportPDF } from '../../lib/pdfGenerator';
+import { generateReportCSV } from '../../lib/csvGenerator';
 
 interface ExportButtonsProps {
   data: ReportData | null;
@@ -19,8 +21,7 @@ interface ExportButtonsProps {
 
 export function ExportButtons({ data }: ExportButtonsProps) {
   const pdfDisabled = !data;
-  // CSV engine ships in Plan 03-04 — button stays disabled as a placeholder.
-  const csvDisabled = true;
+  const csvDisabled = !data;
 
   return (
     <div className="sticky top-0 z-10 bg-gray-950/95 py-3 backdrop-blur-sm">
@@ -37,6 +38,9 @@ export function ExportButtons({ data }: ExportButtonsProps) {
         </button>
         <button
           type="button"
+          onClick={() => {
+            if (data) generateReportCSV(data);
+          }}
           disabled={csvDisabled}
           className="w-full rounded bg-gray-700 px-4 py-2 text-white transition-opacity disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto"
         >
