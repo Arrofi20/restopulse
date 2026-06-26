@@ -1,21 +1,48 @@
 import { PrismaClient } from '@prisma/client';
 import { PrismaSqlite } from 'prisma-adapter-sqlite';
 import { execSync } from 'child_process';
+import { randomUUID } from 'crypto';
+import { unlinkSync } from 'fs';
+import { resolve } from 'path';
 import bcrypt from 'bcrypt';
 
-const TEST_DB_URL = 'file::memory:?cache=shared';
+export interface TestDbResult {
+  prisma: PrismaClient;
+  dbPath: string;
+}
 
-export async function createTestDb(): Promise<PrismaClient> {
-  const adapter = new PrismaSqlite({ url: TEST_DB_URL });
-  const prisma = new PrismaClient({ adapter });
+/**
+ * Creates an isolated test database using a temporary SQLite file.
+ * Uses a unique filename per call to guarantee isolation between test suites.
+ * The caller is responsible for cleaning up the file via cleanupTestDb().
+ */
+export async function createTestDb(): Promise<TestDbResult> {
+  const dbName = `test-${randomUUID()}.db`;
+  const dbPath = resolve(__dirname, '..', '..', 'prisma', dbName);
+  const dbUrl = `file:${dbPath}`;
 
-  // Push Prisma schema to the shared in-memory SQLite database
-  execSync('npx prisma db push --force-reset --skip-generate', {
-    env: { ...process.env, DATABASE_URL: TEST_DB_URL },
+  // Push Prisma schema to the temp database
+  execSync(`npx prisma db push --force-reset --url "${dbUrl}"`, {
     stdio: 'pipe',
   });
 
-  return prisma;
+  // Create PrismaClient connected to the same temp database
+  const adapter = new PrismaSqlite({ url: dbUrl });
+  const prisma = new PrismaClient({ adapter });
+
+  return { prisma, dbPath };
+}
+
+/**
+ * Clean up the test database file and disconnect the Prisma client.
+ */
+export async function cleanupTestDb(result: TestDbResult): Promise<void> {
+  await result.prisma.$disconnect();
+  try {
+    unlinkSync(result.dbPath);
+  } catch {
+    // File may already be deleted or never created — ignore
+  }
 }
 
 export interface SeedResult {

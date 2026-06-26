@@ -1,12 +1,17 @@
 import request from 'supertest';
-import { app } from '../app';
+import type { Application } from 'express';
 import { signToken } from '../lib/jwt';
 
-export function authRequest(userId: string, outletId: string) {
-  const token = signToken({ userId, outletId });
-  return request(app).set('Authorization', `Bearer ${token}`);
+/**
+ * Returns a JWT token for the given user/outlet pair.
+ */
+export function getAuthToken(userId: string, outletId: string): string {
+  return signToken({ userId, outletId });
 }
 
-export function apiRequest() {
+/**
+ * Returns the base supertest request bound to the Express app.
+ */
+export function apiRequest(app: Application) {
   return request(app);
 }

@@ -5,6 +5,7 @@ export default defineConfig({
     environment: 'node',
     include: ['src/**/*.test.ts'],
     globals: true,
+    pool: 'forks',
     env: {
       JWT_SECRET: 'test-secret-key-for-phase04',
     },
