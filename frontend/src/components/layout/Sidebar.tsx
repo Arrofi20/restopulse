@@ -17,7 +17,7 @@ interface SidebarProps {
 }
 
 const navLinkBase =
-  'flex items-center gap-3 px-3 py-2.5 rounded-md text-base transition-colors';
+  'flex items-center gap-3 px-3 py-3 rounded-md text-base transition-colors';
 
 function navLinkClass(isActive: boolean): string {
   return isActive
@@ -50,7 +50,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
           <button
             type="button"
             onClick={onClose}
-            className="text-2xl leading-none text-gray-400 hover:text-white lg:hidden"
+            className="flex items-center justify-center min-w-[44px] min-h-[44px] text-2xl leading-none text-gray-400 hover:text-white lg:hidden"
             aria-label="Tutup menu"
           >
             ×

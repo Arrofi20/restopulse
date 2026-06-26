@@ -100,7 +100,7 @@ export function ReportDateFilter({ value, onChange }: ReportDateFilterProps) {
             type="button"
             onClick={() => handlePresetClick(preset.compute)}
             className={
-              'rounded px-3 py-1.5 text-sm font-medium transition-colors ' +
+              'rounded px-3 py-2.5 text-sm font-medium transition-colors ' +
               (isActive
                 ? 'bg-amber-400 text-black'
                 : 'bg-gray-700 text-gray-300 hover:bg-gray-600 hover:text-white')
@@ -119,7 +119,7 @@ export function ReportDateFilter({ value, onChange }: ReportDateFilterProps) {
           value={value.start}
           onChange={(e) => handleStartChange(e.target.value)}
           aria-label="Tanggal mulai"
-          className="rounded border border-gray-700 bg-gray-800 px-3 py-1.5 text-sm text-white [color-scheme:dark]"
+          className="rounded border border-gray-700 bg-gray-800 px-3 py-2.5 text-sm text-white [color-scheme:dark] min-h-[44px]"
         />
         <span className="text-gray-500">—</span>
         <input
@@ -127,7 +127,7 @@ export function ReportDateFilter({ value, onChange }: ReportDateFilterProps) {
           value={value.end}
           onChange={(e) => handleEndChange(e.target.value)}
           aria-label="Tanggal akhir"
-          className="rounded border border-gray-700 bg-gray-800 px-3 py-1.5 text-sm text-white [color-scheme:dark]"
+          className="rounded border border-gray-700 bg-gray-800 px-3 py-2.5 text-sm text-white [color-scheme:dark] min-h-[44px]"
         />
       </div>
     </div>

@@ -23,7 +23,7 @@ export function RefreshButton({ onClick, loading = false }: RefreshButtonProps) 
       onClick={onClick}
       disabled={loading}
       aria-label="Segarkan data"
-      className="flex items-center gap-2 rounded-lg bg-gray-800 px-3 py-1.5 text-sm font-medium text-white transition-colors hover:bg-gray-700 disabled:cursor-not-allowed disabled:opacity-60"
+      className="flex items-center gap-2 rounded-lg bg-gray-800 px-3 py-2.5 text-sm font-medium text-white transition-colors hover:bg-gray-700 disabled:cursor-not-allowed disabled:opacity-60 min-h-[44px]"
     >
       {loading ? (
         <>

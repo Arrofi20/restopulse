@@ -21,7 +21,7 @@ export function Header({ onMenuClick }: HeaderProps) {
         <button
           type="button"
           onClick={onMenuClick}
-          className="text-2xl leading-none text-gray-300 hover:text-white lg:hidden"
+          className="flex items-center justify-center min-w-[44px] min-h-[44px] text-2xl leading-none text-gray-300 hover:text-white lg:hidden"
           aria-label="Buka menu"
         >
           ☰
