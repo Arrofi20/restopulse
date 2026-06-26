@@ -89,10 +89,26 @@ Plans:
 
 Plans:
 
-- [ ] 03-01: Implementasi mesin E-Report dengan filter rentang tanggal (harian, mingguan, bulanan)
-- [ ] 03-02: Build UI ringkasan laporan (total pendapatan, jumlah transaksi, top items per periode)
-- [ ] 03-03: Implementasi PDF export (jsPDF + autotable, header/footer, Rupiah formatting)
-- [ ] 03-04: Implementasi CSV export (JSON-to-CSV utility, UTF-8 BOM, semicolon delimiter)
+- [ ] 03-01-PLAN.md
+- [ ] 03-02-PLAN.md
+- [ ] 03-03-PLAN.md
+- [ ] 03-04-PLAN.md
+
+**Wave 1**
+
+- [ ] 03-01: Backend Report API — GET /api/report with date filtering, SalesTrend + DailySales aggregation
+
+**Wave 2** *(blocked on Wave 1 completion)*
+
+- [ ] 03-02: Report UI page — /e-report with date filter, summary cards, daily table, and export button placeholder
+
+**Wave 3** *(blocked on Wave 2 completion)*
+
+- [ ] 03-03: PDF export — jsPDF + autotable with A4 portrait, print-ready white theme, Rupiah formatting
+
+**Wave 4** *(blocked on Wave 3 completion)*
+
+- [ ] 03-04: CSV export — UTF-8 BOM, semicolon delimiter, formula injection protection
 
 ### Phase 4: Quality Assurance
 
