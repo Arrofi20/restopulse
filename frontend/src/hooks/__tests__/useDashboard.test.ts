@@ -11,7 +11,7 @@
 // async fetch state transitions.
 
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { renderHook, waitFor } from '@testing-library/react';
+import { renderHook, waitFor, act } from '@testing-library/react';
 import { useDashboard } from '../useDashboard';
 import { get } from '../../api/client';
 
@@ -90,8 +90,11 @@ describe('useDashboard', () => {
     const initialCallCount = vi.mocked(get).mock.calls.length;
     expect(initialCallCount).toBeGreaterThan(0);
 
-    // Manual refresh must trigger a new GET with the same date range
-    result.current.refresh();
+    // Manual refresh must trigger a new GET with the same date range.
+    // Wrapped in act() because refresh() synchronously flips loading -> true.
+    act(() => {
+      result.current.refresh();
+    });
 
     await waitFor(() => {
       expect(vi.mocked(get).mock.calls.length).toBeGreaterThan(initialCallCount);
