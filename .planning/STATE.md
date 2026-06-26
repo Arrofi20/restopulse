@@ -6,14 +6,14 @@ current_phase: 04
 current_phase_name: quality-assurance
 status: executing
 stopped_at: Phase 4 UI-SPEC approved
-last_updated: "2026-06-26T10:55:55.482Z"
+last_updated: "2026-06-26T11:08:21.877Z"
 last_activity: 2026-06-26
 last_activity_desc: Phase 04 execution started
 progress:
   total_phases: 5
   completed_phases: 3
   total_plans: 19
-  completed_plans: 15
+  completed_plans: 16
   percent: 60
 ---
 
@@ -29,7 +29,7 @@ See: .planning/PROJECT.md (updated 2026-06-25)
 ## Current Position
 
 Phase: 04 (quality-assurance) — EXECUTING
-Plan: 2 of 5
+Plan: 3 of 5
 Status: Ready to execute
 Last activity: 2026-06-26 — Phase 04 execution started
 
@@ -95,6 +95,9 @@ Progress: [██████████] 100% (10/10 plans; 2/5 phases)
 - [Phase ?]: [Phase 03 P02]: useReport mirrors useDashboard verbatim (30s poll, refresh()) — only endpoint path differs. ReportDateFilter ships Harian/Mingguan/Bulanan + custom with Bulanan default via defaultReportDateRange() (D-19/D-20). ReportDailyTable uses overflow-x-auto. ExportButtons handlers optional so 03-03/03-04 wire PDF/CSV without editing layout. Report date state independent in EReportPage useState (D-21).
 - [Phase ?]: Phase 03 P03: PDF export engine uses functional autoTable(doc, options) form (not jsPDF.prototype patch) for cleaner ESM import + tree-shaking; multi-page footer uses two-pass stamping (didDrawPage tracks max page count, post-autoTable loop stamps Halaman X/N on every page). ExportButtons dropped optional onExportPDF/onExportCSV props — imports generateReportPDF directly, props simplify to { data }.
 - [Phase 03]: [Phase 03 P04]: CSV export engine — custom ~30-LOC generator (no external lib, RESEARCH.md rec) with UTF-8 BOM + semicolon delimiter + Windows CRLF for Indonesian-locale Excel. escapeCell prefixes =/+/-/@ leading chars with tab BEFORE RFC 4180 quoting (T-03-12 formula-injection mitigation); filename sanitized /[^a-zA-Z0-9]/g -> '_' + 'Outlet' fallback (T-03-11); URL.revokeObjectURL after click (T-03-14). ExportButtons csvDisabled flipped from Plan 03-03 placeholder true to !data — both PDF+CSV buttons now active on data (REPT-03, resolves Plan 03-03 CSV stub).
+- [Phase 04-quality-assurance]: k6 v2.0.0 installed via winget (Go binary, not npm dummy)
+- [Phase 04-quality-assurance]: Lighthouse CLI via execSync chosen over chrome-launcher — zero deps, simpler maintenance
+- [Phase 04-quality-assurance]: Puppeteer pre-auth helper (auth-setup.mjs) supplementary — login-only SPA bundle audit is baseline
 
 ### Pending Todos
 
@@ -113,6 +116,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-06-26T10:55:48.729Z
+Last session: 2026-06-26T11:08:21.870Z
 Stopped at: Phase 4 UI-SPEC approved
 Resume file: .planning/phases/04-quality-assurance/04-UI-SPEC.md
