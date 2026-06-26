@@ -3,3 +3,5 @@ export { DailySalesRepository } from './DailySalesRepository';
 export { SalesTrendRepository } from './SalesTrendRepository';
 export { StatusLogRepository } from './StatusLogRepository';
 export { DailyReportRepository } from './DailyReportRepository';
+export { ReportRepository } from './ReportRepository';
+export type { ReportRow, ReportData } from './ReportRepository';
