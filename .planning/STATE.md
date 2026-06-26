@@ -5,15 +5,15 @@ milestone_name: milestone
 current_phase: 04
 current_phase_name: quality-assurance
 status: executing
-stopped_at: Phase 4 UI-SPEC approved
-last_updated: "2026-06-26T11:16:35.658Z"
+stopped_at: Completed 04-04-PLAN.md
+last_updated: "2026-06-26T11:24:20.815Z"
 last_activity: 2026-06-26
 last_activity_desc: Phase 04 execution started
 progress:
   total_phases: 5
   completed_phases: 3
   total_plans: 19
-  completed_plans: 17
+  completed_plans: 18
   percent: 60
 ---
 
@@ -29,7 +29,7 @@ See: .planning/PROJECT.md (updated 2026-06-25)
 ## Current Position
 
 Phase: 04 (quality-assurance) — EXECUTING
-Plan: 4 of 5
+Plan: 5 of 5
 Status: Ready to execute
 Last activity: 2026-06-26 — Phase 04 execution started
 
@@ -59,6 +59,7 @@ Progress: [██████████] 100% (10/10 plans; 2/5 phases)
 | Phase 03 P04 | 1 min | 2 tasks | 2 files |
 | Phase 04-quality-assurance P01 | 15min | 2 tasks | 7 files |
 | Phase 04-quality-assurance P03 | 6min | 3 tasks | 10 files |
+| Phase 04-quality-assurance P04 | 25min | 2 tasks | 2 files |
 
 ## Accumulated Context
 
@@ -100,6 +101,8 @@ Progress: [██████████] 100% (10/10 plans; 2/5 phases)
 - [Phase 04-quality-assurance]: Lighthouse CLI via execSync chosen over chrome-launcher — zero deps, simpler maintenance
 - [Phase 04-quality-assurance]: Puppeteer pre-auth helper (auth-setup.mjs) supplementary — login-only SPA bundle audit is baseline
 - [Phase 04]: Touch target fix strategy: py-1.5→py-2.5 on preset/date-input/refresh buttons (36→44px), min-w-[44px] min-h-[44px] on icon-only buttons, py-3 on nav items (34→48px) — pattern-based approach without blanket min-h-[44px] to avoid layout breakage. — WCAG AA practical subset requires ≥44px touch targets. Applied targeted CSS fixes to 6 elements across 5 components.
+- [Phase ?]: [04-04] Auth routes (register/login) lack Zod input validation — username/password extracted directly from req.body without schema validation. Major severity per D-55.
+- [Phase ?]: [04-04] JWT verifyToken() checks signature + expiry but not payload shape — missing outletId in token passes authMiddleware. Minor severity.
 
 ### Pending Todos
 
@@ -118,6 +121,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-06-26T11:16:26.598Z
-Stopped at: Phase 4 UI-SPEC approved
-Resume file: .planning/phases/04-quality-assurance/04-UI-SPEC.md
+Last session: 2026-06-26T11:24:16.541Z
+Stopped at: Completed 04-04-PLAN.md
+Resume file: None
