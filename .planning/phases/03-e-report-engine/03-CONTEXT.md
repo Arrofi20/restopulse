@@ -35,27 +35,30 @@ Phase 3 delivers the E-Report Engine for RestoPulse — a date-filtered financia
 ## Implementation Decisions
 
 ### Report Period & Filtering
-- **D-19:** Report date presets: Harian, Mingguan, Bulanan (matching ROADMAP filter types), plus custom date range picker
+- **D-19:** Report date presets: Harian (today), Mingguan (last 7 days), Bulanan (current month), plus custom date range picker
 - **D-20:** Default report view: Bulanan (current month) — natural for financial review
 - **D-21:** Report filter is INDEPENDENT of dashboard filter — E-Report has its own date state
-- **D-22:** Reuse existing DateFilter component pattern from dashboard but adapt presets for reporting
+- **D-22:** Reuse existing DateFilter component pattern from dashboard but adapt presets for reporting (Harian/Mingguan/Bulanan/Custom)
 
 ### Report Content & Layout
 - **D-23:** Report preview shows: outlet name, report period, total revenue, transaction count, top menu items, daily breakdown table
 - **D-24:** PDF layout: A4 portrait, header with outlet name + period, summary stats cards, daily detail table, footer with generation date
-- **D-25:** PDF styling: dark background (matching app theme), white text, Rupiah formatting, 12pt minimum font for readability
+- **D-25:** PDF styling (screen preview): dark background (matching app theme), white text, Rupiah formatting, 12pt minimum font for readability
+- **D-25b:** PDF styling (exported file): **white paper background with dark text** — auto-switches from dark preview to print-ready light theme for ink efficiency and print standard compliance
 - **D-26:** CSV structure: one row per day — columns: Tanggal, Omset (Rp), Menu Terlaris, Jumlah Transaksi
 
 ### Export UX
 - **D-27:** Owner sees report preview on screen FIRST, then clicks Export PDF / Export CSV buttons
 - **D-28:** Export buttons positioned at top-right of report preview, sticky on scroll
-- **D-29:** File naming convention: Laporan_{OutletName}_{StartDate}_{EndDate}.{pdf|csv} (e.g., Laporan_RestoUtama_2026-06-01_2026-06-30.pdf)
+- **D-29:** File naming convention: `Laporan_{OutletName}_{StartDate}_{EndDate}.{pdf|csv}` (e.g., `Laporan_RestoUtama_2026-06-01_2026-06-30.pdf`)
 - **D-30:** Export triggers browser download (no server-side file storage)
+- **D-30b:** CSV export STAYS in Phase 3 — confirmed in-scope. REQUIREMENTS.md should be updated to mark REPT-03 as v1/Phase 3.
 
 ### Data Source
 - **D-31:** Report API reads from SalesTrend table (pre-computed aggregations) for summary + DailySales for detailed breakdown
-- **D-32:** Report endpoint: GET /api/report?start=YYYY-MM-DD&end=YYYY-MM-DD&format=summary (returns aggregated data for preview)
-- **D-33:** Export endpoints: GET /api/report/export?start=&end=&type=pdf and type=csv
+- **D-32:** Report endpoint: `GET /api/report?start=YYYY-MM-DD&end=YYYY-MM-DD&format=summary` (returns aggregated data for preview)
+- **D-33:** Export endpoints: `GET /api/report/export?start=&end=&type=pdf` and `type=csv`
+- **D-33b:** Data source strategy (live query vs cached snapshot) — **agent discretion**. Live query from SalesTrend + DailySales is preferred given existing CQRS-lite pattern; DailySalesReport cached table exists in schema but has no population mechanism yet.
 
 ### Mobile Behavior
 - **D-34:** Report preview stacks vertically on mobile (summary → table → export buttons)
@@ -67,6 +70,8 @@ Phase 3 delivers the E-Report Engine for RestoPulse — a date-filtered financia
 - CSV generation library choice (papaparse vs custom vs JSON-to-CSV)
 - Report table styling (Tailwind classes, responsive breakpoints)
 - Backend aggregation query optimization (Prisma aggregation vs raw computed)
+- Data source implementation: live query vs cached snapshot (DailySalesReport table exists but unused)
+
 </decisions>
 
 <canonical_refs>
@@ -91,7 +96,7 @@ Phase 3 delivers the E-Report Engine for RestoPulse — a date-filtered financia
 - `frontend/src/` — Frontend React application
 
 ### Reusable Components from Phase 2
-- `frontend/src/components/dashboard/DateFilter.tsx` — Date range selector with presets (adapt for reporting presets)
+- `frontend/src/components/dashboard/DateFilter.tsx` — Date range selector with presets (adapt for reporting presets: Harian/Mingguan/Bulanan/Custom)
 - `frontend/src/lib/format.ts` — `formatRupiah()`, `formatCompactRupiah()` — Rupiah formatting
 - `frontend/src/api/client.ts` — Bearer-token API client with 401 redirect
 - `frontend/src/components/layout/DashboardLayout.tsx` — Sidebar + Header + main content layout
@@ -101,7 +106,7 @@ Phase 3 delivers the E-Report Engine for RestoPulse — a date-filtered financia
 ### Backend Patterns from Phase 1-2
 - `src/controllers/DashboardController.ts` — Controller pattern with ZodError handling
 - `src/services/DashboardService.ts` — Service pattern with date validation
-- `src/repositories/SalesTrendRepository.ts` — Repository pattern with findByDateRange
+- `src/repositories/SalesTrendRepository.ts` — Repository pattern with findByDateRange and aggregateSummary
 - `src/middleware/authMiddleware.ts` — JWT Bearer token auth
 - `src/routes/` — Express Router pattern with authMiddleware
 
@@ -111,24 +116,25 @@ Phase 3 delivers the E-Report Engine for RestoPulse — a date-filtered financia
 ## Existing Code Insights
 
 ### Reusable Assets
-- **SalesTrend table** (prisma/schema.prisma): Pre-computed with date, revenue, menu_popularity (JSON string), outlet_id
+- **SalesTrend table** (`prisma/schema.prisma`): Pre-computed with date, revenue, menu_popularity (JSON string), outlet_id
 - **DailySales table**: Raw transaction records with date, revenue, top_menu_items (JSON), data_source enum
-- **Dashboard API** (`GET /api/dashboard`): Returns {outlet, trends[], summary{totalRevenue, transactionCount, topItems[]}} — pattern to follow for report API
-- **DateFilter component**: Preset buttons + custom date picker, already dark-themed
-- **format.ts**: `formatRupiah(1234567)` → `Rp 1.234.567`
+- **DailySalesReport table**: Cached snapshot schema exists (period_start, period_end, total_revenue, transaction_count, top_items) but is currently unused
+- **Dashboard API** (`GET /api/dashboard`): Returns `{outlet, trends[], summary{totalRevenue, transactionCount, topItems[]}}` — pattern to follow for report API
+- **DateFilter component**: Preset buttons + custom date picker, already dark-themed. Exports `defaultDateRange()` for consistent initialization
+- **format.ts**: `formatRupiah(1234567)` → `Rp 1.234.567`; `formatCompactRupiah()` for compact labels
 - **EReportPage**: Placeholder at `/e-report` — needs full implementation
 
 ### Established Patterns
 - **Layered monolith**: Repository → Service → Controller → Route
-- **CQRS-lite**: SalesTrend pre-computed for fast reads
-- **JWT Bearer auth**: localStorage token, Authorization header
+- **CQRS-lite**: SalesTrend pre-computed on write for O(1) dashboard reads
+- **JWT Bearer auth**: localStorage token (`restopulse_token`), Authorization header, 401 → clear + redirect
 - **Dark mode**: Tailwind `dark` class on html, amber-400/yellow for accents, red-500 for warnings
 - **Error format**: `{ success: false, error: { code, message, details } }`
 
 ### Integration Points
-- **New route mount**: Add `app.use('/api/report', reportRoutes)` in src/app.ts
-- **New page route**: Add `/e-report` route in frontend/src/App.tsx (already in sidebar nav)
-- **Data reuse**: Report page can reuse `useDashboard` hook pattern for data fetching
+- **New route mount**: Add `app.use('/api/report', reportRoutes)` in `src/app.ts`
+- **New page route**: Add `/e-report` route in `frontend/src/App.tsx` (already in sidebar nav)
+- **Data reuse**: Report page can reuse `useDashboard` hook pattern for data fetching, but with independent date state (D-21)
 
 </code_context>
 
@@ -137,10 +143,12 @@ Phase 3 delivers the E-Report Engine for RestoPulse — a date-filtered financia
 
 - Report preview page should mirror the dashboard summary cards but add a detailed daily table
 - PDF should be generated client-side using jsPDF + autotable to avoid backend complexity
+- PDF export must auto-switch from dark preview to white paper + dark text for print readiness
 - CSV should use semicolon (;) delimiter and UTF-8 BOM for Excel compatibility (Indonesian Excel uses semicolon by default)
 - Mobile: export buttons should be full-width below the preview, not side-by-side
-- Reuse the existing `DateFilter` component but swap presets to Harian/Mingguan/Bulanan/Custom
+- Reuse the existing `DateFilter` component but swap presets to Harian (today) / Mingguan (last 7d) / Bulanan (current month) / Custom
 - Report API should return both summary (aggregated) and detail (per-day) in one response to minimize API calls
+
 </specifics>
 
 <deferred>
@@ -157,3 +165,4 @@ Phase 3 delivers the E-Report Engine for RestoPulse — a date-filtered financia
 
 *Phase: 03-e-report-engine*
 *Context gathered: 2026-06-26*
+*Updated: 2026-06-26*
