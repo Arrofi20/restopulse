@@ -723,27 +723,27 @@ describe('Error Response Leakage', () => {
 | A6 | `npx lighthouse` works without global installation (Chrome must be installed separately) | Environment Availability | Low — Lighthouse has Chrome as a peer dependency. Chrome is assumed to be installed on the developer's machine. |
 | A7 | The backend export endpoint (`GET /api/report/export`) does NOT exist — export is client-side only | Phase Requirements | Low — verified by reading `src/routes/report.routes.ts` which only has `GET /`. Export functions are in `frontend/src/lib/`. |
 
-## Open Questions
+## Open Questions (RESOLVED)
 
 1. **Prisma db push with `file::memory:` URL**
    - What we know: `prisma db push` can push schema to a database specified by `DATABASE_URL`. For in-memory SQLite, the URL must be `file::memory:`.
    - What's unclear: Whether `prisma db push` with the adapter-based config (Prisma 7+) correctly handles `file::memory:` without a physical file. The standard Prisma CLI expects a file path.
-   - Recommendation: Test with `prisma db push --force-reset` in the setup script. If it fails, fall back to `prisma migrate deploy` or programmatic schema creation. The planner should add a Wave 0 spike task to validate this approach.
+   - **RESOLVED:** Use `execSync('npx prisma db push --force-reset --skip-generate', { env: { ...process.env, DATABASE_URL: 'file::memory:' } })` in the setup script. The planner has adopted this approach in 04-01 PLAN.md Task 1 (`createTestDb` function). If db push fails, the executor will fall back to `prisma migrate deploy` or programmatic schema creation.
 
 2. **k6 authentication token management**
    - What we know: k6 scripts need a valid JWT to hit authenticated endpoints. The token must be generated before the test run.
    - What's unclear: Whether to hardcode a pre-generated token, generate it via a setup script, or have k6 call the login endpoint first. Tokens expire in 24h.
-   - Recommendation: Add a k6 `setup()` function that calls POST /api/auth/login to obtain a fresh token, then pass it to the default function via `data`. This keeps the test self-contained.
+   - **RESOLVED:** Use a k6 `setup()` function that calls POST /api/auth/login to obtain a fresh token, then passes it to the default function via `data`. The planner has adopted this approach in 04-02 PLAN.md Task 1: the k6 `setup()` function logs in with credentials `{ username: 'testuser', password: 'testpass123' }` and returns `{ token: res.json('data.token') }`. This keeps the test self-contained — no hardcoded tokens.
 
 3. **Lighthouse audit with authenticated pages**
    - What we know: Lighthouse audits pages as an unauthenticated user by default. The dashboard, e-report, and data-entry pages require authentication.
    - What's unclear: How to pass authentication cookies/tokens to Lighthouse's headless Chrome. Options: (a) use `--chrome-flags` to set cookies, (b) use Puppeteer to log in before running Lighthouse, (c) test the login page only and use API-level tests for authenticated content.
-   - Recommendation: Use Lighthouse CI's `puppeteerScript` option to log in via Puppeteer before running audits. Alternatively, audit only the login page for performance and rely on API load tests for authenticated page performance.
+   - **RESOLVED:** Two-tier approach adopted in 04-02 PLAN.md Task 2: (1) Run full Lighthouse audit against the login page (public) — captures bundle size, FCP, LCP, TBT, CLS for the SPA shell. (2) Use a Puppeteer pre-auth script option for authenticated dashboard measurement: launch headless Chrome, navigate to login page, fill credentials, submit, wait for redirect to dashboard, then run Lighthouse programmatically using the authenticated session. The fallback is to audit the login page only and note that all pages share the same JS bundle (SPA), so bundle-level metrics (total byte weight ≤800KB per NFR §9.3) are valid across all pages. API response times for authenticated pages are covered by k6 load testing (Task 1).
 
 4. **Vitest configuration coexistence**
    - What we know: The frontend has `vite.config.ts` with vitest inline config (jsdom environment). The backend needs a separate vitest config with `environment: 'node'`.
    - What's unclear: Whether vitest will pick up both configs automatically or if explicit `--config` flags are needed. Also whether the workspace feature should be used.
-   - Recommendation: Create `vitest.config.ts` at project root with `environment: 'node'` and `test.include: ['src/**/*.test.ts']`. Add separate npm scripts: `test:api` (backend) and keep `test` (frontend, run from `frontend/` directory).
+   - **RESOLVED:** Create `vitest.config.ts` at project root with `environment: 'node'` and `test.include: ['src/**/*.test.ts']`. No workspace needed — frontend vitest is invoked from the `frontend/` directory (reads `vite.config.ts`) and backend vitest from the root (reads `vitest.config.ts`). Add separate npm scripts: `test:api` (backend, root) and keep `test` (frontend, run from `frontend/` directory). The planner has adopted this approach in 04-01 PLAN.md Task 1.
 
 ## Environment Availability
 
