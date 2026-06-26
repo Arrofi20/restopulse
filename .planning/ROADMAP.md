@@ -126,11 +126,25 @@ Plans:
 
 Plans:
 
-- [ ] 04-01: Functional testing (auth flow, data entry, chart rendering, report filtering, export)
-- [ ] 04-02: Performance & load testing (API latency, concurrent transactions, database query optimization)
-- [ ] 04-03: Mobile responsiveness & accessibility audit (320px–1440px, contrast ratio, font size 24pt)
-- [ ] 04-04: Security audit (JWT validation, SQL injection prevention, XSS protection)
-- [ ] 04-05: UAT session dengan pemilik restoran dan perbaikan bug kritis
+- [ ] 04-01-PLAN.md — Backend test infrastructure (vitest+supertest) + API functional tests (auth, sales, dashboard, report)
+- [ ] 04-02-PLAN.md — k6 load test (50 VUs, ≤500ms) + Lighthouse frontend audit (≤4s, ≤800KB on 4G)
+- [ ] 04-03-PLAN.md — Mobile responsiveness audit (320–1440px) + accessibility audit (WCAG AA subset, Lighthouse)
+- [ ] 04-04-PLAN.md — Security audit (JWT edge cases, SQL injection, CSV injection, error leakage verification)
+- [ ] 04-05-PLAN.md — UAT test script + sign-off checklist (Bahasa Indonesia) + Critical/Major bug fixes
+
+**Wave 1**
+
+- [ ] 04-01: Backend test infra + API functional tests — vitest.config.ts, setup.ts, helpers.ts, 4 test suites
+- [ ] 04-02: k6 load test script + Lighthouse audit script — standalone tools, no code deps on 04-01
+- [ ] 04-03: Accessibility audit + manual mobile verification + CSS fixes — no file overlap with 04-01/04-02
+
+**Wave 2** *(blocked on Wave 1: 04-01)*
+
+- [ ] 04-04: Security test suites (JWT + injection) + code review — depends on 04-01 test infrastructure
+
+**Wave 3** *(blocked on Waves 1+2)*
+
+- [ ] 04-05: UAT session + bug fixes — depends on all prior plans for aggregated bug list and system stability
 
 ### Phase 5: Deployment & Demo
 
@@ -163,5 +177,5 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 | 1. Foundation | 0/5 | Not started | - |
 | 2. Dashboard | 5/5 | Complete   | 2026-06-26 |
 | 3. E-Report Engine | 4/4 | Complete   | 2026-06-26 |
-| 4. Quality Assurance | 0/5 | Not started | - |
+| 4. Quality Assurance | 0/5 | Planned    | 2026-06-26 |
 | 5. Deployment & Demo | 0/4 | Not started | - |
