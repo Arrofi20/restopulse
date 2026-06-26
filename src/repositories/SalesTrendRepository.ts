@@ -66,6 +66,25 @@ export class SalesTrendRepository {
     });
   }
 
+  async aggregateSummary(
+    outlet_id: string,
+    start: Date,
+    end: Date
+  ): Promise<{ totalRevenue: number; transactionCount: number }> {
+    const result = await this.prisma.salesTrend.aggregate({
+      where: {
+        outlet_id,
+        date: { gte: start, lte: end },
+      },
+      _sum: { revenue: true },
+      _count: { id: true },
+    });
+    return {
+      totalRevenue: result._sum.revenue || 0,
+      transactionCount: result._count.id || 0,
+    };
+  }
+
   async deleteByOutletAndDate(
     outlet_id: string,
     date: Date
