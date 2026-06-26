@@ -101,9 +101,10 @@ export function LineChart({ trends, loading = false }: LineChartProps) {
         callbacks: {
           // D-06: title = date from x-axis label
           title: (items: TooltipItem<'line'>[]) => items[0]?.label ?? '',
-          // D-06: label = Rupiah-formatted revenue
+          // D-06: label = Rupiah-formatted revenue (parsed.y is number | null;
+          // guard null so the formatter always receives a number)
           label: (context: TooltipItem<'line'>) =>
-            formatLineTooltipLabel(context.parsed.y),
+            formatLineTooltipLabel(context.parsed.y ?? 0),
         },
       },
     },
