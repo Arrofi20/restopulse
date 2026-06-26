@@ -122,11 +122,11 @@ Plans:
   3. Page load dasbor ≤4 detik terverifikasi pada koneksi 4G (Lighthouse)
   4. UAT oleh pemilik restoran selesai dengan acceptance sign-off
 
-**Plans**: 5 plans
+**Plans**: 1/5 plans executed
 
 Plans:
 
-- [ ] 04-01-PLAN.md — Backend test infrastructure (vitest+supertest) + API functional tests (auth, sales, dashboard, report)
+- [x] 04-01-PLAN.md — Backend test infrastructure (vitest+supertest) + API functional tests (auth, sales, dashboard, report)
 - [ ] 04-02-PLAN.md — k6 load test (50 VUs, ≤500ms) + Lighthouse frontend audit (≤4s, ≤800KB on 4G)
 - [ ] 04-03-PLAN.md — Mobile responsiveness audit (320–1440px) + accessibility audit (WCAG AA subset, Lighthouse)
 - [ ] 04-04-PLAN.md — Security audit (JWT edge cases, SQL injection, CSV injection, error leakage verification)
@@ -177,5 +177,5 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 | 1. Foundation | 0/5 | Not started | - |
 | 2. Dashboard | 5/5 | Complete   | 2026-06-26 |
 | 3. E-Report Engine | 4/4 | Complete   | 2026-06-26 |
-| 4. Quality Assurance | 0/5 | Planned    | 2026-06-26 |
+| 4. Quality Assurance | 1/5 | In Progress|  |
 | 5. Deployment & Demo | 0/4 | Not started | - |

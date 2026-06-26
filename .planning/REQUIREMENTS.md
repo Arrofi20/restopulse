@@ -9,8 +9,8 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Authentication
 
-- [ ] **AUTH-01**: User dapat masuk ke sistem menggunakan akun (username & password) yang terdaftar
-- [ ] **AUTH-02**: Sistem memvalidasi hak akses login dan mengarahkan pemilik ke halaman Dasbor Utama
+- [x] **AUTH-01**: User dapat masuk ke sistem menggunakan akun (username & password) yang terdaftar
+- [x] **AUTH-02**: Sistem memvalidasi hak akses login dan mengarahkan pemilik ke halaman Dasbor Utama
 
 ### Dashboard Analytics
 
@@ -20,8 +20,8 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Data Entry & Simulation
 
-- [ ] **DATA-01**: Pemilik/pengembang dapat menyuntikkan ratusan baris data transaksi fiktif harian masa lalu secara berurutan ke database melalui tombol "Suntik Data Simulasi"
-- [ ] **DATA-02**: Pemilik dapat memasukkan data transaksi harian baru secara manual melalui formulir (Tanggal, Omset, Menu Terlaris)
+- [x] **DATA-01**: Pemilik/pengembang dapat menyuntikkan ratusan baris data transaksi fiktif harian masa lalu secara berurutan ke database melalui tombol "Suntik Data Simulasi"
+- [x] **DATA-02**: Pemilik dapat memasukkan data transaksi harian baru secara manual melalui formulir (Tanggal, Omset, Menu Terlaris)
 
 ### E-Report & Export
 
@@ -61,13 +61,13 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| AUTH-01 | Phase 1 | Pending |
-| AUTH-02 | Phase 1 | Pending |
+| AUTH-01 | Phase 1 | Complete |
+| AUTH-02 | Phase 1 | Complete |
 | DASH-01 | Phase 2 | Complete |
 | DASH-02 | Phase 2 | Complete |
 | DASH-03 | Phase 2 | Complete |
-| DATA-01 | Phase 1 | Pending |
-| DATA-02 | Phase 1 | Pending |
+| DATA-01 | Phase 1 | Complete |
+| DATA-02 | Phase 1 | Complete |
 | REPT-01 | Phase 3 | Complete |
 | REPT-02 | Phase 3 | Complete |
 
