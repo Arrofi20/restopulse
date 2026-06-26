@@ -7,7 +7,7 @@ RestoPulse akan dibangun dalam 5 fase selama 8 minggu, dimulai dari fondasi data
 ## Phases
 
 - [ ] **Phase 1: Foundation** — Database schema, authentication, data entry API, and dummy data injector
-- [ ] **Phase 2: Dashboard** — Frontend scaffold, Line Chart revenue trend, Pie Chart menu analysis, and interactive tooltips
+- [x] **Phase 2: Dashboard** — Frontend scaffold, Line Chart revenue trend, Pie Chart menu analysis, and interactive tooltips (completed 2026-06-26)
 - [ ] **Phase 3: E-Report Engine** — Date-filtered reporting, PDF export, and CSV export
 - [ ] **Phase 4: Quality Assurance** — Functional testing, performance testing, mobile optimization, and UAT
 - [ ] **Phase 5: Deployment & Demo** — Production deployment, demo data setup, and onboarding documentation
@@ -49,7 +49,7 @@ Plans:
   4. Data baru muncul di dasbor dalam waktu ≤3 detik setelah input
   5. Halaman dasbor memuat dalam waktu ≤4 detik pada koneksi 4G
 
-**Plans**: 4/5 plans executed
+**Plans**: 5/5 plans complete
 
 Plans:
 
@@ -57,7 +57,7 @@ Plans:
 - [x] 02-02-PLAN.md
 - [x] 02-03-PLAN.md
 - [x] 02-04-PLAN.md
-- [ ] 02-05-PLAN.md
+- [x] 02-05-PLAN.md
 
 **Wave 1**
 
@@ -71,7 +71,7 @@ Plans:
 
 **Wave 3** *(blocked on Wave 2 completion)*
 
-- [ ] 02-05: Chart components — LineChart (decline detection), PieChart (top-10 tooltips), EmptyState, Spinner, RefreshButton
+- [x] 02-05: Chart components — LineChart (decline detection), PieChart (top-10 tooltips), EmptyState, Spinner, RefreshButton
 
 ### Phase 3: E-Report Engine
 
@@ -145,7 +145,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Foundation | 0/5 | Not started | - |
-| 2. Dashboard | 4/5 | In Progress|  |
+| 2. Dashboard | 5/5 | Complete   | 2026-06-26 |
 | 3. E-Report Engine | 0/4 | Not started | - |
 | 4. Quality Assurance | 0/5 | Not started | - |
 | 5. Deployment & Demo | 0/4 | Not started | - |

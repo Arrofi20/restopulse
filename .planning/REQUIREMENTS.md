@@ -16,7 +16,7 @@ Requirements for initial release. Each maps to roadmap phases.
 
 - [x] **DASH-01**: Sistem mengagregasikan data omset dan menggambar Line Chart interaktif riwayat tren harian secara otomatis saat halaman dasbor dimuat
 - [x] **DASH-02**: Sistem mengagregasikan data performa menu dan menggambar Pie Chart persentase menu terlaris secara otomatis
-- [ ] **DASH-03**: Sistem menampilkan pop-up detail (tooltip) berisi nominal angka omset dan menu terlaris secara instan ketika titik tanggal pada grafik disentuh
+- [x] **DASH-03**: Sistem menampilkan pop-up detail (tooltip) berisi nominal angka omset dan menu terlaris secara instan ketika titik tanggal pada grafik disentuh
 
 ### Data Entry & Simulation
 
@@ -65,7 +65,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | AUTH-02 | Phase 1 | Pending |
 | DASH-01 | Phase 2 | Complete |
 | DASH-02 | Phase 2 | Complete |
-| DASH-03 | Phase 2 | Pending |
+| DASH-03 | Phase 2 | Complete |
 | DATA-01 | Phase 1 | Pending |
 | DATA-02 | Phase 1 | Pending |
 | REPT-01 | Phase 3 | Pending |

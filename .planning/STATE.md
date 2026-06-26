@@ -4,17 +4,17 @@ milestone: v1.0
 milestone_name: milestone
 current_phase: 02
 current_phase_name: dashboard
-status: executing
-stopped_at: Completed 02-04-PLAN.md (Dashboard data layer)
-last_updated: "2026-06-26T03:53:11.709Z"
+status: verifying
+stopped_at: Completed 02-05-PLAN.md (Chart components + UI widgets) — Phase 02 dashboard complete, ready for verification
+last_updated: "2026-06-26T04:11:16.586Z"
 last_activity: 2026-06-26
 last_activity_desc: Phase 02 execution started
 progress:
   total_phases: 5
-  completed_phases: 1
+  completed_phases: 2
   total_plans: 10
-  completed_plans: 9
-  percent: 90
+  completed_plans: 10
+  percent: 40
 ---
 
 # Project State
@@ -28,12 +28,12 @@ See: .planning/PROJECT.md (updated 2026-06-25)
 
 ## Current Position
 
-Phase: 02 (dashboard) — EXECUTING
+Phase: 02 (dashboard) — COMPLETE (ready for verification)
 Plan: 5 of 5
-Status: Ready to execute
+Status: Phase complete — ready for verification
 Last activity: 2026-06-26 — Phase 02 execution started
 
-Progress: [█████████░] 90%
+Progress: [██████████] 100% (10/10 plans; 2/5 phases)
 
 ## Performance Metrics
 
@@ -52,6 +52,7 @@ Progress: [█████████░] 90%
 | Phase 02 P02 | ~5 min | 3 tasks | 17 files |
 | Phase 02 P03 | 4min | 3 tasks | 8 files |
 | Phase 02 P04 | 7min | 3 tasks | 13 files |
+| Phase 02 P05 | 10min | 3 tasks | 11 files |
 
 ## Accumulated Context
 
@@ -80,6 +81,11 @@ Progress: [█████████░] 90%
 - [Phase 02]: [Phase 02 P04]: Task 1 ran as TDD RED->GREEN — RED 7f6d1f0 added vitest+jsdom+testing-library (all 4 pkgs verified via npm view, T-02-06) + 7 failing tests vs no-op stubs; GREEN 8609de1 implemented usePolling (Page Visibility pause D-13) + useDashboard (30s poll D-10, refresh D-11, useCallback fetcher D-04); 7/7 tests pass
 - [Phase 02]: [Phase 02 P04]: defaultDateRange() exported from DateFilter and used by DashboardPage instead of the plan's inline new Date().toISOString() — the latter computes a UTC date that can differ from the '7 Hari' preset's date-fns local date by a day, leaving the preset un-highlighted on first paint (Rule 1 bug prevention); single-source date-fns local-date math
 - [Phase 02]: [Phase 02 P04]: D-16 chart grid resolved as grid-cols-1 (Line Chart above, Pie Chart below) per the plan's action text explicit code + acceptance criteria; the must_haves truth 'lg:grid-cols-2 side-by-side' is a stale outlier conflicting with both. vite.config.ts imports defineConfig from vitest/config (not vite) so tsc -b type-checks the test field under tsconfig.node.json types:['node'] (Rule 3 blocking). DASH-03 left pending — ships in 02-05
+- [Phase 02]: [Phase 02 P05]: All 3 tasks executed as TDD RED->GREEN (test then feat per task); stub components in each RED commit kept tsc green, matching 02-04 precedent. 6 commits total
+- [Phase 02]: [Phase 02 P05]: Chart testing = mock react-chartjs-2 Line/Pie to stub canvases in jsdom + unit-test pure exported helpers (computePointColors, aggregateMenuItems, tooltip formatters); honors tdd=true without canvas flakiness. Resolved stale 'DO NOT create a separate test file' note that referenced the already-complete 02-04
+- [Phase 02]: [Phase 02 P05]: Rule 1 fix in lib/format.ts — formatCompactRupiah now uses id-ID comma decimals (Rp 12,0 jt not Rp 12.0 jt) via Intl.NumberFormat; sub-million fallback switched to regular space (was NBSP via currency formatter) for internal consistency; formatRupiah untouched; no prior consumers
+- [Phase 02]: [Phase 02 P05]: Rule 3 fix — LineChart tooltip guards context.parsed.y (number|null) with ?? 0; switched per-task verify from tsc --noEmit to npm run build (tsc -b), the stricter authoritative check under the project-references tsconfig layout
+- [Phase 02]: [Phase 02 P05]: DASH-03 (tooltip on touch) marked COMPLETE — LineChart tooltip (date+Rupiah, D-06) + PieChart tooltip (name+%+count+revenue, D-07) implemented + unit-tested; on-canvas tooltip appearance deferred to visual UAT. EmptyState CTA -> /data-entry (Phase 3 forward-reference). Phase 02 dashboard functionally complete (DASH-01/02/03 all done)
 
 ### Pending Todos
 
@@ -98,6 +104,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-06-26T03:52:33.081Z
-Stopped at: Completed 02-03-PLAN.md (Auth flow + Login + Layout)
+Last session: 2026-06-26T04:10:03.216Z
+Stopped at: Completed 02-05-PLAN.md (Chart components + UI widgets) — Phase 02 dashboard complete
 Resume file: None
