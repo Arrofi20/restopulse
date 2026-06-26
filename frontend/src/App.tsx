@@ -1,16 +1,63 @@
-// Scaffold placeholder — Plan 02-03 replaces this with the router + AuthProvider shell.
-// Kept minimal so the dev server renders a dark-themed surface and proves the
-// Tailwind v4 + @custom-variant dark setup works end-to-end.
+// App — router + protected-route shell.
+//
+// Routes:
+//   /login     → LoginPage (bounces to /dashboard if already authenticated)
+//   /dashboard → ProtectedRoute → DashboardLayout + DashboardPage
+//   /e-report  → ProtectedRoute → DashboardLayout + EReportPage
+//   /          → Navigate to /dashboard (which itself redirects to /login
+//                when unauthenticated, satisfying the must_have truth
+//                "Visiting / redirects unauthenticated users to /login")
+//   *          → Navigate to /dashboard
+//
+// ProtectedRoute reads useAuth(); unauthenticated users are redirected to
+// /login (T-02-12 mitigation). The login page uses its own layout — the
+// DashboardLayout (sidebar + header) wraps only authenticated pages.
 
-function App() {
-  return (
-    <div className="min-h-screen bg-[#1a1a2e] text-white flex items-center justify-center">
-      <div className="text-center">
-        <h1 className="text-3xl font-bold text-amber-400">RestoPulse</h1>
-        <p className="mt-2 text-white/70">Dashboard frontend scaffold ready.</p>
-      </div>
-    </div>
-  );
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { type ReactNode } from 'react';
+import { useAuth } from './contexts/AuthContext';
+import { LoginPage } from './pages/LoginPage';
+import { EReportPage } from './pages/EReportPage';
+import { DashboardLayout } from './components/layout/DashboardLayout';
+
+// Temporary placeholder — Plan 02-04 replaces this with the real
+// DashboardPage (summary cards + Line Chart + Pie Chart + date filter).
+const DashboardPage = () => (
+  <div className="p-2 text-white">Dashboard akan tersedia di plan selanjutnya</div>
+);
+
+function ProtectedRoute({ children }: { children: ReactNode }) {
+  const { isAuthenticated } = useAuth();
+  if (!isAuthenticated) {
+    return <Navigate to="/login" replace />;
+  }
+  return <DashboardLayout>{children}</DashboardLayout>;
 }
 
-export default App;
+export default function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/login" element={<LoginPage />} />
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute>
+              <DashboardPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/e-report"
+          element={
+            <ProtectedRoute>
+              <EReportPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route path="/" element={<Navigate to="/dashboard" replace />} />
+        <Route path="*" element={<Navigate to="/dashboard" replace />} />
+      </Routes>
+    </BrowserRouter>
+  );
+}
