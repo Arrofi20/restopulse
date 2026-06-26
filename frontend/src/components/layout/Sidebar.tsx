@@ -75,6 +75,14 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
             <span aria-hidden="true">📄</span>
             <span>E-Report</span>
           </NavLink>
+          <NavLink
+            to="/data-entry"
+            onClick={onClose}
+            className={({ isActive }) => navLinkClass(isActive)}
+          >
+            <span aria-hidden="true">➕</span>
+            <span>Input Data</span>
+          </NavLink>
         </nav>
 
         {/* Logout at the bottom (D-18) */}

@@ -19,6 +19,7 @@ import { useAuth } from './contexts/AuthContext';
 import { LoginPage } from './pages/LoginPage';
 import { RegisterPage } from './pages/RegisterPage';
 import { EReportPage } from './pages/EReportPage';
+import { DataEntryPage } from './pages/DataEntryPage';
 import DashboardPage from './pages/DashboardPage';
 import { DashboardLayout } from './components/layout/DashboardLayout';
 
@@ -49,6 +50,14 @@ export default function App() {
           element={
             <ProtectedRoute>
               <EReportPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/data-entry"
+          element={
+            <ProtectedRoute>
+              <DataEntryPage />
             </ProtectedRoute>
           }
         />
