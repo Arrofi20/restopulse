@@ -18,13 +18,8 @@ import { type ReactNode } from 'react';
 import { useAuth } from './contexts/AuthContext';
 import { LoginPage } from './pages/LoginPage';
 import { EReportPage } from './pages/EReportPage';
+import DashboardPage from './pages/DashboardPage';
 import { DashboardLayout } from './components/layout/DashboardLayout';
-
-// Temporary placeholder — Plan 02-04 replaces this with the real
-// DashboardPage (summary cards + Line Chart + Pie Chart + date filter).
-const DashboardPage = () => (
-  <div className="p-2 text-white">Dashboard akan tersedia di plan selanjutnya</div>
-);
 
 function ProtectedRoute({ children }: { children: ReactNode }) {
   const { isAuthenticated } = useAuth();
