@@ -85,18 +85,18 @@ Plans:
   3. Sistem menghasilkan file CSV dengan encoding UTF-8 BOM dan delimiter yang kompatibel Excel
   4. Ekspor berfungsi pada viewport mobile 320px
 
-**Plans**: 1/4 plans executed
+**Plans**: 2/4 plans executed
 
 Plans:
 
 - [x] 03-01-PLAN.md
-- [ ] 03-02-PLAN.md
+- [x] 03-02-PLAN.md
 - [ ] 03-03-PLAN.md
 - [ ] 03-04-PLAN.md
 
 **Wave 1**
 
-- [ ] 03-01: Backend Report API — GET /api/report with date filtering, SalesTrend + DailySales aggregation
+- [x] 03-01: Backend Report API — GET /api/report with date filtering, SalesTrend + DailySales aggregation
 
 **Wave 2** *(blocked on Wave 1 completion)*
 
@@ -162,6 +162,6 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 |-------|----------------|--------|-----------|
 | 1. Foundation | 0/5 | Not started | - |
 | 2. Dashboard | 5/5 | Complete   | 2026-06-26 |
-| 3. E-Report Engine | 1/4 | In Progress|  |
+| 3. E-Report Engine | 2/4 | In Progress|  |
 | 4. Quality Assurance | 0/5 | Not started | - |
 | 5. Deployment & Demo | 0/4 | Not started | - |
