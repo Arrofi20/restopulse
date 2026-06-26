@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test:api": "vitest run --config vitest.config.ts",
+    "test:api:watch": "vitest --config vitest.config.ts",
     "dev": "nodemon src/server.ts",
     "start": "node dist/server.js",
     "build": "tsc",
@@ -34,8 +35,11 @@
     "@types/express": "^5.0.6",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^26.0.1",
+    "@types/supertest": "^7.2.0",
     "nodemon": "^3.1.14",
+    "supertest": "^7.2.2",
     "ts-node": "^10.9.2",
-    "typescript": "^6.0.3"
+    "typescript": "^6.0.3",
+    "vitest": "^4.1.9"
   }
 }
