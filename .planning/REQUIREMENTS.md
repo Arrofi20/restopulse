@@ -25,7 +25,7 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### E-Report & Export
 
-- [ ] **REPT-01**: Sistem menyaring, menghitung total pendapatan, dan menyusun lembar ringkasan laporan digital di layar sesuai filter rentang tanggal pemilik
+- [x] **REPT-01**: Sistem menyaring, menghitung total pendapatan, dan menyusun lembar ringkasan laporan digital di layar sesuai filter rentang tanggal pemilik
 - [ ] **REPT-02**: Sistem mengonversi struktur data laporan di layar menjadi file dokumen digital siap cetak berformat PDF
 
 ## v2 Requirements
@@ -68,7 +68,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | DASH-03 | Phase 2 | Complete |
 | DATA-01 | Phase 1 | Pending |
 | DATA-02 | Phase 1 | Pending |
-| REPT-01 | Phase 3 | Pending |
+| REPT-01 | Phase 3 | Complete |
 | REPT-02 | Phase 3 | Pending |
 
 **Coverage:**

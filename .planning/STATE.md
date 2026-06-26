@@ -2,18 +2,18 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-current_phase: 02
-current_phase_name: dashboard
-status: verifying
-stopped_at: Phase 03 context gathered
-last_updated: "2026-06-26T06:21:28.660Z"
+current_phase: 03
+current_phase_name: e-report-engine
+status: executing
+stopped_at: Completed 03-01-PLAN.md
+last_updated: "2026-06-26T09:02:01.794Z"
 last_activity: 2026-06-26
-last_activity_desc: Phase 02 execution started
+last_activity_desc: Phase 03 execution started
 progress:
   total_phases: 5
   completed_phases: 2
-  total_plans: 10
-  completed_plans: 10
+  total_plans: 14
+  completed_plans: 11
   percent: 40
 ---
 
@@ -24,14 +24,14 @@ progress:
 See: .planning/PROJECT.md (updated 2026-06-25)
 
 **Core value:** Pemilik restoran dapat langsung melihat tren pendapatan harian dan menu paling laku, serta menghasilkan laporan keuangan akurat dalam hitungan detik — tanpa perlu menghabiskan berjam-jam untuk rekapitulasi buku kas atau nota fisik.
-**Current focus:** Phase 02 — dashboard
+**Current focus:** Phase 03 — e-report-engine
 
 ## Current Position
 
-Phase: 02 (dashboard) — COMPLETE (ready for verification)
-Plan: 5 of 5
-Status: Phase complete — ready for verification
-Last activity: 2026-06-26 — Phase 02 execution started
+Phase: 03 (e-report-engine) — EXECUTING
+Plan: 2 of 4
+Status: Ready to execute
+Last activity: 2026-06-26 — Phase 03 execution started
 
 Progress: [██████████] 100% (10/10 plans; 2/5 phases)
 
@@ -53,6 +53,7 @@ Progress: [██████████] 100% (10/10 plans; 2/5 phases)
 | Phase 02 P03 | 4min | 3 tasks | 8 files |
 | Phase 02 P04 | 7min | 3 tasks | 13 files |
 | Phase 02 P05 | 10min | 3 tasks | 11 files |
+| Phase 03 P01 | 3 min | 3 tasks | 6 files |
 
 ## Accumulated Context
 
@@ -86,6 +87,7 @@ Progress: [██████████] 100% (10/10 plans; 2/5 phases)
 - [Phase 02]: [Phase 02 P05]: Rule 1 fix in lib/format.ts — formatCompactRupiah now uses id-ID comma decimals (Rp 12,0 jt not Rp 12.0 jt) via Intl.NumberFormat; sub-million fallback switched to regular space (was NBSP via currency formatter) for internal consistency; formatRupiah untouched; no prior consumers
 - [Phase 02]: [Phase 02 P05]: Rule 3 fix — LineChart tooltip guards context.parsed.y (number|null) with ?? 0; switched per-task verify from tsc --noEmit to npm run build (tsc -b), the stricter authoritative check under the project-references tsconfig layout
 - [Phase 02]: [Phase 02 P05]: DASH-03 (tooltip on touch) marked COMPLETE — LineChart tooltip (date+Rupiah, D-06) + PieChart tooltip (name+%+count+revenue, D-07) implemented + unit-tested; on-canvas tooltip appearance deferred to visual UAT. EmptyState CTA -> /data-entry (Phase 3 forward-reference). Phase 02 dashboard functionally complete (DASH-01/02/03 all done)
+- [Phase 03]: [Phase 03 P01]: Per-day transactionCount derived from DailySales record presence (1/0) — schema has no transaction_count column and @@unique([outlet_id, date]) makes each daily record the transaction unit. ReportService resolves outlet name via prisma.outlet.findUnique; dateRangeSchema reused (DRY); live SalesTrend + DailySales queries per D-31/D-33b, DailySalesReport snapshot table unused (no population mechanism)
 
 ### Pending Todos
 
@@ -104,6 +106,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-06-26T06:21:28.648Z
-Stopped at: Phase 03 context gathered
-Resume file: .planning/phases/03-e-report-engine/03-CONTEXT.md
+Last session: 2026-06-26T09:00:59.780Z
+Stopped at: Completed 03-01-PLAN.md
+Resume file: None
