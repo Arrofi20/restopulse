@@ -5,16 +5,16 @@ milestone_name: milestone
 current_phase: 02
 current_phase_name: dashboard
 status: executing
-stopped_at: "Completed 02-02-PLAN.md (Frontend scaffold: Vite + React 19 + Tailwind v4 + Chart.js + utils + API client)"
-last_updated: "2026-06-26T03:30:20.323Z"
+stopped_at: Completed 02-03-PLAN.md (Auth flow + Login + Layout)
+last_updated: "2026-06-26T03:40:48.104Z"
 last_activity: 2026-06-26
 last_activity_desc: Phase 02 execution started
 progress:
   total_phases: 5
   completed_phases: 1
   total_plans: 10
-  completed_plans: 7
-  percent: 70
+  completed_plans: 8
+  percent: 80
 ---
 
 # Project State
@@ -29,11 +29,11 @@ See: .planning/PROJECT.md (updated 2026-06-25)
 ## Current Position
 
 Phase: 02 (dashboard) — EXECUTING
-Plan: 3 of 5
+Plan: 4 of 5
 Status: Ready to execute
 Last activity: 2026-06-26 — Phase 02 execution started
 
-Progress: [███████░░░] 70%
+Progress: [████████░░] 80%
 
 ## Performance Metrics
 
@@ -50,6 +50,7 @@ Progress: [███████░░░] 70%
 | 1     | 5/5             | ~1.3h    |
 | Phase 02 P01 | 10min | 3 tasks | 5 files |
 | Phase 02 P02 | ~5 min | 3 tasks | 17 files |
+| Phase 02 P03 | 4min | 3 tasks | 8 files |
 
 ## Accumulated Context
 
@@ -71,6 +72,10 @@ Progress: [███████░░░] 70%
 - [Phase 02]: [Phase 02 P02]: react-chartjs-2@5.3.1 peerDeps explicitly list react ^19.0.0 — no --legacy-peer-deps needed (RESEARCH Pitfall 6 resolved); no chartjs-adapter-date-fns installed (category scale, not time scale, per Pitfall 3)
 - [Phase 02]: [Phase 02 P02]: api/client.ts uses TOKEN_KEY='restopulse_token' + Authorization: Bearer header cast (Record<string,string>) + 401 -> clearToken + /login redirect; no credentials: include (Bearer tokens, not cookies — Pitfall 2)
 - [Phase 02]: [Phase 02 P02]: DASH-03 (tooltip on touch) left pending — this scaffold delivers infrastructure only; tooltip callbacks ship in Plan 02-05. DASH-01/DASH-02 already complete from Plan 02-01
+- [Phase 02]: [Phase 02 P03]: Reordered plan tasks 1 -> 3 -> 2 because Task 2 App.tsx imports DashboardLayout (a Task 3 deliverable); executing Task 3 first keeps every task's tsc --noEmit verify passing with no stubs (Rule 3 blocking fix)
+- [Phase 02]: [Phase 02 P03]: AuthContext persists owner {id, username} in localStorage 'restopulse_user' alongside the token so the header username (D-17) survives page refresh; scoped to existing localStorage trust boundary T-02-11 (Rule 2 missing critical functionality)
+- [Phase 02]: [Phase 02 P03]: All auth redirects use window.location.href (login->dashboard, logout->login, already-authed->dashboard) for v1 simplicity + consistency with apiClient 401 handler; ProtectedRoute uses children-prop wrapping pattern (not react-router Outlet); chartConfig.ts import deferred to Plan 02-05
+- [Phase 02]: [Phase 02 P03]: DASH-03 (tooltip) left pending — this plan delivers auth + layout, not tooltips; requirements mark-complete run with DASH-01 DASH-02 only (both already complete from 02-01, no-op); DASH-03 ships in Plan 02-05
 
 ### Pending Todos
 
@@ -89,6 +94,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-06-26T03:30:02.366Z
-Stopped at: Completed 02-02-PLAN.md (Frontend scaffold: Vite + React 19 + Tailwind v4 + Chart.js + utils + API client)
+Last session: 2026-06-26T03:40:46.541Z
+Stopped at: Completed 02-03-PLAN.md (Auth flow + Login + Layout)
 Resume file: None

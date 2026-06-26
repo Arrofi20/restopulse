@@ -49,13 +49,13 @@ Plans:
   4. Data baru muncul di dasbor dalam waktu ≤3 detik setelah input
   5. Halaman dasbor memuat dalam waktu ≤4 detik pada koneksi 4G
 
-**Plans**: 2/5 plans executed
+**Plans**: 3/5 plans executed
 
 Plans:
 
 - [x] 02-01-PLAN.md
 - [x] 02-02-PLAN.md
-- [ ] 02-03-PLAN.md
+- [x] 02-03-PLAN.md
 - [ ] 02-04-PLAN.md
 - [ ] 02-05-PLAN.md
 
@@ -66,7 +66,7 @@ Plans:
 
 **Wave 2** *(blocked on Wave 1 completion)*
 
-- [ ] 02-03: Auth flow + Login page + App shell + layout (Sidebar, Header, DashboardLayout)
+- [x] 02-03: Auth flow + Login page + App shell + layout (Sidebar, Header, DashboardLayout)
 - [ ] 02-04: Dashboard data layer — usePolling, useDashboard, DateFilter, SummaryCards, DashboardPage shell
 
 **Wave 3** *(blocked on Wave 2 completion)*
@@ -145,7 +145,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Foundation | 0/5 | Not started | - |
-| 2. Dashboard | 2/5 | In Progress|  |
+| 2. Dashboard | 3/5 | In Progress|  |
 | 3. E-Report Engine | 0/4 | Not started | - |
 | 4. Quality Assurance | 0/5 | Not started | - |
 | 5. Deployment & Demo | 0/4 | Not started | - |
