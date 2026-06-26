@@ -4,7 +4,7 @@
 //   1. Page header ("E-Report")
 //   2. Outlet name + period label (or "Memuat..." while loading)
 //   3. ReportDateFilter — own date state, independent of dashboard (D-21)
-//   4. ExportButtons — sticky, disabled until handlers are wired (03-03/03-04)
+//   4. ExportButtons — sticky; PDF enabled by Plan 03-03, CSV disabled until 03-04
 //   5. ReportSummaryCards — total omset / transaction count / top menu
 //   6. Error banner when fetch fails
 //   7. ReportDailyTable — daily breakdown (D-23)
@@ -42,7 +42,7 @@ export function EReportPage() {
       {/* 3. Date filter (independent state) */}
       <ReportDateFilter value={dateRange} onChange={setDateRange} />
 
-      {/* 4. Export buttons (sticky; disabled until 03-03/03-04 wire handlers) */}
+      {/* 4. Export buttons (sticky; PDF enabled by 03-03, CSV pending 03-04) */}
       <ExportButtons data={data} />
 
       {/* 5. Summary cards */}

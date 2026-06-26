@@ -5,29 +5,31 @@
 // vertically (flex-col); on >=sm they sit at the right (sm:flex-row
 // sm:justify-end, sm:w-auto).
 //
-// The export handlers (`onExportPDF` / `onExportCSV`) are optional. When not
-// provided (or when there is no `data` to export), both buttons are disabled.
-// This lets plans 03-03 and 03-04 wire their export engines without touching
-// this component's core layout — they only need to pass handler callbacks.
+// The PDF export engine (Plan 03-03) is wired in directly here via
+// `generateReportPDF(data)` — when report data is present the PDF button is
+// enabled and triggers a client-side download (D-36). The CSV button stays
+// disabled as a placeholder until Plan 03-04 wires its handler.
 
 import type { ReportData } from '../../types/report';
+import { generateReportPDF } from '../../lib/pdfGenerator';
 
 interface ExportButtonsProps {
   data: ReportData | null;
-  onExportPDF?: () => void;
-  onExportCSV?: () => void;
 }
 
-export function ExportButtons({ data, onExportPDF, onExportCSV }: ExportButtonsProps) {
-  const pdfDisabled = !data || !onExportPDF;
-  const csvDisabled = !data || !onExportCSV;
+export function ExportButtons({ data }: ExportButtonsProps) {
+  const pdfDisabled = !data;
+  // CSV engine ships in Plan 03-04 — button stays disabled as a placeholder.
+  const csvDisabled = true;
 
   return (
     <div className="sticky top-0 z-10 bg-gray-950/95 py-3 backdrop-blur-sm">
       <div className="flex flex-col gap-2 sm:flex-row sm:justify-end">
         <button
           type="button"
-          onClick={onExportPDF}
+          onClick={() => {
+            if (data) generateReportPDF(data);
+          }}
           disabled={pdfDisabled}
           className="w-full rounded bg-amber-400 px-4 py-2 font-bold text-black transition-opacity disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto"
         >
@@ -35,7 +37,6 @@ export function ExportButtons({ data, onExportPDF, onExportCSV }: ExportButtonsP
         </button>
         <button
           type="button"
-          onClick={onExportCSV}
           disabled={csvDisabled}
           className="w-full rounded bg-gray-700 px-4 py-2 text-white transition-opacity disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto"
         >
