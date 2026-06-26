@@ -6,7 +6,7 @@ current_phase: 03
 current_phase_name: e-report-engine
 status: executing
 stopped_at: Completed 03-01-PLAN.md
-last_updated: "2026-06-26T09:07:09.893Z"
+last_updated: "2026-06-26T09:07:26.662Z"
 last_activity: 2026-06-26
 last_activity_desc: Phase 03 execution started
 progress:
@@ -89,6 +89,7 @@ Progress: [██████████] 100% (10/10 plans; 2/5 phases)
 - [Phase 02]: [Phase 02 P05]: Rule 3 fix — LineChart tooltip guards context.parsed.y (number|null) with ?? 0; switched per-task verify from tsc --noEmit to npm run build (tsc -b), the stricter authoritative check under the project-references tsconfig layout
 - [Phase 02]: [Phase 02 P05]: DASH-03 (tooltip on touch) marked COMPLETE — LineChart tooltip (date+Rupiah, D-06) + PieChart tooltip (name+%+count+revenue, D-07) implemented + unit-tested; on-canvas tooltip appearance deferred to visual UAT. EmptyState CTA -> /data-entry (Phase 3 forward-reference). Phase 02 dashboard functionally complete (DASH-01/02/03 all done)
 - [Phase 03]: [Phase 03 P01]: Per-day transactionCount derived from DailySales record presence (1/0) — schema has no transaction_count column and @@unique([outlet_id, date]) makes each daily record the transaction unit. ReportService resolves outlet name via prisma.outlet.findUnique; dateRangeSchema reused (DRY); live SalesTrend + DailySales queries per D-31/D-33b, DailySalesReport snapshot table unused (no population mechanism)
+- [Phase ?]: [Phase 03 P02]: useReport mirrors useDashboard verbatim (30s poll, refresh()) — only endpoint path differs. ReportDateFilter ships Harian/Mingguan/Bulanan + custom with Bulanan default via defaultReportDateRange() (D-19/D-20). ReportDailyTable uses overflow-x-auto. ExportButtons handlers optional so 03-03/03-04 wire PDF/CSV without editing layout. Report date state independent in EReportPage useState (D-21).
 
 ### Pending Todos
 
