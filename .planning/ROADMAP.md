@@ -49,12 +49,19 @@ Plans:
   4. Data baru muncul di dasbor dalam waktu ≤3 detik setelah input
   5. Halaman dasbor memuat dalam waktu ≤4 detik pada koneksi 4G
 
-**Plans**: 5 plans
+**Plans**: 1/5 plans executed
 
 Plans:
+
+- [x] 02-01-PLAN.md
+- [ ] 02-02-PLAN.md
+- [ ] 02-03-PLAN.md
+- [ ] 02-04-PLAN.md
+- [ ] 02-05-PLAN.md
+
 **Wave 1**
 
-- [ ] 02-01: Backend API — CORS fix + GET /api/dashboard endpoint (SalesTrend data + summary stats)
+- [x] 02-01: Backend API — CORS fix + GET /api/dashboard endpoint (SalesTrend data + summary stats)
 - [ ] 02-02: Frontend scaffold — Vite + React 19 + Tailwind v4 + Chart.js + utilities + API client
 
 **Wave 2** *(blocked on Wave 1 completion)*
@@ -138,7 +145,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Foundation | 0/5 | Not started | - |
-| 2. Dashboard | 0/5 | Planned | - |
+| 2. Dashboard | 1/5 | In Progress|  |
 | 3. E-Report Engine | 0/4 | Not started | - |
 | 4. Quality Assurance | 0/5 | Not started | - |
 | 5. Deployment & Demo | 0/4 | Not started | - |
