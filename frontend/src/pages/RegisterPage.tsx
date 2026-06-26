@@ -1,25 +1,22 @@
-// LoginPage — username/password form that calls AuthContext.login and
-// redirects to /dashboard on success (D-17 prerequisite: login must exist
-// before the dashboard is accessible).
-//
-// Auth flow: POST /api/auth/login via apiClient → AuthContext stores the
-// token + user → redirect to /dashboard. Failed login shows an Indonesian
-// error message. If the user is already authenticated, visiting /login
-// bounces to /dashboard.
-
 import { useState, useEffect, type FormEvent } from 'react';
-import { Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import { post } from '../api/client';
 
-export function LoginPage() {
-  const { isAuthenticated, login } = useAuth();
+interface RegisterResponse {
+  success: boolean;
+  data: {
+    token: string;
+    owner: { id: string; username: string };
+  };
+}
+
+export function RegisterPage() {
+  const { isAuthenticated } = useAuth();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
-  // Already logged in? Bounce to the dashboard (simple v1 redirect —
-  // matches the logout + 401 redirect mechanism in AuthContext/apiClient).
   useEffect(() => {
     if (isAuthenticated) {
       window.location.href = '/dashboard';
@@ -29,15 +26,25 @@ export function LoginPage() {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setError(null);
+
+    if (username.trim().length < 3) {
+      setError('Nama pengguna minimal 3 karakter');
+      return;
+    }
+    if (password.length < 6) {
+      setError('Kata sandi minimal 6 karakter');
+      return;
+    }
+
     setLoading(true);
     try {
-      // login() throws on bad credentials (apiClient throws on non-ok), so
-      // reaching the next line means success.
-      await login(username, password);
-      window.location.href = '/dashboard';
-      // Leave loading=true during the redirect; only reset on error.
+      await post<RegisterResponse>('/auth/register', {
+        username: username.trim(),
+        password,
+      });
+      window.location.href = '/login';
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Gagal masuk');
+      setError(err instanceof Error ? err.message : 'Gagal mendaftar');
       setLoading(false);
     }
   };
@@ -47,7 +54,7 @@ export function LoginPage() {
       <div className="w-full max-w-sm rounded-lg border border-gray-800 bg-gray-900 p-8">
         <div className="mb-6 text-center">
           <h1 className="text-3xl font-bold text-amber-400">RestoPulse</h1>
-          <p className="mt-1 text-lg text-gray-300">Dasbor Analitik Restoran</p>
+          <p className="mt-1 text-lg text-gray-300">Buat Akun Baru</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -80,7 +87,7 @@ export function LoginPage() {
             <input
               id="password"
               type="password"
-              autoComplete="current-password"
+              autoComplete="new-password"
               required
               value={password}
               onChange={(e) => setPassword(e.target.value)}
@@ -100,16 +107,9 @@ export function LoginPage() {
             disabled={loading}
             className="w-full rounded-md bg-amber-500 px-4 py-2.5 font-semibold text-black transition-colors hover:bg-amber-400 disabled:cursor-not-allowed disabled:opacity-60"
           >
-            {loading ? 'Memproses...' : 'Masuk'}
+            {loading ? 'Memproses...' : 'Daftar'}
           </button>
         </form>
-
-        <p className="mt-4 text-center text-sm text-gray-400">
-          Belum punya akun?{' '}
-          <Link to="/register" className="text-amber-400 hover:text-amber-300">
-            Daftar
-          </Link>
-        </p>
       </div>
     </div>
   );
