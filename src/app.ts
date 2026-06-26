@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import authRoutes from './routes/auth.routes';
 import salesRoutes from './routes/sales.routes';
 import adminRoutes from './routes/admin.routes';
+import dashboardRoutes from './routes/dashboard.routes';
 import { errorHandler } from './middleware/errorHandler';
 import { authRateLimiter } from './middleware/rateLimiter';
 
@@ -30,6 +31,7 @@ app.get('/health', (req, res) => {
 
 app.use('/api/auth', authRateLimiter, authRoutes);
 app.use('/api/sales', salesRoutes);
+app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/admin', adminRoutes);
 
 app.use(errorHandler);
