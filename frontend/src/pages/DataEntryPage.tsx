@@ -154,7 +154,7 @@ export function DataEntryPage() {
             type="number"
             value={revenue}
             min="1"
-            step="1000"
+            step="1"
             placeholder="Contoh: 2500000"
             onChange={(e) => setRevenue(e.target.value)}
             className="w-full rounded border border-gray-700 bg-gray-800 px-3 py-2.5 text-sm text-white min-h-[44px]"
