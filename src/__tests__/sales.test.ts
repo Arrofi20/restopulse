@@ -174,7 +174,7 @@ describe('Sales API', () => {
     const res = await request(app)
       .post('/api/admin/dummy-inject')
       .set('Authorization', `Bearer ${token}`)
-      .send({ days: 7, confirm: 'HAPUS' });
+      .send({ days: 7, confirm: true });
 
     expect(res.status).toBe(200);
     expect(res.body.success).toBe(true);

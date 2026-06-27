@@ -89,9 +89,9 @@ export class DummyService {
     };
   }
 
-  async injectDummyData(outlet_id: string, days: number, confirm: string) {
-    if (confirm !== 'HAPUS') {
-      throw new Error("Confirmation required: type 'HAPUS' to proceed");
+  async injectDummyData(outlet_id: string, days: number, confirm: boolean) {
+    if (confirm !== true) {
+      throw new Error('Confirmation required: set confirm to true to proceed');
     }
 
     const cappedDays = Math.min(days, 730);
