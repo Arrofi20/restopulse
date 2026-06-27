@@ -5,15 +5,15 @@ milestone_name: milestone
 current_phase: 05
 current_phase_name: deployment-demo
 status: executing
-stopped_at: Completed 05-01-PLAN.md
-last_updated: "2026-06-27T10:52:55.102Z"
+stopped_at: Completed 05-02-PLAN.md
+last_updated: "2026-06-27T11:01:00.030Z"
 last_activity: 2026-06-27
 last_activity_desc: Phase 05 execution started
 progress:
   total_phases: 5
   completed_phases: 4
   total_plans: 23
-  completed_plans: 21
+  completed_plans: 22
   percent: 80
 ---
 
@@ -29,7 +29,7 @@ See: .planning/PROJECT.md (updated 2026-06-25)
 ## Current Position
 
 Phase: 05 (deployment-demo) — EXECUTING
-Plan: 2 of 4
+Plan: 3 of 4
 Status: Ready to execute
 Last activity: 2026-06-27 — Phase 05 execution started
 
@@ -62,6 +62,7 @@ Progress: [██████████] 100% (10/10 plans; 2/5 phases)
 | Phase 04-quality-assurance P04 | 25min | 2 tasks | 2 files |
 | Phase 04-quality-assurance P05 | 3min | 3 tasks | 4 files |
 | Phase 05-deployment-demo P01 | 18min | 3 tasks | 6 files |
+| Phase 05-deployment-demo P02 | 4min | 4 tasks | 5 files |
 
 ## Accumulated Context
 
@@ -114,6 +115,8 @@ Progress: [██████████] 100% (10/10 plans; 2/5 phases)
 - [Phase 05]: Monitoring: existing `/health` endpoint only — no external uptime monitoring or structured logging
 - [Phase ?]: Prisma 7 does not support env() in datasource provider argument; kept provider as literal string and created separate schema.postgresql.prisma for production
 - [Phase ?]: Prisma 7 removed url from schema files; moved connection URL entirely to prisma.config.ts
+- [Phase ?]: Fixed tsconfig rootDir from '.' to './src' so tsc produces dist/server.js, matching the npm start script expectation
+- [Phase ?]: Created DEPLOYMENT.md with verification commands for post-Render-deploy validation rather than attempting live curls against non-existent services
 
 ### Pending Todos
 
@@ -132,6 +135,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-06-27T10:52:55.089Z
-Stopped at: Completed 05-01-PLAN.md
+Last session: 2026-06-27T11:01:00.002Z
+Stopped at: Completed 05-02-PLAN.md
 Resume file: None

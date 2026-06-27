@@ -158,18 +158,18 @@ Plans:
   3. Dokumentasi onboarding tersedia untuk pemilik restoran
   4. Demo data simulasi siap untuk presentasi
 
-**Plans**: 2/4 plans executed
+**Plans**: 3/4 plans executed
 
 Plans:
 
 - [x] 05-01-PLAN.md — Setup production environment (Render Web Service + PostgreSQL, env vars, Prisma config)
-- [ ] 05-02-PLAN.md — Deploy backend and frontend (build scripts, CORS, API base URL, static site)
+- [x] 05-02-PLAN.md — Deploy backend and frontend (build scripts, CORS, API base URL, static site)
 - [x] 05-03-PLAN.md — Demo data scenario and user guide (README in Bahasa Indonesia)
 - [ ] 05-04-PLAN.md — Basic monitoring (health check verification)
 
 **Wave 1**
 
-- [ ] 05-01: Prisma env-aware config + .env.example + production migration command
+- [x] 05-01: Prisma env-aware config + .env.example + production migration command
 
 **Wave 2** *(blocked on Wave 1: 05-01)*
 
@@ -177,7 +177,7 @@ Plans:
 
 **Wave 3** *(blocked on Wave 2: 05-02)*
 
-- [ ] 05-03: README user guide in Bahasa Indonesia + demo scenario
+- [x] 05-03: README user guide in Bahasa Indonesia + demo scenario
 - [ ] 05-04: Health endpoint enrichment + startup logs + health-check script
 
 ## Progress
@@ -191,4 +191,4 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 | 2. Dashboard | 5/5 | Complete   | 2026-06-26 |
 | 3. E-Report Engine | 4/4 | Complete   | 2026-06-26 |
 | 4. Quality Assurance | 5/5 | Complete   | 2026-06-26 |
-| 5. Deployment & Demo | 2/4 | In Progress|  |
+| 5. Deployment & Demo | 3/4 | In Progress|  |
