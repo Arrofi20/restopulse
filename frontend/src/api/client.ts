@@ -75,3 +75,10 @@ export async function post<T>(endpoint: string, body: unknown): Promise<T> {
     body: JSON.stringify(body),
   });
 }
+
+export async function patch<T>(endpoint: string, body: unknown): Promise<T> {
+  return apiClient<T>(endpoint, {
+    method: 'PATCH',
+    body: JSON.stringify(body),
+  });
+}

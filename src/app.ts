@@ -6,6 +6,7 @@ import salesRoutes from './routes/sales.routes';
 import adminRoutes from './routes/admin.routes';
 import dashboardRoutes from './routes/dashboard.routes';
 import reportRoutes from './routes/report.routes';
+import outletRoutes from './routes/outlet.routes';
 import { errorHandler } from './middleware/errorHandler';
 import { authRateLimiter } from './middleware/rateLimiter';
 
@@ -39,6 +40,7 @@ app.use('/api/auth', authRateLimiter, authRoutes);
 app.use('/api/sales', salesRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/report', reportRoutes);
+app.use('/api/outlet', outletRoutes);
 app.use('/api/admin', adminRoutes);
 
 app.use(errorHandler);
