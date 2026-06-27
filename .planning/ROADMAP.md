@@ -174,11 +174,11 @@ Plans:
 **Wave 2** *(blocked on Wave 1: 05-01)*
 
 - [ ] 05-02: Frontend API base URL + render.yaml + build verification
-- [ ] 05-04: Health endpoint enrichment + startup logs + health-check script
 
 **Wave 3** *(blocked on Wave 2: 05-02)*
 
 - [ ] 05-03: README user guide in Bahasa Indonesia + demo scenario
+- [ ] 05-04: Health endpoint enrichment + startup logs + health-check script
 
 ## Progress
 
