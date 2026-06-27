@@ -2,13 +2,13 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-current_phase: 04
-current_phase_name: quality-assurance
-status: verifying
-stopped_at: Completed 04-04-PLAN.md
-last_updated: "2026-06-26T11:30:17.364Z"
-last_activity: 2026-06-26
-last_activity_desc: Phase 04 execution started
+current_phase: 05
+current_phase_name: deployment-demo
+status: discussing
+stopped_at: Completed 05-CONTEXT.md
+last_updated: "2026-06-27T00:00:00.000Z"
+last_activity: 2026-06-27
+last_activity_desc: Phase 05 context gathered
 progress:
   total_phases: 5
   completed_phases: 4
@@ -24,7 +24,7 @@ progress:
 See: .planning/PROJECT.md (updated 2026-06-25)
 
 **Core value:** Pemilik restoran dapat langsung melihat tren pendapatan harian dan menu paling laku, serta menghasilkan laporan keuangan akurat dalam hitungan detik — tanpa perlu menghabiskan berjam-jam untuk rekapitulasi buku kas atau nota fisik.
-**Current focus:** Phase 04 — quality-assurance
+**Current focus:** Phase 05 — deployment-demo
 
 ## Current Position
 
@@ -106,6 +106,11 @@ Progress: [██████████] 100% (10/10 plans; 2/5 phases)
 - [Phase ?]: [04-04] JWT verifyToken() checks signature + expiry but not payload shape — missing outletId in token passes authMiddleware. Minor severity.
 - [Phase ?]: Auto-approved UAT checkpoint under auto_advance mode — UAT session with restaurant owner must be conducted separately using uat-script.md and uat-checklist.md
 - [Phase ?]: 04-05: Only 1 Major bug across all 4 prior audits — Auth Zod validation fixed with registerSchema+loginSchema following SalesController pattern. No Critical bugs found.
+- [Phase 05]: Hosting: Render.com — backend Web Service + PostgreSQL, frontend Static Site (split deploy)
+- [Phase 05]: Database: SQLite local dev, PostgreSQL production (Render) — environment-based Prisma datasource
+- [Phase 05]: Demo data: existing "Suntik Data Simulasi" button (no pre-seeded demo account)
+- [Phase 05]: Onboarding: short user guide in README, Bahasa Indonesia, for restaurant owners
+- [Phase 05]: Monitoring: existing `/health` endpoint only — no external uptime monitoring or structured logging
 
 ### Pending Todos
 
