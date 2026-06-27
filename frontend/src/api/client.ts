@@ -11,7 +11,10 @@
 // `credentials: 'include'` is intentionally NOT set — the backend uses
 // Bearer tokens, not cookies (RESEARCH.md Pitfall 2).
 
-const API_BASE = '/api';
+// VITE_API_BASE_URL must be set during the Render Static Site build so the
+// frontend calls the correct backend origin in production. Falls back to
+// '/api' for local development (relies on Vite dev proxy).
+const API_BASE = (import.meta.env.VITE_API_BASE_URL as string | undefined) || '/api';
 const TOKEN_KEY = 'restopulse_token';
 
 function getToken(): string | null {
