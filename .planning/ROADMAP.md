@@ -162,10 +162,23 @@ Plans:
 
 Plans:
 
-- [ ] 05-01: Setup production environment (VPS/PaaS, environment variables, SSL)
-- [ ] 05-02: Deploy aplikasi backend dan frontend ke production
-- [ ] 05-03: Prepare demo data scenario dan panduan pengguna (bahasa Indonesia)
-- [ ] 05-04: Setup monitoring dasar (health check endpoint, error logging)
+- [ ] 05-01-PLAN.md — Setup production environment (Render Web Service + PostgreSQL, env vars, Prisma config)
+- [ ] 05-02-PLAN.md — Deploy backend and frontend (build scripts, CORS, API base URL, static site)
+- [ ] 05-03-PLAN.md — Demo data scenario and user guide (README in Bahasa Indonesia)
+- [ ] 05-04-PLAN.md — Basic monitoring (health check verification)
+
+**Wave 1**
+
+- [ ] 05-01: Prisma env-aware config + .env.example + production migration command
+
+**Wave 2** *(blocked on Wave 1: 05-01)*
+
+- [ ] 05-02: Frontend API base URL + render.yaml + build verification
+- [ ] 05-04: Health endpoint enrichment + startup logs + health-check script
+
+**Wave 3** *(blocked on Wave 2: 05-02)*
+
+- [ ] 05-03: README user guide in Bahasa Indonesia + demo scenario
 
 ## Progress
 
