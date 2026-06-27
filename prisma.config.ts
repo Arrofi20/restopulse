@@ -4,9 +4,9 @@ export default defineConfig({
   earlyAccess: true,
   schema: './prisma/schema.prisma',
   datasource: {
-    url: 'file:./prisma/dev.db',
+    url: process.env.DATABASE_URL,
   },
   migrate: {
-    datasourceUrl: 'file:./prisma/dev.db',
+    datasourceUrl: process.env.DATABASE_URL,
   },
 })
