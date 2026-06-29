@@ -19,12 +19,14 @@
 
 import { useState } from 'react';
 import { useDashboard } from '../hooks/useDashboard';
+import { useAiSummary } from '../hooks/useAiSummary';
 import { DateFilter, defaultDateRange } from '../components/dashboard/DateFilter';
 import { SummaryCards } from '../components/dashboard/SummaryCards';
 import { LineChart } from '../components/dashboard/LineChart';
 import { PieChart } from '../components/dashboard/PieChart';
 import { EmptyState } from '../components/dashboard/EmptyState';
 import { RefreshButton } from '../components/ui/RefreshButton';
+import { Spinner } from '../components/ui/Spinner';
 import type { DateRange } from '../types/dashboard';
 
 export default function DashboardPage() {
@@ -34,17 +36,43 @@ export default function DashboardPage() {
   // children. D-10: auto-poll every 30s (inside useDashboard -> usePolling).
   // D-13: polling pauses when the tab is hidden.
   const { data, loading, error, refresh } = useDashboard(dateRange);
+  const { summary, loading: aiLoading, error: aiError, generate } = useAiSummary();
 
   // D-09: empty state when data loaded but no trends for this period.
   const showEmptyState =
     !loading && !!data && data.trends.length === 0;
+
+  const handleAiSummary = () => {
+    if (!data) return;
+    generate({ trends: data.trends, summary: data.summary });
+  };
 
   return (
     <div className="space-y-4">
       {/* Top bar: date filter (left) + manual refresh (right) (D-11) */}
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <DateFilter value={dateRange} onChange={setDateRange} />
-        <RefreshButton onClick={refresh} loading={loading} />
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={handleAiSummary}
+            disabled={aiLoading || !data}
+            className="flex items-center gap-2 rounded-lg bg-indigo-600 px-3 py-2.5 text-sm font-medium text-white transition-colors hover:bg-indigo-500 disabled:cursor-not-allowed disabled:opacity-60 min-h-[44px]"
+          >
+            {aiLoading ? (
+              <>
+                <Spinner />
+                <span>Membuat ringkasan...</span>
+              </>
+            ) : (
+              <>
+                <span aria-hidden="true">✨</span>
+                <span>Ringkasan AI</span>
+              </>
+            )}
+          </button>
+          <RefreshButton onClick={refresh} loading={loading} />
+        </div>
       </div>
 
       <SummaryCards
@@ -80,6 +108,25 @@ export default function DashboardPage() {
               Menu Terlaris
             </h3>
             <PieChart trends={data?.trends ?? []} loading={loading} />
+          </div>
+        </div>
+      )}
+
+      {/* AI Summary error state */}
+      {aiError && (
+        <div className="rounded-lg border border-red-700 bg-red-900/50 p-4 text-red-300">
+          {aiError}
+        </div>
+      )}
+
+      {/* AI Summary result */}
+      {summary && (
+        <div className="rounded-xl border border-gray-800 bg-gray-900 p-4">
+          <h3 className="mb-3 text-lg font-semibold text-white">
+            Ringkasan AI
+          </h3>
+          <div className="whitespace-pre-wrap text-sm leading-relaxed text-gray-300">
+            {summary}
           </div>
         </div>
       )}
