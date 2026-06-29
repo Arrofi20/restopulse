@@ -58,7 +58,7 @@ Progress: [██████████] 100% (23/23 plans; 5/5 phases)
 
 ### Pending Todos
 
-None.
+- Plan 05-05: implementasi AI Analytics (backend endpoint /api/ai/summary + frontend komponen tombol dan card ringkasan AI) — status: planned
 
 ### Blockers/Concerns
 

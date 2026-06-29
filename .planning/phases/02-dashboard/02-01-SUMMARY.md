@@ -46,7 +46,7 @@ key-decisions:
 
 patterns-established:
   - "Dashboard read path: Controller -> Service (validate + query + aggregate + parse JSON) -> Repository, mirroring the Sales vertical"
-  - "Aggregate-summary repository method returning { totalRevenue, transactionCount } with || 0 null-coalescing"
+  - "Aggregate-summary repository method returning { totalRevenue, dayCount } with || 0 null-coalescing"
 
 requirements-completed:
   - DASH-01
@@ -67,7 +67,7 @@ coverage:
     human_judgment: true
     rationale: "No unit/integration test suite exists for this plan; the 401-without-token and 200-with-token contract requires a running server, seeded DB, and live login flow that was not executed during this run."
   - id: D2
-    description: "Dashboard response shape { success, data: { outlet: { name }, trends: [...], summary: { totalRevenue, transactionCount } } } with menu_popularity parsed from JSON string"
+    description: "Dashboard response shape { success, data: { outlet: { name }, trends: [...], summary: { totalRevenue, dayCount } } } with menu_popularity parsed from JSON string"
     requirement: DASH-02
     verification:
       - kind: other
@@ -121,7 +121,7 @@ status: complete
 ## Accomplishments
 
 - **Fixed CORS** in `src/app.ts`: replaced bare `app.use(cors())` with explicit `cors({ origin: process.env.CORS_ORIGIN || 'http://localhost:5173', credentials: true })` so the Phase 2 Vite frontend can call the API (closes CORS pitfall from 02-RESEARCH.md).
-- **Added `aggregateSummary`** to `SalesTrendRepository`: Prisma `aggregate` over the date range scoped to `outlet_id`, returning `{ totalRevenue, transactionCount }` with `|| 0` null-coalescing — the summary half of the dashboard payload.
+- **Added `aggregateSummary`** to `SalesTrendRepository`: Prisma `aggregate` over the date range scoped to `outlet_id`, returning `{ totalRevenue, dayCount }` with `|| 0` null-coalescing — the summary half of the dashboard payload.
 - **Created `DashboardService`**: validates `start`/`end` with the existing `dateRangeSchema` (DRY reuse), parses UTC day boundaries, queries pre-computed `SalesTrend` rows + aggregate summary, `JSON.parse`s `menu_popularity` per row, and resolves the outlet name for the frontend header (D-17/D-18).
 - **Created `DashboardController`**: singleton `getInstance()` DI chain (`new DashboardController(new DashboardService(new SalesTrendRepository()))`), `getDashboard` extracts `outletId` from `req.user`, maps `ZodError` -> 400 `VALIDATION_ERROR` and other errors -> 400 `DASHBOARD_ERROR`.
 - **Created `dashboard.routes.ts`** and mounted at `/api/dashboard` in `app.ts` (between `/api/sales` and `/api/admin`), protected by `authMiddleware`.

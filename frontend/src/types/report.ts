@@ -7,7 +7,7 @@ export interface ReportRow {
   date: string; // ISO date string (YYYY-MM-DD)
   revenue: number;
   topMenu: string; // highest-count item name for that day, or "-" if empty
-  transactionCount: number; // 1 if a DailySales record exists for that date, else 0
+  dayCount: number; // 1 if a DailySales record exists for that date, else 0
 }
 
 export interface ReportData {
@@ -15,7 +15,7 @@ export interface ReportData {
   period: { start: string; end: string };
   summary: {
     totalRevenue: number;
-    transactionCount: number;
+    dayCount: number;
     topItems: string[]; // top 3 menu names by summed count across the range
   };
   rows: ReportRow[];

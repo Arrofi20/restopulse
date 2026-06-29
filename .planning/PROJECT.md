@@ -35,6 +35,7 @@ Pemilik restoran dapat langsung melihat tren pendapatan harian dan menu paling l
 ### Active (Next Milestone)
 
 - [ ] Notifikasi WhatsApp mingguan otomatis (NOTF-01)
+- [ ] AI Ringkasan Otomatis performa penjualan (AI-01)
 - [ ] Manajemen multi-outlet / multi-cabang
 - [ ] Sistem loyalitas & membership
 - [ ] Integrasi POS real-time
@@ -79,6 +80,7 @@ Pemilik restoran dapat langsung melihat tren pendapatan harian dan menu paling l
 | Render.com hosting | Free-tier Web Service + PostgreSQL + Static Site, deployment simple | ✓ Good — render.yaml blueprint siap |
 | SQLite local dev, PostgreSQL production | Env-based Prisma datasource, zero-config local dev | ✓ Good — dev/prod parity dengan provider switch |
 | Prisma 7 adapter-based config | Prisma 7.8.0 memerlukan adapter untuk SQLite | ⚠️ Revisit — complexity yang bisa dihindari dengan Prisma 6 |
+| Google Gemini API untuk AI Analytics | Model AI Google yang mendukung Bahasa Indonesia untuk generate ringkasan performa otomatis | 📋 Planned — diimplementasikan di Phase 5 (plan 05-05) |
 
 ## Evolution
 

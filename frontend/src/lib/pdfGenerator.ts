@@ -24,7 +24,7 @@ import type { ReportData } from '../types/report';
  * Layout (A4 portrait, mm):
  *   y=20  outlet name (18pt, near-black)
  *   y=28  period line (11pt, gray)
- *   y=38  summary stats (10pt): total omset, transaction count, top-3 menu
+ *   y=38  summary stats (10pt): total omset, day count, top-3 menu
  *   y=56  daily detail table (autoTable, grid theme, light-gray header)
  *   footer (every page): "Dibuat pada: <ts> — Halaman X / N"
  *
@@ -48,7 +48,7 @@ export function generateReportPDF(data: ReportData): void {
   doc.setTextColor(20, 20, 20);
   const topMenu = data.summary.topItems.slice(0, 3).join(', ') || '-';
   doc.text(`Total Omset: ${formatRupiah(data.summary.totalRevenue)}`, 14, 38);
-  doc.text(`Jumlah Transaksi: ${String(data.summary.transactionCount)}`, 14, 44);
+  doc.text(`Hari Tercatat: ${String(data.summary.dayCount)}`, 14, 44);
   doc.text(`Menu Terlaris: ${topMenu}`, 14, 50);
 
   // ---- Daily detail table -------------------------------------------------
@@ -61,12 +61,12 @@ export function generateReportPDF(data: ReportData): void {
 
   autoTable(doc, {
     startY: 56,
-    head: [['Tanggal', 'Omset (Rp)', 'Menu Terlaris', 'Jumlah Transaksi']],
+    head: [['Tanggal', 'Omset (Rp)', 'Menu Terlaris', 'Hari Tercatat']],
     body: data.rows.map((r) => [
       r.date,
       formatRupiah(r.revenue),
       r.topMenu,
-      String(r.transactionCount),
+      String(r.dayCount),
     ]),
     theme: 'grid',
     headStyles: {

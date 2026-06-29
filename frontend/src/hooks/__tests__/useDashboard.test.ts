@@ -35,7 +35,7 @@ describe('useDashboard', () => {
     data: {
       outlet: { name: 'Resto Utama' },
       trends: [],
-      summary: { totalRevenue: 1500000, transactionCount: 42 },
+      summary: { totalRevenue: 1500000, dayCount: 42 },
     },
   };
 

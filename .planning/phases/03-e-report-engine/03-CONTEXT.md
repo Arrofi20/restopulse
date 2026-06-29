@@ -41,11 +41,11 @@ Phase 3 delivers the E-Report Engine for RestoPulse — a date-filtered financia
 - **D-22:** Reuse existing DateFilter component pattern from dashboard but adapt presets for reporting (Harian/Mingguan/Bulanan/Custom)
 
 ### Report Content & Layout
-- **D-23:** Report preview shows: outlet name, report period, total revenue, transaction count, top menu items, daily breakdown table
+- **D-23:** Report preview shows: outlet name, report period, total revenue, day count, top menu items, daily breakdown table
 - **D-24:** PDF layout: A4 portrait, header with outlet name + period, summary stats cards, daily detail table, footer with generation date
 - **D-25:** PDF styling (screen preview): dark background (matching app theme), white text, Rupiah formatting, 12pt minimum font for readability
 - **D-25b:** PDF styling (exported file): **white paper background with dark text** — auto-switches from dark preview to print-ready light theme for ink efficiency and print standard compliance
-- **D-26:** CSV structure: one row per day — columns: Tanggal, Omset (Rp), Menu Terlaris, Jumlah Transaksi
+- **D-26:** CSV structure: one row per day — columns: Tanggal, Omset (Rp), Menu Terlaris, Hari Tercatat
 
 ### Export UX
 - **D-27:** Owner sees report preview on screen FIRST, then clicks Export PDF / Export CSV buttons
@@ -119,7 +119,7 @@ Phase 3 delivers the E-Report Engine for RestoPulse — a date-filtered financia
 - **SalesTrend table** (`prisma/schema.prisma`): Pre-computed with date, revenue, menu_popularity (JSON string), outlet_id
 - **DailySales table**: Raw transaction records with date, revenue, top_menu_items (JSON), data_source enum
 - **DailySalesReport table**: Cached snapshot schema exists (period_start, period_end, total_revenue, transaction_count, top_items) but is currently unused
-- **Dashboard API** (`GET /api/dashboard`): Returns `{outlet, trends[], summary{totalRevenue, transactionCount, topItems[]}}` — pattern to follow for report API
+- **Dashboard API** (`GET /api/dashboard`): Returns `{outlet, trends[], summary{totalRevenue, dayCount, topItems[]}}` — pattern to follow for report API
 - **DateFilter component**: Preset buttons + custom date picker, already dark-themed. Exports `defaultDateRange()` for consistent initialization
 - **format.ts**: `formatRupiah(1234567)` → `Rp 1.234.567`; `formatCompactRupiah()` for compact labels
 - **EReportPage**: Placeholder at `/e-report` — needs full implementation

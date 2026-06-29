@@ -5,7 +5,7 @@ export interface ReportRow {
   date: string; // YYYY-MM-DD
   revenue: number;
   topMenu: string;
-  transactionCount: number;
+  dayCount: number;
 }
 
 export interface ReportData {
@@ -19,7 +19,7 @@ interface ParsedMenuPopularity {
 
 /**
  * ReportRepository aggregates SalesTrend (daily revenue + menu popularity)
- * and DailySales (daily transaction counts) into a unified report dataset
+ * and DailySales (daily day counts) into a unified report dataset
  * scoped to a single outlet. Per D-31/D-33b the report API lives-query the
  * pre-computed CQRS-lite tables directly (no caching layer / DailySalesReport
  * snapshot table which has no population mechanism yet).
@@ -45,7 +45,7 @@ export class ReportRepository {
       orderBy: { date: 'asc' },
     });
 
-    // 2. DailySales rows — daily transaction count
+    // 2. DailySales rows — daily day count
     const dailySales = await this.prisma.dailySales.findMany({
       where: {
         outlet_id,
@@ -55,13 +55,13 @@ export class ReportRepository {
     });
 
     // 3. Index DailySales rows by UTC YYYY-MM-DD for transaction-count join
-    const transactionCountByDate = new Map<string, number>();
+    const dayCountByDate = new Map<string, number>();
     for (const ds of dailySales) {
-      transactionCountByDate.set(toUTCDateString(ds.date), 1);
+      dayCountByDate.set(toUTCDateString(ds.date), 1);
     }
     // DailySales has @@unique([outlet_id, date]) so at most one row per day;
-    // represent the transaction count implicitly as 1 per daily record. The
-    // report's transactionCount is the count of daily sales records across the
+    // represent the day count implicitly as 1 per daily record. The
+    // report's dayCount is the count of daily sales records across the
     // period — each DailySales row represents one aggregated sales day, so we
     // surface the per-row count as 1 when a DailySales record exists for that
     // date, 0 otherwise. (Per schema, DailySales does not store a per-row
@@ -80,18 +80,18 @@ export class ReportRepository {
       .slice(0, 3)
       .map(([name]) => name);
 
-    // 5. Map SalesTrend rows into ReportRow with matched transaction counts
+    // 5. Map SalesTrend rows into ReportRow with matched day counts
     const rows: ReportRow[] = trends.map((t) => {
       const dateStr = toUTCDateString(t.date);
       const parsed = safeParseMenuPopularity(t.menu_popularity);
       const sortedItems = [...parsed.items].sort((a, b) => b.count - a.count);
       const topMenu = sortedItems.length > 0 ? sortedItems[0].name : '-';
-      const transactionCount = transactionCountByDate.has(dateStr) ? 1 : 0;
+      const dayCount = dayCountByDate.has(dateStr) ? 1 : 0;
       return {
         date: dateStr,
         revenue: t.revenue,
         topMenu,
-        transactionCount,
+        dayCount,
       };
     });
 

@@ -5,7 +5,7 @@
 //   2. Outlet name + period label (or "Memuat..." while loading)
 //   3. ReportDateFilter — own date state, independent of dashboard (D-21)
 //   4. ExportButtons — sticky; PDF enabled by Plan 03-03, CSV disabled until 03-04
-//   5. ReportSummaryCards — total omset / transaction count / top menu
+//   5. ReportSummaryCards — total omset / day count / top menu
 //   6. Error banner when fetch fails
 //   7. ReportDailyTable — daily breakdown (D-23)
 //

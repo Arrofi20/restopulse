@@ -40,7 +40,7 @@
 | Yes, show total revenue + tx count | Summary cards at top give the owner quick numbers | ✓ |
 | No, just the charts | Keep it minimal — the charts already communicate the data | |
 
-**User's choice:** Show summary statistics cards (total revenue + transaction count)
+**User's choice:** Show summary statistics cards (total revenue + day count)
 
 ---
 

@@ -39,7 +39,7 @@ Phase 2 delivers the complete frontend application for RestoPulse — a React-ba
 - **D-02:** Quick-select preset buttons: 7 Hari (7H), 30 Hari (30H), Bulan Ini, Semua
 - **D-03:** Custom date picker (start-end) alongside presets
 - **D-04:** Shared filter between Line Chart and Pie Chart
-- **D-05:** Summary statistics cards above charts showing total revenue + transaction count
+- **D-05:** Summary statistics cards above charts showing total revenue + day count
 
 ### Chart Interaction
 - **D-06:** Line Chart tooltip: date + revenue only

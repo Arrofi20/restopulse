@@ -35,9 +35,9 @@ describe('useReport', () => {
     data: {
       outlet: { name: 'Resto Utama' },
       period: { start: '2026-06-01', end: '2026-06-30' },
-      summary: { totalRevenue: 1500000, transactionCount: 21, topItems: ['Nasi Goreng', 'Es Teh', 'Ayam Bakar'] },
+      summary: { totalRevenue: 1500000, dayCount: 21, topItems: ['Nasi Goreng', 'Es Teh', 'Ayam Bakar'] },
       rows: [
-        { date: '2026-06-01', revenue: 50000, topMenu: 'Nasi Goreng', transactionCount: 1 },
+        { date: '2026-06-01', revenue: 50000, topMenu: 'Nasi Goreng', dayCount: 1 },
       ],
     },
   };

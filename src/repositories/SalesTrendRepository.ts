@@ -70,7 +70,7 @@ export class SalesTrendRepository {
     outlet_id: string,
     start: Date,
     end: Date
-  ): Promise<{ totalRevenue: number; transactionCount: number }> {
+  ): Promise<{ totalRevenue: number; dayCount: number }> {
     const result = await this.prisma.salesTrend.aggregate({
       where: {
         outlet_id,
@@ -81,7 +81,7 @@ export class SalesTrendRepository {
     });
     return {
       totalRevenue: result._sum.revenue || 0,
-      transactionCount: result._count.id || 0,
+      dayCount: result._count.id || 0,
     };
   }
 

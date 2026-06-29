@@ -30,7 +30,7 @@ Phase 3 delivers a complete E-Report Engine for RestoPulse: a date-filtered fina
 - PDF layout: A4 portrait, header with outlet name + period, summary stats cards, daily detail table, footer with generation date [D-24]
 - PDF styling (screen preview): dark background, white text, Rupiah formatting, 12pt minimum font [D-25]
 - PDF styling (exported file): **white paper background with dark text** — auto-switches from dark preview to print-ready light theme [D-25b]
-- CSV structure: one row per day — columns: Tanggal, Omset (Rp), Menu Terlaris, Jumlah Transaksi [D-26]
+- CSV structure: one row per day — columns: Tanggal, Omset (Rp), Menu Terlaris, Hari Tercatat [D-26]
 - Export UX: preview FIRST, then Export PDF / Export CSV buttons [D-27]
 - Export buttons at top-right of preview, **sticky on scroll** [D-28]
 - File naming: `Laporan_{OutletName}_{StartDate}_{EndDate}.{pdf|csv}` [D-29]
@@ -240,17 +240,17 @@ export function generateReportPDF(data: ReportData) {
   const summaryY = 38;
   doc.setFontSize(10);
   doc.text(`Total Omset: ${data.summary.totalRevenueFormatted}`, 14, summaryY);
-  doc.text(`Jumlah Transaksi: ${data.summary.transactionCount}`, 14, summaryY + 6);
+  doc.text(`Hari Tercatat: ${data.summary.dayCount}`, 14, summaryY + 6);
 
   // --- Daily Detail Table ---
   autoTable(doc, {
     startY: summaryY + 14,
-    head: [['Tanggal', 'Omset (Rp)', 'Menu Terlaris', 'Jumlah Transaksi']],
+    head: [['Tanggal', 'Omset (Rp)', 'Menu Terlaris', 'Hari Tercatat']],
     body: data.rows.map((r) => [
       r.date,
       r.revenueFormatted,
       r.topMenu,
-      String(r.transactionCount),
+      String(r.dayCount),
     ]),
     theme: 'grid',
     headStyles: { fillColor: [240, 240, 240], textColor: 20, fontStyle: 'bold' },
@@ -288,7 +288,7 @@ export function generateReportPDF(data: ReportData) {
 ```typescript
 // Source: MDN Blob API + Indonesian Excel conventions
 export function generateReportCSV(data: ReportData): void {
-  const headers = ['Tanggal', 'Omset (Rp)', 'Menu Terlaris', 'Jumlah Transaksi'];
+  const headers = ['Tanggal', 'Omset (Rp)', 'Menu Terlaris', 'Hari Tercatat'];
 
   const escapeCell = (val: string): string => {
     if (val.includes(';') || val.includes('"') || val.includes('\n')) {
@@ -302,7 +302,7 @@ export function generateReportCSV(data: ReportData): void {
       r.date,
       r.revenueFormatted,
       r.topMenu,
-      String(r.transactionCount),
+      String(r.dayCount),
     ].map(escapeCell).join(';')
   );
 
@@ -414,7 +414,7 @@ async getReportSummary(outlet_id: string, start: Date, end: Date) {
 
   return {
     totalRevenue: summary._sum.revenue || 0,
-    transactionCount: summary._count.id || 0,
+    dayCount: summary._count.id || 0,
     dailyRows: dailyRows.map((r) => ({
       date: format(r.date, 'yyyy-MM-dd'),
       revenue: r.revenue,
@@ -449,7 +449,7 @@ async getReportSummary(outlet_id: string, start: Date, end: Date) {
         <th className="px-3 py-2 text-left whitespace-nowrap">Tanggal</th>
         <th className="px-3 py-2 text-right whitespace-nowrap">Omset (Rp)</th>
         <th className="px-3 py-2 text-left whitespace-nowrap">Menu Terlaris</th>
-        <th className="px-3 py-2 text-center whitespace-nowrap">Jumlah Transaksi</th>
+        <th className="px-3 py-2 text-center whitespace-nowrap">Hari Tercatat</th>
       </tr>
     </thead>
     <tbody className="divide-y divide-gray-800">

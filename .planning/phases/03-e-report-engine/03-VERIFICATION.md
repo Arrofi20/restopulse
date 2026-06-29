@@ -8,7 +8,7 @@ overrides_applied: 0
 behavior_unverified_items:
   - truth: "GET /api/report?start=YYYY-MM-DD&end=YYYY-MM-DD returns aggregated report data scoped to the authenticated outlet"
     test: "Start backend + seeded DB, call GET /api/report with a valid JWT and date range, inspect JSON payload"
-    expected: "200 { success: true, data: { outlet, period, summary: { totalRevenue, transactionCount, topItems }, rows } } scoped to the token's outletId"
+    expected: "200 { success: true, data: { outlet, period, summary: { totalRevenue, dayCount, topItems }, rows } } scoped to the token's outletId"
     why_human: "Repository/Service/Controller wiring is statically verified and tsc passes, but no HTTP integration test exercises the live endpoint + Prisma aggregation + outlet scoping path"
   - truth: "Invalid date ranges return 400 VALIDATION_ERROR with structured error details"
     test: "Call GET /api/report?start=2026-13-01&end=2026-06-30 with a valid JWT (or start > end)"
@@ -20,7 +20,7 @@ behavior_unverified_items:
     why_human: "pdfGenerator.ts calls doc.save() which triggers a browser download — no jsPDF/browser test exercises the download path; the PDF visual layout (white paper, dark text, print readiness) also needs human inspection"
   - truth: "PDF contains outlet name, report period, summary stats, daily detail table, and footer with generation date"
     test: "Open the downloaded PDF and verify each section"
-    expected: "Header (outlet name 18pt + period), summary (Total Omset / Jumlah Transaksi / Menu Terlaris), daily table, and 'Dibuat pada: <ts> — Halaman X / N' footer on every page"
+    expected: "Header (outlet name 18pt + period), summary (Total Omset / Hari Tercatat / Menu Terlaris), daily table, and 'Dibuat pada: <ts> — Halaman X / N' footer on every page"
     why_human: "The code builds every section (doc.text + autoTable + footer loop), but the rendered output's visual correctness (layout, page-break behavior, footer placement) requires opening the actual PDF"
   - truth: "Clicking 'Export CSV' generates and downloads a CSV file with UTF-8 BOM and semicolon delimiter"
     test: "Click 'Export CSV' on /e-report, open the downloaded file in Excel/a hex editor"
@@ -37,7 +37,7 @@ human_verification:
     expected: "A4 portrait, white background, dark text, formatRupiah amounts, 'Halaman X / N' footer on every page, file named Laporan_{Outlet}_{Start}_{End}.pdf"
     why_human: "jsPDF rendering quality and filename behavior are browser-driven; static code inspection confirms the layout calls but not the rendered output"
   - test: "Download the CSV and open it in Excel"
-    expected: "UTF-8 BOM present (EF BB BF), ';' delimiter, columns Tanggal/Omset (Rp)/Menu Terlaris/Jumlah Transaksi, Indonesian diacritics render correctly, cells starting with = + - @ are neutralized"
+    expected: "UTF-8 BOM present (EF BB BF), ';' delimiter, columns Tanggal/Omset (Rp)/Menu Terlaris/Hari Tercatat, Indonesian diacritics render correctly, cells starting with = + - @ are neutralized"
     why_human: "Excel compatibility and formula-injection neutralization against a live spreadsheet need a browser download + Excel open"
   - test: "Verify export buttons function at viewport mobile 320px (ROADMAP SC 4)"
     expected: "Export buttons are full-width and stack vertically at 320px; daily table scrolls horizontally without overflowing; summary cards stack to one column"
@@ -61,10 +61,10 @@ human_verification:
 | #   | Truth | Status | Evidence |
 | --- | ----- | ------ | -------- |
 | 1   | GET /api/report returns aggregated report data scoped to the authenticated outlet | ⚠️ PRESENT_BEHAVIOR_UNVERIFIED | ReportController.getReport -> ReportService.getReport -> ReportRepository.getReportData chain wired; outlet scoping via req.user!.outletId (ReportController.ts:21); mounted at app.ts:36; tsc passes. No HTTP integration test exercises the live endpoint. |
-| 2   | Report response includes outlet name, period, total revenue, transaction count, top menu items, and daily breakdown rows | ✓ VERIFIED | ReportService.getReport returns `{ outlet: { name }, period: { start, end }, summary: { totalRevenue, transactionCount, topItems }, rows }` (ReportService.ts:48-53); ReportRepository builds rows with date/revenue/topMenu/transactionCount + topItems array (ReportRepository.ts:84-98). |
+| 2   | Report response includes outlet name, period, total revenue, day count, top menu items, and daily breakdown rows | ✓ VERIFIED | ReportService.getReport returns `{ outlet: { name }, period: { start, end }, summary: { totalRevenue, dayCount, topItems }, rows }` (ReportService.ts:48-53); ReportRepository builds rows with date/revenue/topMenu/dayCount + topItems array (ReportRepository.ts:84-98). |
 | 3   | Invalid date ranges return 400 VALIDATION_ERROR with structured error details | ⚠️ PRESENT_BEHAVIOR_UNVERIFIED | ZodError -> 400 VALIDATION_ERROR mapping present (ReportController.ts:31-39); other errors -> 400 REPORT_ERROR (ReportController.ts:40-45). dateRangeSchema reused from sales.schema. No test sends invalid dates through the live HTTP layer. |
 | 4   | Owner can select Harian/Mingguan/Bulanan/Custom date range on the E-Report page | ✓ VERIFIED | ReportDateFilter.tsx ships 3 preset buttons (Harian/Mingguan/Bulanan) + 2 native date inputs for Custom (lines 35-57, 116-132); defaultReportDateRange() returns Bulanan (lines 62-67); active preset highlighted via amber-400 (lines 96-106). |
-| 5   | Report preview displays outlet name, report period, total revenue, transaction count, top menu items, and daily breakdown table | ✓ VERIFIED | EReportPage.tsx composes periodLabel (line 30-32), ReportSummaryCards (3 cards: Total Omset/Jumlah Transaksi/Menu Terlaris), ReportDailyTable (4-column daily breakdown) — all wired and substantive. |
+| 5   | Report preview displays outlet name, report period, total revenue, day count, top menu items, and daily breakdown table | ✓ VERIFIED | EReportPage.tsx composes periodLabel (line 30-32), ReportSummaryCards (3 cards: Total Omset/Hari Tercatat/Menu Terlaris), ReportDailyTable (4-column daily breakdown) — all wired and substantive. |
 | 6   | Export buttons are sticky at the top-right of the preview and full-width on mobile | ✓ VERIFIED | ExportButtons.tsx uses `sticky top-0 z-10 bg-gray-950/95 backdrop-blur-sm` (line 27), `flex flex-col gap-2 sm:flex-row sm:justify-end` (line 28), `w-full ... sm:w-auto` (lines 35, 45). |
 | 7   | Report date state is independent of dashboard date state (D-21) | ✓ VERIFIED | EReportPage owns its own `useState(defaultReportDateRange)` (EReportPage.tsx:26); no shared store; useReport receives dateRange as prop (useReport.ts:35). Dashboard page state is separate. |
 | 8   | Clicking 'Export PDF' generates and downloads a PDF file with white paper background and dark text | ⚠️ PRESENT_BEHAVIOR_UNVERIFIED | ExportButtons PDF onClick calls generateReportPDF(data) (ExportButtons.tsx:32); pdfGenerator.ts builds A4 portrait jsPDF with dark text colors (textColor 20) on white paper (pdfGenerator.ts:35-118); doc.save() triggers browser download (line 118). No test exercises the jsPDF/doc.save download path. |
@@ -72,7 +72,7 @@ human_verification:
 | 10  | PDF file name follows Laporan_{OutletName}_{StartDate}_{EndDate}.pdf convention | ✓ VERIFIED | pdfGenerator.ts:117-118 sanitizes outlet name (`/[^A-Za-z0-9]+/g` -> '_' with edge trim, 'Outlet' fallback) and calls `doc.save(\`Laporan_${safeName}_${start}_${end}.pdf\`)`. |
 | 11  | PDF uses Rupiah formatting from formatRupiah() | ✓ VERIFIED | pdfGenerator.ts imports formatRupiah (line 18) and applies it to totalRevenue (line 50) and each row.revenue (line 67). formatRupiah defined in frontend/src/lib/format.ts:17. |
 | 12  | Clicking 'Export CSV' generates and downloads a CSV file with UTF-8 BOM and semicolon delimiter | ⚠️ PRESENT_BEHAVIOR_UNVERIFIED | ExportButtons CSV onClick calls generateReportCSV(data) (ExportButtons.tsx:42); csvGenerator.ts prepends `\uFEFF` BOM (line 81-82), joins cells with ';' (line 75), joins rows with '\r\n' (line 78), triggers download via URL.createObjectURL + link.click() (lines 84-95). No test exercises the Blob/download path. |
-| 13  | CSV contains one row per day with columns: Tanggal, Omset (Rp), Menu Terlaris, Jumlah Transaksi | ✓ VERIFIED | csvGenerator.ts:22 defines CSV_HEADERS = ['Tanggal', 'Omset (Rp)', 'Menu Terlaris', 'Jumlah Transaksi']; line 72-76 maps each data row to those 4 cells. |
+| 13  | CSV contains one row per day with columns: Tanggal, Omset (Rp), Menu Terlaris, Hari Tercatat | ✓ VERIFIED | csvGenerator.ts:22 defines CSV_HEADERS = ['Tanggal', 'Omset (Rp)', 'Menu Terlaris', 'Hari Tercatat']; line 72-76 maps each data row to those 4 cells. |
 | 14  | CSV file name follows Laporan_{OutletName}_{StartDate}_{EndDate}.csv convention | ✓ VERIFIED | csvGenerator.ts:90-91 sanitizes outlet name (`/[^a-zA-Z0-9]/g` -> '_', 'Outlet' fallback) and sets `link.download = \`Laporan_${safeName}_${start}_${end}.csv\``. |
 | 15  | Special characters in data are escaped correctly to prevent CSV corruption | ✓ VERIFIED | csvGenerator.ts escapeCell (lines 43-57) applies RFC 4180 quoting for values containing ';', '"', or '\n' (doubling internal quotes, line 52-54). |
 | 16  | CSV injection (formula injection) is mitigated by prefixing risky leading characters | ✓ VERIFIED | csvGenerator.ts FORMULA_INJECTION_PREFIXES = ['=','+','-','@'] (line 28); escapeCell prefixes such cells with '\t' BEFORE quoting (lines 48-50). |
@@ -92,7 +92,7 @@ human_verification:
 | `frontend/src/hooks/useReport.ts` | Polls GET /api/report every 30s | ✓ VERIFIED | 64 lines; usePolling(fetchReport, 30000), useCallback keyed on dateRange, refresh() |
 | `frontend/src/hooks/__tests__/useReport.test.ts` | 4 behavioral tests | ✓ VERIFIED | 111 lines; 4 tests pass (vitest run: 32/32 passed) |
 | `frontend/src/components/report/ReportDateFilter.tsx` | Harian/Mingguan/Bulanan/Custom presets | ✓ VERIFIED | 135 lines; 3 presets + custom date inputs + defaultReportDateRange() |
-| `frontend/src/components/report/ReportSummaryCards.tsx` | 3 summary cards responsive grid | ✓ VERIFIED | 69 lines; Total Omset (amber-400 text-3xl), Jumlah Transaksi, Menu Terlaris; shimmer + empty states |
+| `frontend/src/components/report/ReportSummaryCards.tsx` | 3 summary cards responsive grid | ✓ VERIFIED | 69 lines; Total Omset (amber-400 text-3xl), Hari Tercatat, Menu Terlaris; shimmer + empty states |
 | `frontend/src/components/report/ReportDailyTable.tsx` | Daily breakdown table, overflow-x-auto | ✓ VERIFIED | 74 lines; 4 columns, skeleton + empty states, overflow-x-auto wrapper |
 | `frontend/src/components/report/ExportButtons.tsx` | Sticky export bar, both engines wired | ✓ VERIFIED | 52 lines; imports generateReportPDF + generateReportCSV; both onClick handlers wired; pdfDisabled/csvDisabled = !data |
 | `frontend/src/pages/EReportPage.tsx` | Full preview page (placeholder replaced) | ✓ VERIFIED | 62 lines; composes useReport + all report components; independent useState; no "E-Report akan tersedia" placeholder text |
@@ -119,8 +119,8 @@ human_verification:
 
 | Artifact | Data Variable | Source | Produces Real Data | Status |
 | -------- | ------------- | ------ | ------------------ | ------ |
-| ReportSummaryCards | summary.totalRevenue / transactionCount / topItems | useReport(data) -> GET /api/report -> ReportRepository.prisma.salesTrend.findMany + dailySales.findMany | Yes (live Prisma queries, not static) | ✓ FLOWING |
-| ReportDailyTable | rows[].date/revenue/topMenu/transactionCount | useReport(data).rows -> same API | Yes | ✓ FLOWING |
+| ReportSummaryCards | summary.totalRevenue / dayCount / topItems | useReport(data) -> GET /api/report -> ReportRepository.prisma.salesTrend.findMany + dailySales.findMany | Yes (live Prisma queries, not static) | ✓ FLOWING |
+| ReportDailyTable | rows[].date/revenue/topMenu/dayCount | useReport(data).rows -> same API | Yes | ✓ FLOWING |
 | pdfGenerator | data: ReportData (all fields) | EReportPage passes useReport data to ExportButtons -> generateReportPDF | Yes (chained from API) | ✓ FLOWING |
 | csvGenerator | data: ReportData | same chain | Yes | ✓ FLOWING |
 | EReportPage periodLabel | data.outlet.name + data.period | useReport(data) | Yes | ✓ FLOWING |

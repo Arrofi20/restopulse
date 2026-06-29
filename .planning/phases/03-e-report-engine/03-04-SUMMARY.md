@@ -49,7 +49,7 @@ requirements-completed: [REPT-03]
 # Coverage metadata (#1602)
 coverage:
   - id: D1
-    description: "Client-side CSV export engine producing a UTF-8 BOM prefixed, semicolon-delimited, Windows-CRLF Excel-compatible CSV with columns Tanggal, Omset (Rp), Menu Terlaris, Jumlah Transaksi and one row per day"
+    description: "Client-side CSV export engine producing a UTF-8 BOM prefixed, semicolon-delimited, Windows-CRLF Excel-compatible CSV with columns Tanggal, Omset (Rp), Menu Terlaris, Hari Tercatat and one row per day"
     requirement: "REPT-03"
     verification:
       - kind: integration
@@ -104,7 +104,7 @@ status: complete
 - **Files modified:** 2 (1 created, 1 modified)
 
 ## Accomplishments
-- Added `frontend/src/lib/csvGenerator.ts` exporting `generateReportCSV(data: ReportData): void` — builds a CSV with headers `Tanggal;Omset (Rp);Menu Terlaris;Jumlah Transaksi` and one row per day (`date;formatRupiah(revenue);topMenu;transactionCount`), joined with Windows CRLF (`\r\n`) for Excel compatibility, prefixed with the UTF-8 BOM (`\uFEFF`) so Excel detects UTF-8 encoding (Indonesian diacritics render correctly)
+- Added `frontend/src/lib/csvGenerator.ts` exporting `generateReportCSV(data: ReportData): void` — builds a CSV with headers `Tanggal;Omset (Rp);Menu Terlaris;Hari Tercatat` and one row per day (`date;formatRupiah(revenue);topMenu;dayCount`), joined with Windows CRLF (`\r\n`) for Excel compatibility, prefixed with the UTF-8 BOM (`\uFEFF`) so Excel detects UTF-8 encoding (Indonesian diacritics render correctly)
 - Implemented `escapeCell(value)` with two hardening layers: (1) **formula-injection mitigation** — cells starting with `=`, `+`, `-`, or `@` are prefixed with a tab character (`\t`) to neutralize Excel formula execution (T-03-12, RESEARCH.md Security Domain); (2) **RFC 4180 quoting** — values containing `;`, `"`, or `\n` are wrapped in double quotes with internal `"` doubled. The tab prefix runs BEFORE quoting so the leading-char test sees the original character
 - Triggered browser download via a synthetic `<a>` element + `URL.createObjectURL(blob)`, with `URL.revokeObjectURL(url)` called immediately after `link.click()` to prevent memory leaks (T-03-14 mitigate / RESEARCH.md Pitfall 4)
 - Sanitized D-29 filename: `Laporan_{Outlet}_{Start}_{End}.csv` with outlet name regex-replaced to alphanumerics + underscores (T-03-11 mitigate), falling back to literal `Outlet` if empty

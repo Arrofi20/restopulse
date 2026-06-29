@@ -129,7 +129,7 @@ None — discussion stayed within phase scope
 | REPT-01 | Sistem menyaring dan menyusun lembar ringkasan laporan digital sesuai filter rentang tanggal | API tests: GET /api/report?start=&end= with various date ranges; verify aggregation accuracy |
 | REPT-02 | Sistem mengonversi struktur data laporan menjadi file PDF siap cetak | Client-side export — verify /api/report returns correct data for PDF generation; manual PDF visual check |
 
-**Note on D-41 export target:** The CONTEXT.md references `GET /api/report/export?type=pdf/csv` but the backend has NO export endpoint. Export (PDF/CSV) is client-side only via `generateReportPDF()` and `generateReportCSV()` in `frontend/src/lib/`. The API test for export should verify `GET /api/report` returns the complete data structure required by the client-side export generators (period, outlet, rows with date/revenue/topMenu/transactionCount).
+**Note on D-41 export target:** The CONTEXT.md references `GET /api/report/export?type=pdf/csv` but the backend has NO export endpoint. Export (PDF/CSV) is client-side only via `generateReportPDF()` and `generateReportCSV()` in `frontend/src/lib/`. The API test for export should verify `GET /api/report` returns the complete data structure required by the client-side export generators (period, outlet, rows with date/revenue/topMenu/dayCount).
 
 ## Package Legitimacy Audit
 

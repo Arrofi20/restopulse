@@ -63,7 +63,7 @@ behavior_unverified_items:
 | `frontend/src/hooks/usePolling.ts` | Generic polling hook with Page Visibility API | ✓ VERIFIED | 51 lines. Immediate fetch on mount, setInterval, visibility pause, cleanup. Tested (3 tests). |
 | `frontend/src/hooks/useDashboard.ts` | Dashboard data fetching with 30s poll | ⚠️ VERIFIED (code) / FAILED (SC-4) | 61 lines. useCallback fetcher, 30s usePolling, refresh(). Code is correct and tested (4 tests), but 30s interval fails SC-4. |
 | `frontend/src/components/dashboard/DateFilter.tsx` | Date range selector with presets + custom picker | ✓ VERIFIED | 142 lines. 4 presets (date-fns), active highlight, native date inputs, defaultDateRange() export. |
-| `frontend/src/components/dashboard/SummaryCards.tsx` | Total revenue + transaction count cards | ✓ VERIFIED | 56 lines. formatRupiah, text-3xl (24pt), animate-pulse shimmer. |
+| `frontend/src/components/dashboard/SummaryCards.tsx` | Total revenue + day count cards | ✓ VERIFIED | 56 lines. formatRupiah, text-3xl (24pt), animate-pulse shimmer. |
 | `frontend/src/pages/DashboardPage.tsx` | Dashboard page composing all components | ✓ VERIFIED | 88 lines. DateFilter + RefreshButton + SummaryCards + LineChart + PieChart + EmptyState. Fully wired. |
 | `frontend/src/components/dashboard/LineChart.tsx` | Line chart with decline detection + Rupiah tooltip | ✓ VERIFIED | 137 lines. computePointColors (D-08), formatLineTooltipLabel (D-06), formatAxisTick. Empty guard. Loading overlay. Tested. |
 | `frontend/src/components/dashboard/PieChart.tsx` | Pie chart with top-10 aggregation + multi-field tooltip | ✓ VERIFIED | 148 lines. aggregateMenuItems (D-02 top-10), formatPieTooltipLines (D-07). Empty guard. Loading overlay. Tested. |
@@ -95,7 +95,7 @@ behavior_unverified_items:
 | -------- | ------------- | ------ | ------------------ | ------ |
 | `LineChart.tsx` | `revenueData` (from `trends`) | `useDashboard` → `GET /api/dashboard` → `SalesTrendRepository.findByDateRange` → Prisma `findMany` | ✓ FLOWING | Prisma query on SalesTrend table, scoped to outlet_id + date range. No hardcoded/empty returns. |
 | `PieChart.tsx` | `aggregated` (from `trends[].menu_popularity`) | Same as above — menu_popularity JSON.parse'd in DashboardService | ✓ FLOWING | Real menu data from SalesTrend rows. Aggregation logic tested. |
-| `SummaryCards.tsx` | `totalRevenue`, `transactionCount` | `useDashboard` → `summary` from `SalesTrendRepository.aggregateSummary` → Prisma `aggregate` (_sum/_count) | ✓ FLOWING | Prisma aggregate query. Null-coalesced to 0 (not hardcoded). |
+| `SummaryCards.tsx` | `totalRevenue`, `dayCount` | `useDashboard` → `summary` from `SalesTrendRepository.aggregateSummary` → Prisma `aggregate` (_sum/_count) | ✓ FLOWING | Prisma aggregate query. Null-coalesced to 0 (not hardcoded). |
 | `DashboardPage.tsx` | `data` (DashboardData) | `useDashboard(dateRange)` → `get('/dashboard?...')` | ✓ FLOWING | Full data chain from DB to render. No disconnected props. |
 
 ### Behavioral Spot-Checks

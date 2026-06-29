@@ -49,7 +49,7 @@ export default function DashboardPage() {
 
       <SummaryCards
         totalRevenue={data?.summary.totalRevenue ?? 0}
-        transactionCount={data?.summary.transactionCount ?? 0}
+        dayCount={data?.summary.dayCount ?? 0}
         loading={loading}
       />
 

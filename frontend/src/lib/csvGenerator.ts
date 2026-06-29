@@ -7,7 +7,7 @@
 //
 // No external CSV library is used — a custom generator is ~30 LOC and
 // sufficient (RESEARCH.md recommendation). Columns: Tanggal, Omset (Rp),
-// Menu Terlaris, Jumlah Transaksi (D-26). Filename follows D-29:
+// Menu Terlaris, Hari Tercatat (D-26). Filename follows D-29:
 // `Laporan_{OutletName}_{Start}_{End}.csv` with the outlet name sanitized
 // (T-03-11 mitigate).
 //
@@ -19,7 +19,7 @@
 import { formatRupiah } from './format';
 import type { ReportData } from '../types/report';
 
-const CSV_HEADERS = ['Tanggal', 'Omset (Rp)', 'Menu Terlaris', 'Jumlah Transaksi'];
+const CSV_HEADERS = ['Tanggal', 'Omset (Rp)', 'Menu Terlaris', 'Hari Tercatat'];
 
 // Characters that, when they appear at the start of a CSV cell, Excel treats
 // as a formula introduction (RESEARCH.md Security Domain). We prefix such
@@ -70,7 +70,7 @@ function escapeCell(value: unknown): string {
  */
 export function generateReportCSV(data: ReportData): void {
   const rows = data.rows.map((r) =>
-    [r.date, formatRupiah(r.revenue), r.topMenu, String(r.transactionCount)]
+    [r.date, formatRupiah(r.revenue), r.topMenu, String(r.dayCount)]
       .map(escapeCell)
       .join(';'),
   );

@@ -243,9 +243,9 @@ export class DashboardService {
     // 3. Query repository
     const trends = await this.salesTrendRepo.findByDateRange(outlet_id, startDate, endDate);
 
-    // 4. Compute summary statistics (totalRevenue, transactionCount)
+    // 4. Compute summary statistics (totalRevenue, dayCount)
     // 5. Return combined result
-    return { trends, summary: { totalRevenue, transactionCount } };
+    return { trends, summary: { totalRevenue, dayCount } };
   }
 }
 ```
@@ -314,7 +314,7 @@ export class SalesTrendRepository {
     });
     return {
       totalRevenue: result._sum.revenue || 0,
-      transactionCount: result._count.id || 0,
+      dayCount: result._count.id || 0,
     };
   }
 ```
@@ -567,7 +567,7 @@ import { usePolling } from './usePolling';
 interface DashboardData {
   trends: Array<{ date: string; revenue: number; menu_popularity: string }>;
   totalRevenue: number;
-  transactionCount: number;
+  dayCount: number;
 }
 
 interface DateRange {
@@ -823,7 +823,7 @@ export interface DashboardData {
   trends: SalesTrendItem[];
   summary: {
     totalRevenue: number;
-    transactionCount: number;
+    dayCount: number;
   };
 }
 

@@ -62,9 +62,9 @@ created: 2026-06-26
 | Label | `text-sm` | 14px | 400–500 | 1.25 (default) | Card labels ("Total Omset"), table headers, form labels, input text |
 | Heading | `text-lg` | 18px | 600 (semibold) | 1.2 (default) | Header outlet name, sidebar brand |
 | Heading | `text-3xl` | ~30px | 700 (bold) | 1.2 (default) | Login page title ("RestoPulse"), card financial values |
-| Display | `text-3xl font-bold` | ~30px | 700 (bold) | 1.2 (default) | SummaryCards revenue value (amber-400), transaction count (white) |
+| Display | `text-3xl font-bold` | ~30px | 700 (bold) | 1.2 (default) | SummaryCards revenue value (amber-400), day count (white) |
 
-**Financial data font minimum (OPENCODE.md §5):** `text-3xl` (~30px) — satisfies the 24pt minimum requirement for financial data display. **Audit must verify all financial figures (revenue amounts, transaction counts) render at ≥24pt on all viewports.**
+**Financial data font minimum (OPENCODE.md §5):** `text-3xl` (~30px) — satisfies the 24pt minimum requirement for financial data display. **Audit must verify all financial figures (revenue amounts, day counts) render at ≥24pt on all viewports.**
 
 **Font scaling audit (D-47):**
 - Verify text remains readable at 200% browser zoom without horizontal scroll
@@ -149,13 +149,13 @@ created: 2026-06-26
 | DateFilter presets | DateFilter.tsx | `7 Hari`, `30 Hari`, `Bulan Ini`, `Semua` | Verify all four presets rendered |
 | DateFilter aria | DateFilter.tsx | `Tanggal mulai` / `Tanggal akhir` | Verify aria-labels on custom date inputs |
 | Summary card label 1 | SummaryCards.tsx | `Total Omset` | Verify amber-400 revenue value rendered |
-| Summary card label 2 | SummaryCards.tsx | `Jumlah Transaksi` | Verify white transaction count rendered |
+| Summary card label 2 | SummaryCards.tsx | `Hari Tercatat` | Verify white day count rendered |
 | Empty state heading | EmptyState.tsx | `Belum ada data penjualan untuk periode ini` | Verify on dashboard when no data |
 | Empty state sub | EmptyState.tsx | `Gunakan formulir input data atau suntik data simulasi untuk memulai.` | Verify gray-500 sub-message |
 | Empty state CTA | EmptyState.tsx | `Tambah Data` | Verify button navigates to /data-entry |
 | Spinner aria | Spinner.tsx | `Memuat` | Verify `role="status"` + `aria-label="Memuat"` |
 | ReportDateFilter presets | ReportDateFilter.tsx | `Harian`, `Mingguan`, `Bulanan` | Verify three presets (no "Semua") + custom date picker |
-| Report table headers | ReportDailyTable.tsx | `Tanggal`, `Omset (Rp)`, `Menu Terlaris`, `Jumlah Transaksi` | Verify column order matches |
+| Report table headers | ReportDailyTable.tsx | `Tanggal`, `Omset (Rp)`, `Menu Terlaris`, `Hari Tercatat` | Verify column order matches |
 | Report table empty | ReportDailyTable.tsx | `Tidak ada data untuk periode ini` | Verify centered, gray-400 |
 | Export PDF button | ExportButtons.tsx | `Export PDF` | Verify amber-400, disabled when no data |
 | Export CSV button | ExportButtons.tsx | `Export CSV` | Verify gray-700, disabled when no data |
@@ -181,7 +181,7 @@ created: 2026-06-26
 | Component | File | Audit Focus |
 |-----------|------|-------------|
 | **DateFilter** | `dashboard/DateFilter.tsx` | 4 preset buttons (7 Hari, 30 Hari, Bulan Ini, Semua) + custom date inputs. Verify: active preset highlighted amber-400 with black text, inactive bg-gray-700, aria-pressed on presets, aria-label on date inputs, date inputs use [color-scheme:dark], layout wraps on mobile. |
-| **SummaryCards** | `dashboard/SummaryCards.tsx` | grid-cols-1 on mobile, sm:grid-cols-2. Verify: Total Omset card with amber-400 text-3xl, Jumlah Transaksi card with white text-3xl, loading shimmer (animate-pulse h-8 w-48), border-gray-800, bg-gray-900. |
+| **SummaryCards** | `dashboard/SummaryCards.tsx` | grid-cols-1 on mobile, sm:grid-cols-2. Verify: Total Omset card with amber-400 text-3xl, Hari Tercatat card with white text-3xl, loading shimmer (animate-pulse h-8 w-48), border-gray-800, bg-gray-900. |
 | **LineChart** | `dashboard/LineChart.tsx` | h-[300px] container. Verify: Chart.js line rendered, amber-400 line color, pointRadius 5 / pointHoverRadius 8, decline points red (day-over-day drop), tooltip shows date + "Rp X" on hover/touch, y-axis ticks use compact Rupiah ("Rp 12,3 jt"), x-axis labels use id-ID date format ("26 Jun 2026"), loading overlay (bg-gray-950/50 + Spinner) does not replace chart, maxRotation 45 on x-axis ticks. |
 | **PieChart** | `dashboard/PieChart.tsx` | Verify: top-10 menu items rendered, tooltip shows name + percentage + count + revenue, hover state visible, loading overlay works same as LineChart. |
 | **EmptyState** | `dashboard/EmptyState.tsx` | Centered py-16. Verify: 📊 emoji, heading text-lg text-gray-300, sub-message text-sm text-gray-500, "Tambah Data" button amber-500 on amber-400 hover. |
@@ -193,8 +193,8 @@ created: 2026-06-26
 | Component | File | Audit Focus |
 |-----------|------|-------------|
 | **ReportDateFilter** | `report/ReportDateFilter.tsx` | 3 presets (Harian, Mingguan, Bulanan) + custom date picker. Default: Bulanan (current month). Same styling pattern as dashboard DateFilter. |
-| **ReportSummaryCards** | `report/ReportSummaryCards.tsx` | Verify: mirrors dashboard SummaryCards pattern; shows total revenue + transaction count for the filtered period + outlet name. |
-| **ReportDailyTable** | `report/ReportDailyTable.tsx` | overflow-x-auto wrapper. Verify: 4 columns (Tanggal, Omset (Rp), Menu Terlaris, Jumlah Transaksi), 5 skeleton rows on loading, even:bg-gray-900/50 striping, empty state "Tidak ada data untuk periode ini", text-sm data cells, formatRupiah on revenue column. |
+| **ReportSummaryCards** | `report/ReportSummaryCards.tsx` | Verify: mirrors dashboard SummaryCards pattern; shows total revenue + day count for the filtered period + outlet name. |
+| **ReportDailyTable** | `report/ReportDailyTable.tsx` | overflow-x-auto wrapper. Verify: 4 columns (Tanggal, Omset (Rp), Menu Terlaris, Hari Tercatat), 5 skeleton rows on loading, even:bg-gray-900/50 striping, empty state "Tidak ada data untuk periode ini", text-sm data cells, formatRupiah on revenue column. |
 | **ExportButtons** | `report/ExportButtons.tsx` | sticky top-0 z-10, bg-gray-950/95, backdrop-blur-sm. Verify: PDF button amber-400 w-full on mobile (sm:w-auto), CSV button bg-gray-700 w-full on mobile (sm:w-auto), both disabled (opacity-50, cursor-not-allowed) when data is null, flex-col on mobile → sm:flex-row sm:justify-end on desktop. |
 
 ### Auth Pages
@@ -358,7 +358,7 @@ Run Lighthouse accessibility audit (`npx lighthouse --only-categories=accessibil
 | No data | Both buttons disabled, 50% opacity | Verify `disabled:cursor-not-allowed disabled:opacity-50` |
 | Has data | PDF button amber-400, CSV button gray-700, both clickable | Verify download triggers client-side (no server request) |
 | PDF download | File named `Laporan_{OutletName}_{StartDate}_{EndDate}.pdf` | Verify D-29 filename convention |
-| CSV download | File named `Laporan_{OutletName}_{StartDate}_{EndDate}.csv` with UTF-8 BOM + semicolon delimiter | Verify D-29 filename, D-26 structure (Tanggal, Omset (Rp), Menu Terlaris, Jumlah Transaksi) |
+| CSV download | File named `Laporan_{OutletName}_{StartDate}_{EndDate}.csv` with UTF-8 BOM + semicolon delimiter | Verify D-29 filename, D-26 structure (Tanggal, Omset (Rp), Menu Terlaris, Hari Tercatat) |
 | CSV injection safety | Cells starting with =/+/ - /@ prefixed with tab | Verify `escapeCell()` function behavior (unit test exists) |
 | Memory leak | `URL.revokeObjectURL` called after download | Verify no dangling blob URLs |
 

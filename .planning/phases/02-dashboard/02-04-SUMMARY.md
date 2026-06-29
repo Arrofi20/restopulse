@@ -16,7 +16,7 @@ provides:
   - "usePolling hook (hooks/usePolling.ts) — generic polling with Page Visibility API: immediate fetch on mount, setInterval cadence, pause on document.hidden, resume with immediate fetch on visible, cleanup on unmount"
   - "useDashboard hook (hooks/useDashboard.ts) — GET /api/dashboard with date range, { data, loading, error, refresh } state, 30s auto-poll via usePolling (D-10), useCallback-stable fetcher keyed on dateRange.start/end so date changes re-fetch (D-04)"
   - "DateFilter component (components/dashboard/DateFilter.tsx) — 4 preset buttons (7 Hari/30 Hari/Bulan Ini/Semua via date-fns) + 2 native date inputs (D-01/D-02/D-03), active-preset highlight, defaultDateRange() export"
-  - "SummaryCards component (components/dashboard/SummaryCards.tsx) — Total Omset (formatRupiah, amber-400, 24pt) + Jumlah Transaksi cards with animate-pulse shimmer loading (D-05/D-12)"
+  - "SummaryCards component (components/dashboard/SummaryCards.tsx) — Total Omset (formatRupiah, amber-400, 24pt) + Hari Tercatat cards with animate-pulse shimmer loading (D-05/D-12)"
   - "DashboardPage (pages/DashboardPage.tsx) — composes useDashboard + DateFilter + SummaryCards + error banner + chart grid (D-16), default 7-day range (D-01)"
   - "Vitest test infrastructure — vitest@4.1.9 + jsdom + @testing-library/react + @testing-library/jest-dom; 7 behavioral hook tests (3 usePolling, 4 useDashboard) all passing"
 affects:
@@ -119,7 +119,7 @@ coverage:
     human_judgment: true
     rationale: "Preset click behavior, active-highlight rendering, and native date-picker dark-mode styling are structurally verified and bundle cleanly, but actual click→onChange→refetch round-trip and visual active-state styling require a browser + live backend and are deferred to the Phase 2 visual UAT."
   - id: D4
-    description: "SummaryCards — Total Omset (formatRupiah, amber-400, >=24pt) + Jumlah Transaksi cards in sm:grid-cols-2, animate-pulse shimmer on loading (D-05/D-12)"
+    description: "SummaryCards — Total Omset (formatRupiah, amber-400, >=24pt) + Hari Tercatat cards in sm:grid-cols-2, animate-pulse shimmer on loading (D-05/D-12)"
     requirement: DASH-01
     verification:
       - kind: other
@@ -169,7 +169,7 @@ status: complete
 - **Built the dashboard data layer as two tested hooks.** `usePolling(fetchFn, intervalMs)` calls `fetchFn` immediately on mount, sets a `setInterval` cadence, registers a `visibilitychange` listener that pauses the interval when `document.hidden` (D-13) and resumes with an immediate fetch when visible, and cleans up both the interval and the listener on unmount (no memory leaks). `useDashboard(dateRange)` manages `{ data, loading, error }`, calls `get<{ success, data: DashboardData }>('/dashboard?start=...&end=...')` via the existing apiClient, wraps the fetcher in `useCallback` keyed on `dateRange.start/end` so a date change re-fetches (D-04), drives a 30s `usePolling` (D-10), and exposes `refresh()` for the manual refresh button (D-11). The DashboardData already carries `outlet.name` — no separate outlet fetch.
 - **Verified the hooks with 7 behavioral vitest tests** (3 usePolling, 4 useDashboard) covering immediate-mount fetch, interval cadence, visibility pause/resume, unmount cleanup, mount + dateRange-change fetch, loading/data/error transitions, manual refresh, and error-state on rejected fetch. All pass under jsdom with fake timers (usePolling) and real timers + waitFor (useDashboard).
 - **Built DateFilter (D-01/D-02/D-03)** — 4 preset buttons ("7 Hari", "30 Hari", "Bulan Ini", "Semua") computed via `date-fns` (`subDays`/`startOfMonth`/`endOfMonth`/`format`), an active-preset highlight (amber-400) by comparing the current `value` to each preset's computed range, and two native `<input type="date">` fields with `[color-scheme:dark]` for the custom picker. Exports `defaultDateRange()` so DashboardPage inits with the same date-fns local-date math the "7 Hari" preset uses (timezone-safe).
-- **Built SummaryCards (D-05/D-12)** — two cards in a `sm:grid-cols-2` grid: "Total Omset" via `formatRupiah` in `text-3xl` amber-400 (satisfies the OPENCODE.md >=24pt financial-data rule) and "Jumlah Transaksi" in `text-3xl` white. A `loading` prop swaps each value for an `animate-pulse` shimmer placeholder so the cards never show "Rp 0" / "0" during the first fetch.
+- **Built SummaryCards (D-05/D-12)** — two cards in a `sm:grid-cols-2` grid: "Total Omset" via `formatRupiah` in `text-3xl` amber-400 (satisfies the OPENCODE.md >=24pt financial-data rule) and "Hari Tercatat" in `text-3xl` white. A `loading` prop swaps each value for an `animate-pulse` shimmer placeholder so the cards never show "Rp 0" / "0" during the first fetch.
 - **Built DashboardPage and wired App.tsx** — `useState(() => defaultDateRange())` (D-01), `useDashboard(dateRange)` (D-04 shared filter), renders `DateFilter` + `SummaryCards` + a red error banner + the chart grid (`grid grid-cols-1 gap-6`: Line Chart placeholder above, Pie Chart below, per D-16 action text). `refresh` is kept in the data contract for Plan 02-05's refresh button. App.tsx's inline placeholder was replaced with `import DashboardPage from './pages/DashboardPage'`.
 - **Stood up the project's test infrastructure** — vitest 4.1.9 + jsdom 29.1.1 + @testing-library/react 16.3.2 + @testing-library/jest-dom 6.9.1 (all verified legitimate via `npm view` before install), configured in `vite.config.ts` (`test.environment: jsdom`, `globals: true`, setup file) with `defineConfig` imported from `vitest/config` so `tsc -b` type-checks the `test` field. Added `test` / `test:watch` scripts and `vitest/globals` + `@testing-library/jest-dom` types to tsconfig.app.json.
 - **Verified end-to-end**: `npx tsc --noEmit` exit 0; `npm run build` (`tsc -b && vite build`) exit 0 (264.50 kB JS / 83.32 kB gzipped — under the 800KB NFR 9.3); `npm run dev` boots Vite in 426ms with HTTP 200 on `/`; `npx vitest run` → 7/7 tests pass.
@@ -190,7 +190,7 @@ _Plan metadata commit recorded separately below._
 - `frontend/src/hooks/usePolling.ts` — generic polling hook with Page Visibility API (D-10/D-13)
 - `frontend/src/hooks/useDashboard.ts` — dashboard data fetching + state + refresh, 30s auto-poll (D-04/D-10/D-11)
 - `frontend/src/components/dashboard/DateFilter.tsx` — preset buttons + custom date picker + `defaultDateRange()` export (D-01/D-02/D-03)
-- `frontend/src/components/dashboard/SummaryCards.tsx` — total revenue + transaction count cards with shimmer (D-05/D-12)
+- `frontend/src/components/dashboard/SummaryCards.tsx` — total revenue + day count cards with shimmer (D-05/D-12)
 - `frontend/src/pages/DashboardPage.tsx` — page composing data layer + filters + summary + chart grid (D-01/D-04/D-16)
 - `frontend/src/test/setup.ts` — vitest global setup (jest-dom matchers)
 - `frontend/src/hooks/__tests__/usePolling.test.ts` — 3 behavioral tests

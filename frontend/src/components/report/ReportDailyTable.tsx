@@ -1,6 +1,6 @@
 // ReportDailyTable — daily breakdown table for the E-Report preview (D-23).
 //
-// Columns: Tanggal | Omset (Rp) | Menu Terlaris | Jumlah Transaksi
+// Columns: Tanggal | Omset (Rp) | Menu Terlaris | Hari Tercatat
 //
 // Wrapped in `overflow-x-auto` so the table scrolls horizontally on mobile
 // instead of overflowing the viewport.
@@ -26,7 +26,7 @@ export function ReportDailyTable({ rows, loading }: ReportDailyTableProps) {
             <th className="px-4 py-3 text-left text-sm font-medium">Tanggal</th>
             <th className="px-4 py-3 text-right text-sm font-medium">Omset (Rp)</th>
             <th className="px-4 py-3 text-left text-sm font-medium">Menu Terlaris</th>
-            <th className="px-4 py-3 text-center text-sm font-medium">Jumlah Transaksi</th>
+            <th className="px-4 py-3 text-center text-sm font-medium">Hari Tercatat</th>
           </tr>
         </thead>
         <tbody className="divide-y divide-gray-800">
@@ -62,7 +62,7 @@ export function ReportDailyTable({ rows, loading }: ReportDailyTableProps) {
                 </td>
                 <td className="px-4 py-3 text-sm text-white">{row.topMenu}</td>
                 <td className="px-4 py-3 text-center text-sm text-white">
-                  {row.transactionCount}
+                  {row.dayCount}
                 </td>
               </tr>
             ))

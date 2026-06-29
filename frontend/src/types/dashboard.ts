@@ -22,7 +22,7 @@ export interface DashboardData {
   trends: SalesTrendItem[];
   summary: {
     totalRevenue: number;
-    transactionCount: number;
+    dayCount: number;
   };
 }
 

@@ -12,7 +12,7 @@ number: 1
 name: Verify GET /api/report returns outlet-scoped report data on a live server
 expected: |
   Start backend with seeded DB and call GET /api/report with a valid JWT and date range.
-  200 response with { success: true, data: { outlet, period, summary: { totalRevenue, transactionCount, topItems }, rows } } scoped to the token's outletId.
+  200 response with { success: true, data: { outlet, period, summary: { totalRevenue, dayCount, topItems }, rows } } scoped to the token's outletId.
   401 without JWT; 400 VALIDATION_ERROR with ZodIssue[] details on malformed dates (e.g. start > end, start=2026-13-01).
 awaiting: user response
 
@@ -31,7 +31,7 @@ expected: A4 portrait, white background, dark text, formatRupiah amounts, 'Halam
 result: [pending]
 
 ### 4. CSV Excel compatibility (download + open)
-expected: UTF-8 BOM present (EF BB BF), ';' delimiter, columns Tanggal/Omset (Rp)/Menu Terlaris/Jumlah Transaksi, Indonesian diacritics render correctly, cells starting with = + - @ are neutralized
+expected: UTF-8 BOM present (EF BB BF), ';' delimiter, columns Tanggal/Omset (Rp)/Menu Terlaris/Hari Tercatat, Indonesian diacritics render correctly, cells starting with = + - @ are neutralized
 result: [pending]
 
 ### 5. Mobile 320px viewport (ROADMAP SC 4)

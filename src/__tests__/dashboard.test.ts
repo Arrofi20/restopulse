@@ -87,7 +87,7 @@ describe('Dashboard API', () => {
     // Summary data
     expect(res.body.data.summary).toBeDefined();
     expect(typeof res.body.data.summary.totalRevenue).toBe('number');
-    expect(typeof res.body.data.summary.transactionCount).toBe('number');
+    expect(typeof res.body.data.summary.dayCount).toBe('number');
   });
 
   // DASH-01: Trends data structure

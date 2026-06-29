@@ -2,7 +2,7 @@
 //
 // Cards in a responsive grid (sm:grid-cols-3):
 //   1. "Total Omset"       — formatRupiah(summary.totalRevenue), amber-400, 24pt
-//   2. "Jumlah Transaksi"  — summary.transactionCount, white, 24pt
+//   2. "Hari Tercatat"  — summary.dayCount, white, 24pt
 //   3. "Menu Terlaris"     — top 3 of summary.topItems joined, white, lg
 //
 // Loading state: shimmer (animate-pulse) placeholders so the cards don't
@@ -24,7 +24,7 @@ interface ReportSummaryCardsProps {
 
 export function ReportSummaryCards({ data, loading }: ReportSummaryCardsProps) {
   const totalRevenue = data?.summary.totalRevenue;
-  const transactionCount = data?.summary.transactionCount;
+  const dayCount = data?.summary.dayCount;
   const topItems = data?.summary.topItems ?? [];
 
   return (
@@ -41,14 +41,14 @@ export function ReportSummaryCards({ data, loading }: ReportSummaryCardsProps) {
         )}
       </div>
 
-      {/* Jumlah Transaksi */}
+      {/* Hari Tercatat */}
       <div className="rounded-xl border border-gray-800 bg-gray-900 p-5">
-        <div className="text-sm text-gray-400">Jumlah Transaksi</div>
+        <div className="text-sm text-gray-400">Hari Tercatat</div>
         {loading ? (
           <div className="mt-2 h-8 w-48 animate-pulse rounded bg-gray-800" />
         ) : (
           <div className="mt-1 text-3xl font-bold text-white">
-            {transactionCount === undefined ? '-' : transactionCount}
+            {dayCount === undefined ? '-' : dayCount}
           </div>
         )}
       </div>

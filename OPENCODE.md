@@ -13,7 +13,7 @@
   - FR-003 (Dashboard Agregasi: Line Chart & Pie Chart)
   - FR-004 (Dummy Injector Data)
   - FR-005 (E-Report Filter Tanggal)
-- **Should Have:** FR-006 (Export PDF), FR-007 (Tooltip Interaktif)
+- **Should Have:** FR-006 (Export PDF), FR-007 (Tooltip Interaktif), FR-011 (AI Ringkasan Otomatis)
 - **Could Have:** FR-008 (Export CSV), FR-009 (Manual Input Form)
 - **Won't Have (v1):** FR-010 (WhatsApp Notif)
 

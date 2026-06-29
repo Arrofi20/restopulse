@@ -22,7 +22,7 @@
 | 11 | Tooltip interaktif pada Pie Chart | DASH-03 | ⬜ | ⬜ Berhasil / ⬜ Gagal | |
 | 12 | Filter tanggal preset (7 Hari, 30 Hari, Bulan Ini) | DASH-01 | ⬜ | ⬜ Berhasil / ⬜ Gagal | |
 | 13 | Filter tanggal kustom (Tanggal Mulai - Tanggal Akhir) | DASH-01 | ⬜ | ⬜ Berhasil / ⬜ Gagal | |
-| 14 | Kartu ringkasan (Total Omset, Jumlah Transaksi) | DASH-01 | ⬜ | ⬜ Berhasil / ⬜ Gagal | |
+| 14 | Kartu ringkasan (Total Omset, Hari Tercatat) | DASH-01 | ⬜ | ⬜ Berhasil / ⬜ Gagal | |
 | 15 | Tombol refresh data | DASH-01 | ⬜ | ⬜ Berhasil / ⬜ Gagal | |
 | 16 | Suntik data simulasi | DATA-01 | ⬜ | ⬜ Berhasil / ⬜ Gagal | |
 | 17 | Input data transaksi manual | DATA-02 | ⬜ | ⬜ Berhasil / ⬜ Gagal | |

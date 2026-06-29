@@ -125,8 +125,8 @@ Sebelum UAT, sistem telah melalui 4 fase audit:
 **Hasil:** ⬜ Berhasil / ⬜ Gagal — [catatan]
 
 ### 2.6 Kartu Ringkasan (Summary Cards)
-- Amati kartu ringkasan: "Total Omset" dan "Jumlah Transaksi"
-- **Diharapkan:** Nilai Total Omset dalam Rupiah (contoh: "Rp 1.234.567"), nilai Jumlah Transaksi dalam angka
+- Amati kartu ringkasan: "Total Omset" dan "Hari Tercatat"
+- **Diharapkan:** Nilai Total Omset dalam Rupiah (contoh: "Rp 1.234.567"), nilai Hari Tercatat dalam angka
 - **Diharapkan:** Nilai berubah sesuai filter tanggal yang dipilih
 - **Diharapkan:** Font nilai finansial besar (text-3xl, ≥24pt)
 
@@ -168,7 +168,7 @@ Sebelum UAT, sistem telah melalui 4 fase audit:
 - Klik tombol "Export CSV"
 - **Diharapkan:** Browser mengunduh file CSV
 - Buka file CSV di Excel
-- **Diharapkan:** Kolom: Tanggal, Omset (Rp), Menu Terlaris, Jumlah Transaksi
+- **Diharapkan:** Kolom: Tanggal, Omset (Rp), Menu Terlaris, Hari Tercatat
 - **Diharapkan:** Encoding benar (karakter Indonesia tampil sempurna), delimiter titik koma (;)
 - **Diharapkan:** Karakter `=` di awal sel tidak menyebabkan error Excel (perlindungan formula injection)
 

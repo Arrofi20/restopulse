@@ -57,7 +57,7 @@ describe('Report API', () => {
       ],
     });
 
-    // Seed DailySales records (used for transaction counts)
+    // Seed DailySales records (used for day counts)
     await db.prisma.dailySales.createMany({
       data: [
         {
@@ -122,7 +122,7 @@ describe('Report API', () => {
     // Summary with aggregate data
     expect(data.summary).toBeDefined();
     expect(typeof data.summary.totalRevenue).toBe('number');
-    expect(typeof data.summary.transactionCount).toBe('number');
+    expect(typeof data.summary.dayCount).toBe('number');
 
     // Rows array
     expect(data.rows).toBeDefined();
@@ -135,7 +135,7 @@ describe('Report API', () => {
       expect(typeof row.date).toBe('string');
       expect(typeof row.revenue).toBe('number');
       expect(row.topMenu).toBeDefined();
-      expect(typeof row.transactionCount).toBe('number');
+      expect(typeof row.dayCount).toBe('number');
     }
   });
 
@@ -167,7 +167,7 @@ describe('Report API', () => {
     expect(res.body.data.summary.totalRevenue).toBe(600000);
 
     // Transaction count = number of days with sales = 3
-    expect(res.body.data.summary.transactionCount).toBe(3);
+    expect(res.body.data.summary.dayCount).toBe(3);
   });
 
   // Date validation

@@ -34,8 +34,8 @@ export class ReportService {
 
     // 4. Compute period aggregates
     const totalRevenue = rows.reduce((sum, r) => sum + r.revenue, 0);
-    const transactionCount = rows.reduce(
-      (sum, r) => sum + r.transactionCount,
+    const dayCount = rows.reduce(
+      (sum, r) => sum + r.dayCount,
       0
     );
 
@@ -48,7 +48,7 @@ export class ReportService {
     return {
       outlet: { name: outlet?.name ?? '' },
       period: { start, end },
-      summary: { totalRevenue, transactionCount, topItems },
+      summary: { totalRevenue, dayCount, topItems },
       rows,
     };
   }

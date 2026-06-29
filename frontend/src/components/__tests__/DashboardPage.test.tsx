@@ -32,7 +32,7 @@ describe('DashboardPage', () => {
       data: {
         outlet: { name: 'Test Outlet' },
         trends: [],
-        summary: { totalRevenue: 0, transactionCount: 0 },
+        summary: { totalRevenue: 0, dayCount: 0 },
       },
       loading: false,
       error: null,
@@ -57,7 +57,7 @@ describe('DashboardPage', () => {
             outlet_id: 'o1',
           },
         ],
-        summary: { totalRevenue: 1_000_000, transactionCount: 5 },
+        summary: { totalRevenue: 1_000_000, dayCount: 5 },
       },
       loading: false,
       error: null,

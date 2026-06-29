@@ -14,7 +14,7 @@ provides:
   - E-Report preview page at /e-report with independent date filtering, summary cards, daily breakdown table, and sticky export button area
   - useReport hook polling GET /api/report every 30s (independent date state, D-21)
   - ReportDateFilter with Harian/Mingguan/Bulanan/Custom presets + defaultReportDateRange() (D-19/D-20)
-  - ReportSummaryCards (Total Omset / Jumlah Transaksi / Menu Terlaris) and ReportDailyTable components
+  - ReportSummaryCards (Total Omset / Hari Tercatat / Menu Terlaris) and ReportDailyTable components
   - ExportButtons placeholder component (sticky, mobile-responsive) ready for 03-03/03-04 handler wiring
 affects: [03-03 (PDF export engine), 03-04 (CSV export engine)]
 
@@ -41,7 +41,7 @@ key-files:
 key-decisions:
   - "useReport mirrors useDashboard verbatim (30s poll, useCallback fetcher keyed on date range, refresh() flips loading) — only the endpoint path differs (/report vs /dashboard). No new abstractions introduced."
   - "ReportDateFilter drops the dashboard 'Semua' preset and adds 'Harian' (today only) per D-19; 'Bulanan' (current month) is the default per D-20, exported via defaultReportDateRange() so the preset is highlighted on first paint (same fix as 02-04's defaultDateRange)."
-  - "ReportDailyTable uses overflow-x-auto for mobile horizontal scroll rather than collapsing columns — preserves all four columns (Tanggal, Omset, Menu Terlaris, Jumlah Transaksi) required by D-23."
+  - "ReportDailyTable uses overflow-x-auto for mobile horizontal scroll rather than collapsing columns — preserves all four columns (Tanggal, Omset, Menu Terlaris, Hari Tercatat) required by D-23."
   - "ExportButtons handlers are optional props; buttons disable when handler is absent OR data is null. This keeps the component stable across 03-03 (PDF) and 03-04 (CSV) — those plans only need to pass callbacks."
   - "Independent report date state lives in EReportPage via useState(defaultReportDateRange()) — NOT lifted to a shared store, satisfying D-21 (report and dashboard date states must not bleed)."
 
@@ -105,8 +105,8 @@ status: complete
 - E-Report preview page replaces the Phase-2 placeholder at `/e-report` and composes the report data flow: `useReport` (poll) → `ReportDateFilter` → `ExportButtons` → `ReportSummaryCards` → `ReportDailyTable`
 - `useReport` hook mirrors `useDashboard` (30s poll via `usePolling`, `useCallback` fetcher keyed on date range, manual `refresh()`) but hits `GET /api/report?start=&end=` — 4 behavioral unit tests passing
 - `ReportDateFilter` ships Harian/Mingguan/Bulanan presets + a custom manual picker, with `defaultReportDateRange()` returning the current month so the Bulanan preset is active on first paint (D-19/D-20)
-- `ReportSummaryCards` shows Total Omset (amber-400 24pt, `formatRupiah`), Jumlah Transaksi, and top-3 Menu Terlaris with shimmer loading + `-` empty fallback
-- `ReportDailyTable` renders the daily breakdown (Tanggal / Omset / Menu Terlaris / Jumlah Transaksi) in an `overflow-x-auto` container with skeleton rows and a "Tidak ada data untuk periode ini" empty state
+- `ReportSummaryCards` shows Total Omset (amber-400 24pt, `formatRupiah`), Hari Tercatat, and top-3 Menu Terlaris with shimmer loading + `-` empty fallback
+- `ReportDailyTable` renders the daily breakdown (Tanggal / Omset / Menu Terlaris / Hari Tercatat) in an `overflow-x-auto` container with skeleton rows and a "Tidak ada data untuk periode ini" empty state
 - `ExportButtons` is sticky at the top with backdrop-blur, full-width on mobile and right-aligned on desktop, disabled until plans 03-03/03-04 wire PDF/CSV handlers — no component edits needed for wiring
 
 ## Task Commits
@@ -132,7 +132,7 @@ Each task was committed atomically:
 ## Decisions Made
 - **useReport mirrors useDashboard verbatim** — same 30s poll, `useCallback` fetcher keyed on date range, `refresh()` loading flip; only the endpoint path differs. No new abstractions.
 - **ReportDateFilter drops dashboard's "Semua" preset and adds "Harian" (today only)** per D-19; "Bulanan" (current month) is the default per D-20, exported via `defaultReportDateRange()` so the preset is highlighted on first paint (same fix as 02-04's `defaultDateRange`).
-- **ReportDailyTable uses `overflow-x-auto` for mobile** rather than collapsing columns — preserves all four required columns (Tanggal, Omset, Menu Terlaris, Jumlah Transaksi) per D-23.
+- **ReportDailyTable uses `overflow-x-auto` for mobile** rather than collapsing columns — preserves all four required columns (Tanggal, Omset, Menu Terlaris, Hari Tercatat) per D-23.
 - **ExportButtons handlers are optional props** — buttons disable when a handler is absent OR `data` is null. Plans 03-03/03-04 only need to pass callbacks; the component's layout stays stable.
 - **Independent report date state lives in EReportPage** via `useState(defaultReportDateRange())` — not lifted to a shared store, satisfying D-21 (report and dashboard date states must not bleed).
 
@@ -154,7 +154,7 @@ None new beyond the plan's `<threat_model>`:
 
 ## Next Phase Readiness
 - E-Report preview UI is complete and ready for the export engines (plans 03-03 PDF, 03-04 CSV) — they only need to pass `onExportPDF` / `onExportCSV` handlers to `ExportButtons`.
-- The report payload contract (`{ outlet, period, summary: { totalRevenue, transactionCount, topItems }, rows }`) is fully typed on the frontend via `frontend/src/types/report.ts`.
+- The report payload contract (`{ outlet, period, summary: { totalRevenue, dayCount, topItems }, rows }`) is fully typed on the frontend via `frontend/src/types/report.ts`.
 - No blockers.
 
 ## Self-Check: PASSED

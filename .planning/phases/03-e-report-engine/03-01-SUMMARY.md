@@ -35,7 +35,7 @@ key-files:
     - src/app.ts
 
 key-decisions:
-  - "Per-day transactionCount derived from DailySales record presence (1/0), not a per-row count — DailySales schema has no transaction_count column and @@unique([outlet_id, date]) makes each daily record the transaction unit; period summary.transactionCount = number of days with recorded sales"
+  - "Per-day dayCount derived from DailySales record presence (1/0), not a per-row count — DailySales schema has no transaction_count column and @@unique([outlet_id, date]) makes each daily record the transaction unit; period summary.dayCount = number of days with recorded sales"
   - "Live queries against SalesTrend + DailySales (per D-31/D-33b); the DailySalesReport cached snapshot table is intentionally unused because it has no population mechanism yet"
   - "Per-row topMenu = first item of that day's parsed menu_popularity items sorted by count desc ('-' if empty); period topItems = top 3 names by summed count across all days"
   - "Reused existing dateRangeSchema (DRY) for input validation, mirroring the Phase 2 dashboard pattern"
@@ -99,7 +99,7 @@ status: complete
 
 ## Accomplishments
 - ReportRepository unifies SalesTrend (revenue + menu_popularity) and DailySales (per-day transaction presence) into a structured `{ rows, topItems }` payload scoped to a single outlet
-- ReportService validates the date range via the shared `dateRangeSchema`, computes period totals (`totalRevenue`, `transactionCount`), resolves the outlet name, and returns `{ outlet, period, summary, rows }`
+- ReportService validates the date range via the shared `dateRangeSchema`, computes period totals (`totalRevenue`, `dayCount`), resolves the outlet name, and returns `{ outlet, period, summary, rows }`
 - ReportController mirrors DashboardController (ZodError -> 400 VALIDATION_ERROR, other errors -> 400 REPORT_ERROR) and is mounted at `GET /api/report` between `/api/dashboard` and `/api/admin`, protected by `authMiddleware`
 - All queries scoped to `req.user.outletId` — owners cannot read other outlets' data (T-03-02 mitigated)
 
@@ -122,7 +122,7 @@ Each task was committed atomically:
 - `src/app.ts` - Mounts `/api/report` between `/api/dashboard` and `/api/admin`
 
 ## Decisions Made
-- **Per-day transactionCount = 1 if a DailySales record exists for that date else 0** — DailySales schema has no `transaction_count` column and `@@unique([outlet_id, date])` makes each daily record the transaction unit; period summary.transactionCount is therefore the number of days with recorded sales
+- **Per-day dayCount = 1 if a DailySales record exists for that date else 0** — DailySales schema has no `transaction_count` column and `@@unique([outlet_id, date])` makes each daily record the transaction unit; period summary.dayCount is therefore the number of days with recorded sales
 - **Live queries against SalesTrend + DailySales** (per D-31/D-33b) — the DailySalesReport cached snapshot table has no population mechanism yet and is intentionally unused
 - **Per-row topMenu + period topItems** semantics: per-row topMenu is the highest-count item in that day's parsed `menu_popularity.items` (sorted desc; `"-"` if empty); period `topItems` is the top 3 names by summed count across all days
 - **Reused `dateRangeSchema`** (DRY) for input validation, mirroring the existing Phase 2 dashboard pattern
@@ -133,16 +133,16 @@ Each task was committed atomically:
 
 **1. [Rule 3 - Blocking] Schema mismatch on DailySales transaction_count**
 - **Found during:** Task 1 (ReportRepository.getReportData)
-- **Issue:** Plan Task 1 step 3 specifies `transactionCount (number from matching DailySales row by date, or 0 if no match)` — implying a numeric column on DailySales. The DailySales Prisma model has no `transaction_count` field; its `@@unique([outlet_id, date])` constraint means at most one record per outlet per day, which makes the daily record itself the transaction unit, not an aggregate count
-- **Fix:** Derived per-day `transactionCount` from DailySales record presence (1 when a matching row exists for that date, 0 otherwise). The period `summary.transactionCount` then sums these, which equals the number of days with recorded sales across the range
+- **Issue:** Plan Task 1 step 3 specifies `dayCount (number from matching DailySales row by date, or 0 if no match)` — implying a numeric column on DailySales. The DailySales Prisma model has no `transaction_count` field; its `@@unique([outlet_id, date])` constraint means at most one record per outlet per day, which makes the daily record itself the transaction unit, not an aggregate count
+- **Fix:** Derived per-day `dayCount` from DailySales record presence (1 when a matching row exists for that date, 0 otherwise). The period `summary.dayCount` then sums these, which equals the number of days with recorded sales across the range
 - **Files modified:** src/repositories/ReportRepository.ts
-- **Verification:** `npx tsc --noEmit --skipLibCheck` exits 0; traceable via Date-request-count join index (`transactionCountByDate`)
+- **Verification:** `npx tsc --noEmit --skipLibCheck` exits 0; traceable via Date-request-count join index (`dayCountByDate`)
 - **Committed in:** c1fdb03 (Task 1 commit)
 
 ---
 
 **Total deviations:** 1 auto-fixed (1 Rule 3 blocking — schema mismatch resolved to keep plan semantically consistent without scope creep)
-**Impact on plan:** The endpoint's contract (outlet, period, summary, rows) is unchanged; only the numeric meaning of `transactionCount` was clarified against the actual schema. No scope creep; the report shape in the plan's `must_haves.truths` still holds.
+**Impact on plan:** The endpoint's contract (outlet, period, summary, rows) is unchanged; only the numeric meaning of `dayCount` was clarified against the actual schema. No scope creep; the report shape in the plan's `must_haves.truths` still holds.
 
 ## Issues Encountered
 None — all three tasks compiled on first attempt; the only deviation (schema mismatch) was resolved inline as Rule 3.
@@ -159,7 +159,7 @@ None new beyond the plan's `<threat_model>`:
 
 ## Next Phase Readiness
 - Backend report API is ready for the report preview UI (plan 03-02) and export engines (plans 03-03, 03-04)
-- The report payload shape (`{ outlet, period, summary: { totalRevenue, transactionCount, topItems }, rows: [{ date, revenue, topMenu, transactionCount }] }`) is the contract for those downstream consumers
+- The report payload shape (`{ outlet, period, summary: { totalRevenue, dayCount, topItems }, rows: [{ date, revenue, topMenu, dayCount }] }`) is the contract for those downstream consumers
 - No blockers
 
 ## Self-Check: PASSED

@@ -1,10 +1,10 @@
-// SummaryCards — total revenue + transaction count display cards (D-05).
+// SummaryCards — total revenue + day count display cards (D-05).
 //
 // Two cards in a responsive grid (sm:grid-cols-2). Receives props from
 // DashboardPage — does NOT fetch data itself.
 //
 //   Card 1 — "Total Omset":     formatRupiah(totalRevenue), amber-400, 24pt
-//   Card 2 — "Jumlah Transaksi": transactionCount, white, 24pt
+//   Card 2 — "Hari Tercatat": dayCount, white, 24pt
 //
 // Loading state: a shimmer (animate-pulse) placeholder so the cards don't
 // show "Rp 0" / "0" while the first fetch is in flight (D-12 subtle loading).
@@ -17,13 +17,13 @@ import { formatRupiah } from '../../lib/format';
 
 interface SummaryCardsProps {
   totalRevenue: number;
-  transactionCount: number;
+  dayCount: number;
   loading?: boolean;
 }
 
 export function SummaryCards({
   totalRevenue,
-  transactionCount,
+  dayCount,
   loading = false,
 }: SummaryCardsProps) {
   return (
@@ -42,12 +42,12 @@ export function SummaryCards({
 
       {/* Transaction Count (D-05) */}
       <div className="rounded-xl border border-gray-800 bg-gray-900 p-5">
-        <div className="text-sm text-gray-400">Jumlah Transaksi</div>
+        <div className="text-sm text-gray-400">Hari Tercatat</div>
         {loading ? (
           <div className="mt-2 h-8 w-48 animate-pulse rounded bg-gray-800" />
         ) : (
           <div className="mt-1 text-3xl font-bold text-white">
-            {transactionCount}
+            {dayCount}
           </div>
         )}
       </div>

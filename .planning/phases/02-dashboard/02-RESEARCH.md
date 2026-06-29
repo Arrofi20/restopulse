@@ -20,7 +20,7 @@ Phase 2 delivers the complete frontend React application for the RestoPulse owne
 - **D-02:** Quick-select preset buttons: 7 Hari (7H), 30 Hari (30H), Bulan Ini, Semua
 - **D-03:** Custom date picker (start-end) alongside presets
 - **D-04:** Shared filter between Line Chart and Pie Chart
-- **D-05:** Summary statistics cards above charts showing total revenue + transaction count
+- **D-05:** Summary statistics cards above charts showing total revenue + day count
 - **D-06:** Line Chart tooltip: date + revenue only
 - **D-07:** Pie Chart tooltip: name + percentage + count + revenue contributed
 - **D-08:** Revenue decline visual indicator: red point marker + annotation showing drop percentage (e.g., -15%)
@@ -642,7 +642,7 @@ import { usePolling } from './usePolling';
 interface DashboardData {
   trends: Array<{ date: string; revenue: number; menu_popularity: string }>;
   totalRevenue: number;
-  transactionCount: number;
+  dayCount: number;
 }
 
 interface DateRange {
@@ -713,7 +713,7 @@ export function useDashboard(dateRange: DateRange) {
 1. **New dashboard API endpoint: server-side or client-side aggregation?**
    - What we know: SalesTrend table has pre-computed data. No dashboard endpoint exists. `GET /api/sales` returns DailySales records (raw, not aggregated).
    - What's unclear: Whether to create a new `/api/dashboard` endpoint on the backend (recommended — reads SalesTrend directly) or reuse `GET /api/sales` and aggregate on the client.
-   - Recommendation: Create `GET /api/dashboard?start=YYYY-MM-DD&end=YYYY-MM-DD` endpoint that reads from SalesTrend via `SalesTrendRepository.findByDateRange()`. This leverages the CQRS-lite architecture and keeps the frontend thin. The endpoint should return: `{ trends: SalesTrend[], summary: { totalRevenue, transactionCount } }`.
+   - Recommendation: Create `GET /api/dashboard?start=YYYY-MM-DD&end=YYYY-MM-DD` endpoint that reads from SalesTrend via `SalesTrendRepository.findByDateRange()`. This leverages the CQRS-lite architecture and keeps the frontend thin. The endpoint should return: `{ trends: SalesTrend[], summary: { totalRevenue, dayCount } }`.
 
 2. **Login page: separate route or modal?**
    - What we know: Phase 1 provides `POST /api/auth/login`. The CONTEXT.md doesn't specify login page details.
@@ -765,7 +765,7 @@ export function useDashboard(dateRange: DateRange) {
 | DASH-01 | Line Chart renders with correct data points from API response | unit | `npx vitest run src/components/dashboard/__tests__/LineChart.test.tsx` | ❌ Wave 0 |
 | DASH-02 | Pie Chart renders with correct menu segments | unit | `npx vitest run src/components/dashboard/__tests__/PieChart.test.tsx` | ❌ Wave 0 |
 | DASH-03 | Tooltip displays Rupiah amount on point hover (Line Chart) and menu detail (Pie Chart) | unit | `npx vitest run src/components/dashboard/__tests__/LineChart.test.tsx` (included above) | ❌ Wave 0 |
-| DASH-01-D2 | Summary cards show correct total revenue + transaction count | unit | `npx vitest run src/components/dashboard/__tests__/SummaryCards.test.tsx` | ❌ Wave 0 |
+| DASH-01-D2 | Summary cards show correct total revenue + day count | unit | `npx vitest run src/components/dashboard/__tests__/SummaryCards.test.tsx` | ❌ Wave 0 |
 | SC-4 | Data refreshes within 3 seconds (polling works) | integration | Manual test with `waitFor` in polling hook test | ❌ Wave 0 |
 | SC-5 | Page loads within 4 seconds on 4G | e2e / manual | Lighthouse audit — not automatable in unit tests | ❌ Manual only |
 
