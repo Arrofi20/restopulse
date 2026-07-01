@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useDashboard } from '../hooks/useDashboard';
 import { useAiSummary } from '../hooks/useAiSummary';
 import { DateFilter, defaultDateRange } from '../components/dashboard/DateFilter';
@@ -11,6 +12,55 @@ import { EmptyState } from '../components/dashboard/EmptyState';
 import { RefreshButton } from '../components/ui/RefreshButton';
 import { Spinner } from '../components/ui/Spinner';
 import type { DateRange } from '../types/dashboard';
+import type { AiErrorInfo } from '../hooks/useAiSummary';
+
+function AiErrorDialog({
+  error,
+  onRetry,
+  onDismiss,
+}: {
+  error: AiErrorInfo;
+  onRetry: () => void;
+  onDismiss: () => void;
+}) {
+  const navigate = useNavigate();
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60" role="dialog" aria-modal="true">
+      <div className="mx-4 w-full max-w-md rounded-xl border border-red-800 bg-gray-900 p-6 space-y-4">
+        <h2 className="text-lg font-semibold text-white">{error.title}</h2>
+        <p className="text-sm text-gray-400">{error.message}</p>
+        <div className="flex justify-end gap-3 pt-2">
+          <button
+            type="button"
+            onClick={onDismiss}
+            className="rounded-lg bg-gray-700 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-gray-600 min-h-[44px]"
+          >
+            Close
+          </button>
+          {error.kind === 'no_key' && (
+            <button
+              type="button"
+              onClick={() => navigate('/settings')}
+              className="rounded-lg bg-amber-500 px-4 py-2.5 text-sm font-semibold text-black transition-colors hover:bg-amber-400 min-h-[44px]"
+            >
+              Open Settings
+            </button>
+          )}
+          {(error.kind === 'network' || error.kind === 'timeout' || error.kind === 'unknown') && (
+            <button
+              type="button"
+              onClick={onRetry}
+              className="rounded-lg bg-indigo-600 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-indigo-500 min-h-[44px]"
+            >
+              Retry
+            </button>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export default function DashboardPage() {
   const [dateRange, setDateRange] = useState<DateRange>(() => defaultDateRange());
@@ -21,20 +71,17 @@ export default function DashboardPage() {
     loading: aiLoading,
     error: aiError,
     isMock,
+    showErrorDialog,
     generate,
     retry,
+    dismissError,
   } = useAiSummary();
 
   const showEmptyState = !loading && !!data && data.trends.length === 0;
 
-  const handleAiSummary = () => {
-    console.log('[AI] Button clicked, generating summary for', dateRange);
-    try {
-      generate(dateRange);
-    } catch (e) {
-      console.error('[AI] generate threw synchronously:', e);
-    }
-  };
+  const handleAiSummary = useCallback(() => {
+    generate(dateRange);
+  }, [generate, dateRange]);
 
   return (
     <div className="space-y-4">
@@ -50,7 +97,7 @@ export default function DashboardPage() {
             {aiLoading ? (
               <>
                 <Spinner />
-                <span>Membuat ringkasan...</span>
+                <span>Generating AI Business Summary...</span>
               </>
             ) : (
               <>
@@ -95,22 +142,7 @@ export default function DashboardPage() {
         </div>
       )}
 
-      {aiError && (
-        <div className="rounded-lg border border-red-700 bg-red-900/50 p-4 text-red-300">
-          <div className="flex items-center justify-between">
-            <span>{aiError}</span>
-            <button
-              type="button"
-              onClick={retry}
-              className="ml-4 rounded-lg bg-red-700 px-3 py-1.5 text-xs font-medium text-white transition-colors hover:bg-red-600"
-            >
-              Coba Lagi
-            </button>
-          </div>
-        </div>
-      )}
-
-      {aiSummary && (
+      {aiSummary && !showErrorDialog && (
         <div className="rounded-xl border border-gray-800 bg-gray-900 p-4">
           <div className="mb-3 flex items-center gap-2">
             <h3 className="text-lg font-semibold text-white">Ringkasan AI</h3>
@@ -124,6 +156,14 @@ export default function DashboardPage() {
             {aiSummary}
           </div>
         </div>
+      )}
+
+      {showErrorDialog && aiError && (
+        <AiErrorDialog
+          error={aiError}
+          onRetry={retry}
+          onDismiss={dismissError}
+        />
       )}
     </div>
   );
