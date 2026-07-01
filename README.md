@@ -2,6 +2,39 @@
 
 RestoPulse adalah sistem informasi dasbor analitik dan laporan digital (E-Report) berbasis web untuk pemilik restoran. Sistem ini mengubah data penjualan harian menjadi grafik interaktif, mencatat pengeluaran bulanan dan pesanan catering, menghasilkan laporan keuangan digital siap cetak, serta memberikan ringkasan bisnis otomatis berbasis AI.
 
+## Setup Development
+
+```bash
+git clone <repository-url>
+cd restopulse
+
+# Backend
+npm install
+npm run dev          # http://localhost:3000
+
+# Frontend (terminal terpisah)
+cd frontend
+npm install
+npm run dev          # http://localhost:5173
+```
+
+Setelah `npm install`:
+- Prisma Client otomatis di-generate (via `postinstall`)
+- Database SQLite dev.db otomatis dibuat (via `predev` migration)
+- `.env` otomatis dibuat dari `.env.example` jika belum ada
+
+Tidak perlu menjalankan `npx prisma generate` atau `npx prisma migrate` secara manual.
+
+Untuk menjalankan semua test:
+
+```bash
+# Backend
+npx vitest run --config vitest.config.ts
+
+# Frontend
+cd frontend && npx vitest run
+```
+
 ## Cara Login
 
 Buka URL aplikasi RestoPulse di browser Anda. Pada halaman login, masukkan username dan password yang telah didaftarkan sebelumnya. Klik tombol **Login**, dan Anda akan diarahkan secara otomatis ke halaman Dasbor Utama. Jika belum memiliki akun, Anda dapat mendaftar melalui halaman register.

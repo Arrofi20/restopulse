@@ -6,13 +6,14 @@ import type { GeminiTestResult } from '../types/settings';
 
 export function SettingsPage() {
   const { config, loading, error, models, saveKey, saveModel, deleteKey, testConnection } = useSettings();
-  const { showToast } = useToast();
+  const { showToast, toasts, dismissToast } = useToast();
 
   const [apiKeyInput, setApiKeyInput] = useState('');
   const [showKey, setShowKey] = useState(false);
   const [saving, setSaving] = useState(false);
   const [testing, setTesting] = useState(false);
   const [deleting, setDeleting] = useState(false);
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [testResult, setTestResult] = useState<GeminiTestResult | null>(null);
   const [selectedModel, setSelectedModel] = useState('');
 
@@ -62,12 +63,13 @@ export function SettingsPage() {
     }
   };
 
-  const handleDelete = async () => {
-    if (!confirm('Hapus API key yang tersimpan? Sistem akan kembali menggunakan .env jika tersedia.')) return;
+  const handleDeleteConfirm = async () => {
+    setShowDeleteDialog(false);
     setDeleting(true);
+    setTestResult(null);
     try {
       await deleteKey();
-      showToast('success', 'API key dihapus');
+      showToast('success', 'API key berhasil dihapus. Sistem akan menggunakan .env jika tersedia.');
     } catch (err) {
       showToast('error', err instanceof Error ? err.message : 'Gagal menghapus API key');
     } finally {
@@ -94,6 +96,7 @@ export function SettingsPage() {
 
   const sourceLabel = config?.source === 'database' ? 'Database (Web UI)' : config?.source === 'env' ? '.env' : 'Tidak dikonfigurasi';
   const sourceColor = config?.source === 'database' ? 'text-green-400' : config?.source === 'env' ? 'text-yellow-400' : 'text-gray-500';
+  const hasStoredKey = config?.source === 'database';
 
   return (
     <div className="mx-auto max-w-2xl space-y-6">
@@ -101,8 +104,6 @@ export function SettingsPage() {
         <h1 className="text-2xl font-bold text-white">Settings</h1>
         <p className="mt-1 text-sm text-gray-400">Kelola konfigurasi Gemini AI</p>
       </div>
-
-      <ToastContainer toasts={[]} onDismiss={() => {}} />
 
       {/* Gemini AI Configuration Status */}
       <div className="rounded-xl border border-gray-800 bg-gray-900 p-6 space-y-4">
@@ -160,7 +161,7 @@ export function SettingsPage() {
         </p>
       </div>
 
-      {/* API Key Input */}
+      {/* API Key Input + Delete */}
       <form onSubmit={handleSave} className="rounded-xl border border-gray-800 bg-gray-900 p-6 space-y-4">
         <h3 className="text-sm font-semibold text-white">API Key</h3>
 
@@ -207,16 +208,14 @@ export function SettingsPage() {
           >
             {saving ? 'Menyimpan...' : 'Simpan API Key'}
           </button>
-          {config?.source === 'database' && (
-            <button
-              type="button"
-              onClick={handleDelete}
-              disabled={deleting}
-              className="rounded-lg bg-red-800/50 px-4 py-2.5 text-sm text-red-400 transition-colors hover:bg-red-800 hover:text-white disabled:opacity-50 min-h-[44px]"
-            >
-              {deleting ? 'Menghapus...' : 'Hapus'}
-            </button>
-          )}
+          <button
+            type="button"
+            onClick={() => setShowDeleteDialog(true)}
+            disabled={!hasStoredKey || deleting}
+            className="rounded-lg bg-red-800/50 px-4 py-2.5 text-sm font-medium text-red-400 transition-colors hover:bg-red-800 hover:text-white disabled:cursor-not-allowed disabled:opacity-50 min-h-[44px]"
+          >
+            {deleting ? 'Menghapus...' : 'Delete API Key'}
+          </button>
         </div>
       </form>
 
@@ -252,6 +251,37 @@ export function SettingsPage() {
           </div>
         )}
       </div>
+
+      {/* Delete Confirmation Dialog */}
+      {showDeleteDialog && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60" role="dialog" aria-modal="true">
+          <div className="mx-4 w-full max-w-md rounded-xl border border-red-800 bg-gray-900 p-6 space-y-4">
+            <h2 className="text-lg font-semibold text-white">Delete Gemini API Key?</h2>
+            <p className="text-sm text-gray-400">
+              This will permanently remove the stored Gemini API key. AI Summary will use the
+              environment variable (if available) or become unavailable until a new key is configured.
+            </p>
+            <div className="flex justify-end gap-3 pt-2">
+              <button
+                type="button"
+                onClick={() => setShowDeleteDialog(false)}
+                className="rounded-lg bg-gray-700 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-gray-600 min-h-[44px]"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={handleDeleteConfirm}
+                className="rounded-lg bg-red-700 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-red-600 min-h-[44px]"
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <ToastContainer toasts={toasts} onDismiss={dismissToast} />
     </div>
   );
 }

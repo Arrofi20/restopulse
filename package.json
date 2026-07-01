@@ -1,11 +1,13 @@
 {
   "name": "restopulse-rofi",
-  "version": "1.0.0",
-  "description": "",
+  "version": "1.1.0",
+  "description": "RestoPulse — Dashboard analitik dan laporan digital untuk pemilik restoran",
   "main": "index.js",
   "scripts": {
     "test:api": "vitest run --config vitest.config.ts",
     "test:api:watch": "vitest --config vitest.config.ts",
+    "postinstall": "prisma generate",
+    "predev": "node scripts/setup-env.js && prisma migrate deploy",
     "dev": "nodemon src/server.ts",
     "start": "node dist/server.js",
     "build": "tsc",

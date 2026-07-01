@@ -1,12 +1,17 @@
 import { defineConfig } from 'prisma/config'
+import dotenv from 'dotenv'
+
+dotenv.config()
+
+const DATABASE_URL = process.env.DATABASE_URL || 'file:./prisma/dev.db'
 
 export default defineConfig({
   earlyAccess: true,
   schema: './prisma/schema.prisma',
   datasource: {
-    url: process.env.DATABASE_URL,
+    url: DATABASE_URL,
   },
   migrate: {
-    datasourceUrl: process.env.DATABASE_URL,
+    datasourceUrl: DATABASE_URL,
   },
 })
