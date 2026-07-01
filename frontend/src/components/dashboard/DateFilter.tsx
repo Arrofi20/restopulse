@@ -1,31 +1,19 @@
 // DateFilter — date range selector with preset buttons + manual date picker.
 // Implements D-01 (default 7 days), D-02 (preset buttons), D-03 (custom picker).
 //
-// Props:
-//   - value:    the active DateRange (controlled by DashboardPage)
-//   - onChange: called with a new DateRange when a preset is clicked or a
-//               manual date input changes
-//
-// Preset buttons (D-02):
-//   "7 Hari"     → last 7 days (D-01 default)
-//   "30 Hari"    → last 30 days
-//   "Bulan Ini"  → start..end of the current month
-//   "Semua"      → 2020-01-01 .. today (effectively "all time")
+// Preset buttons:
+//   "Hari Ini"    → today only
+//   "7 Hari"      → last 7 days (D-01 default)
+//   "30 Hari"     → last 30 days
+//   "Semua Data"  → 2020-01-01 .. today (all historical records)
 //
 // The active preset is highlighted (amber-400) by comparing the current
-// `value` against each preset's computed range. Custom date inputs (D-03)
-// sit alongside the presets; editing them overrides the preset selection.
+// `value` against each preset's computed range. Custom date inputs sit
+// alongside the presets; editing them overrides the preset selection.
 //
-// Date math uses date-fns (subDays, startOfMonth, endOfMonth, format) per
-// RESEARCH.md § Don't Hand-Roll (timezone/DST/leap-year edge cases).
-//
-// `defaultDateRange()` is exported so DashboardPage can initialize its state
-// with the SAME date-fns local-date computation the "7 Hari" preset uses —
-// this guarantees the preset is highlighted as active on first paint. Using
-// `new Date().toISOString()` in DashboardPage instead would compute a UTC
-// date that can differ from the preset's local date by a day (timezone bug).
+// Date math uses date-fns (subDays, format) per RESEARCH.md § Don't Hand-Roll.
 
-import { subDays, startOfMonth, endOfMonth, format } from 'date-fns';
+import { subDays, format } from 'date-fns';
 import type { DateRange } from '../../types/dashboard';
 
 interface DateFilterProps {
@@ -33,7 +21,16 @@ interface DateFilterProps {
   onChange: (range: DateRange) => void;
 }
 
+const ALL_DATA_START = '2020-01-01';
+
 const PRESETS: { label: string; compute: () => DateRange }[] = [
+  {
+    label: 'Hari Ini',
+    compute: () => ({
+      start: format(new Date(), 'yyyy-MM-dd'),
+      end: format(new Date(), 'yyyy-MM-dd'),
+    }),
+  },
   {
     label: '7 Hari',
     compute: () => ({
@@ -49,16 +46,9 @@ const PRESETS: { label: string; compute: () => DateRange }[] = [
     }),
   },
   {
-    label: 'Bulan Ini',
+    label: 'Semua Data',
     compute: () => ({
-      start: format(startOfMonth(new Date()), 'yyyy-MM-dd'),
-      end: format(endOfMonth(new Date()), 'yyyy-MM-dd'),
-    }),
-  },
-  {
-    label: 'Semua',
-    compute: () => ({
-      start: '2020-01-01',
+      start: ALL_DATA_START,
       end: format(new Date(), 'yyyy-MM-dd'),
     }),
   },

@@ -35,8 +35,8 @@ const CATERING_CLIENTS = [
 ];
 
 function addDays(date: Date, days: number): Date {
-  const result = new Date(date);
-  result.setDate(result.getDate() + days);
+  const result = new Date(date.getTime());
+  result.setUTCDate(result.getUTCDate() + days);
   return result;
 }
 
@@ -78,8 +78,8 @@ interface GeneratedCatering {
 }
 
 function generateRealisticRevenue(date: Date): number {
-  const dayOfWeek = date.getDay();
-  const month = date.getMonth();
+  const dayOfWeek = date.getUTCDay();
+  const month = date.getUTCMonth();
 
   let baseRevenue = 800000 + Math.random() * 1200000;
 
@@ -289,7 +289,7 @@ export class DataManagementService {
     }
 
     const today = new Date();
-    today.setHours(0, 0, 0, 0);
+    today.setUTCHours(0, 0, 0, 0);
 
     const simStartDate = startDate
       ? new Date(startDate + 'T00:00:00Z')
@@ -345,10 +345,10 @@ export class DataManagementService {
 
       let insertedSales = 0;
       for (const day of generatedDays) {
-        const dayStart = new Date(day.date);
-        dayStart.setHours(0, 0, 0, 0);
-        const dayEnd = new Date(day.date);
-        dayEnd.setHours(23, 59, 59, 999);
+        const dayStart = new Date(day.date.getTime());
+        dayStart.setUTCHours(0, 0, 0, 0);
+        const dayEnd = new Date(day.date.getTime());
+        dayEnd.setUTCHours(23, 59, 59, 999);
 
         const existing = await tx.dailySales.findFirst({
           where: {
@@ -435,16 +435,17 @@ export class DataManagementService {
       }
 
       for (const day of generatedDays) {
+        const trendDayStart = new Date(day.date.getTime());
+        trendDayStart.setUTCHours(0, 0, 0, 0);
+        const trendDayEnd = new Date(day.date.getTime());
+        trendDayEnd.setUTCHours(23, 59, 59, 999);
+
         const existingTrend = await tx.salesTrend.findFirst({
           where: {
             outlet_id,
             date: {
-              gte: new Date(
-                new Date(day.date).setHours(0, 0, 0, 0)
-              ),
-              lte: new Date(
-                new Date(day.date).setHours(23, 59, 59, 999)
-              ),
+              gte: trendDayStart,
+              lte: trendDayEnd,
             },
           },
         });

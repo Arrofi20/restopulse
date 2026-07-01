@@ -10,6 +10,7 @@ import outletRoutes from './routes/outlet.routes';
 import aiRoutes from './routes/ai.routes';
 import expenseRoutes from './routes/expense.routes';
 import cateringRoutes from './routes/catering.routes';
+import settingsRoutes from './routes/settings.routes';
 import { errorHandler } from './middleware/errorHandler';
 import { authRateLimiter } from './middleware/rateLimiter';
 
@@ -48,5 +49,6 @@ app.use('/api/admin', adminRoutes);
 app.use('/api/ai', aiRoutes);
 app.use('/api/expenses', expenseRoutes);
 app.use('/api/catering', cateringRoutes);
+app.use('/api/settings', settingsRoutes);
 
 app.use(errorHandler);

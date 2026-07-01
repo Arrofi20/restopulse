@@ -1,5 +1,6 @@
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { AnalyticsService, type AnalyticsResult } from './AnalyticsService';
+import { SettingsService } from './SettingsService';
 
 const AI_TIMEOUT_MS = 60000;
 
@@ -44,22 +45,29 @@ export interface AiSummaryResult {
 
 export class AiService {
   private analyticsService: AnalyticsService;
+  private settingsService: SettingsService;
   private genAI: GoogleGenerativeAI | null = null;
+  private genAIKey: string | null = null;
+  private genAIOutletId: string | null = null;
   private pendingRequest: Promise<AiSummaryResult> | null = null;
   private lastRequestKey: string = '';
 
   constructor(analyticsService?: AnalyticsService) {
     this.analyticsService = analyticsService ?? new AnalyticsService();
+    this.settingsService = new SettingsService();
   }
 
-  private getGenAI(): GoogleGenerativeAI | null {
-    const apiKey = process.env.GEMINI_API_KEY;
+  private async getGenAI(outletId: string): Promise<GoogleGenerativeAI | null> {
+    const apiKey = await this.settingsService.getDecryptedKey(outletId);
     if (!apiKey || apiKey.trim() === '') {
       return null;
     }
-    if (!this.genAI) {
-      this.genAI = new GoogleGenerativeAI(apiKey.trim());
+    if (this.genAI && this.genAIKey === apiKey && this.genAIOutletId === outletId) {
+      return this.genAI;
     }
+    this.genAI = new GoogleGenerativeAI(apiKey.trim());
+    this.genAIKey = apiKey;
+    this.genAIOutletId = outletId;
     return this.genAI;
   }
 
@@ -84,7 +92,7 @@ export class AiService {
         };
       }
 
-      const genAI = this.getGenAI();
+      const genAI = await this.getGenAI(outletId);
       if (!genAI) {
         return {
           summary: MOCK_SUMMARY,
@@ -93,10 +101,11 @@ export class AiService {
         };
       }
 
+      const modelName = await this.settingsService.getGeminiModel(outletId);
       const prompt = this.buildPrompt(analytics);
 
       try {
-        const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
+        const model = genAI.getGenerativeModel({ model: modelName });
         const result = await this.withTimeout(
           model.generateContent(prompt),
           AI_TIMEOUT_MS

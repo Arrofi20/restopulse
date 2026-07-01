@@ -91,6 +91,14 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
             <span aria-hidden="true">🍽️</span>
             <span>Catering</span>
           </NavLink>
+          <NavLink
+            to="/settings"
+            onClick={onClose}
+            className={({ isActive }) => navLinkClass(isActive)}
+          >
+            <span aria-hidden="true">⚙️</span>
+            <span>Settings</span>
+          </NavLink>
         </nav>
 
         {/* Logout at the bottom (D-18) */}

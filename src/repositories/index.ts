@@ -8,3 +8,4 @@ export type { ReportRow, ReportData } from './ReportRepository';
 export { MonthlyExpenseRepository } from './MonthlyExpenseRepository';
 export { CateringOrderRepository, CATERING_STATUSES } from './CateringOrderRepository';
 export type { CateringStatus } from './CateringOrderRepository';
+export { SettingsRepository } from './SettingsRepository';

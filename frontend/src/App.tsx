@@ -21,6 +21,7 @@ import { RegisterPage } from './pages/RegisterPage';
 import { EReportPage } from './pages/EReportPage';
 import { DataManagementPage } from './pages/DataManagementPage';
 import { CateringPage } from './pages/CateringPage';
+import { SettingsPage } from './pages/SettingsPage';
 import DashboardPage from './pages/DashboardPage';
 import { DashboardLayout } from './components/layout/DashboardLayout';
 
@@ -67,6 +68,14 @@ export default function App() {
           element={
             <ProtectedRoute>
               <CateringPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/settings"
+          element={
+            <ProtectedRoute>
+              <SettingsPage />
             </ProtectedRoute>
           }
         />

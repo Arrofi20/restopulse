@@ -27,10 +27,10 @@ export class DailySalesRepository {
     outlet_id: string,
     date: Date
   ): Promise<DailySales | null> {
-    const startOfDay = new Date(date);
-    startOfDay.setHours(0, 0, 0, 0);
-    const endOfDay = new Date(date);
-    endOfDay.setHours(23, 59, 59, 999);
+    const startOfDay = new Date(date.getTime());
+    startOfDay.setUTCHours(0, 0, 0, 0);
+    const endOfDay = new Date(date.getTime());
+    endOfDay.setUTCHours(23, 59, 59, 999);
 
     return this.prisma.dailySales.findFirst({
       where: {

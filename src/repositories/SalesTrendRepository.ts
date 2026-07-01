@@ -14,10 +14,10 @@ export class SalesTrendRepository {
     menu_popularity: object;
     outlet_id: string;
   }): Promise<SalesTrend> {
-    const startOfDay = new Date(data.date);
-    startOfDay.setHours(0, 0, 0, 0);
-    const endOfDay = new Date(data.date);
-    endOfDay.setHours(23, 59, 59, 999);
+    const startOfDay = new Date(data.date.getTime());
+    startOfDay.setUTCHours(0, 0, 0, 0);
+    const endOfDay = new Date(data.date.getTime());
+    endOfDay.setUTCHours(23, 59, 59, 999);
 
     const existing = await this.prisma.salesTrend.findFirst({
       where: {
@@ -89,10 +89,10 @@ export class SalesTrendRepository {
     outlet_id: string,
     date: Date
   ): Promise<void> {
-    const startOfDay = new Date(date);
-    startOfDay.setHours(0, 0, 0, 0);
-    const endOfDay = new Date(date);
-    endOfDay.setHours(23, 59, 59, 999);
+    const startOfDay = new Date(date.getTime());
+    startOfDay.setUTCHours(0, 0, 0, 0);
+    const endOfDay = new Date(date.getTime());
+    endOfDay.setUTCHours(23, 59, 59, 999);
 
     await this.prisma.salesTrend.deleteMany({
       where: {

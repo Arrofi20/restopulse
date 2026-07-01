@@ -116,3 +116,14 @@ model CateringOrder {
 
   @@index([outlet_id, order_date])
 }
+
+model Setting {
+  id         String   @id @default(uuid())
+  outlet_id  String
+  key        String
+  value      String
+  updated_at DateTime @updatedAt
+
+  @@unique([outlet_id, key])
+  @@index([outlet_id])
+}
