@@ -1,55 +1,78 @@
 # RestoPulse — Panduan Singkat untuk Pemilik Restoran
 
-RestoPulse adalah sistem informasi dasbor analitik dan laporan digital (E-Report) berbasis web untuk pemilik restoran. Sistem ini mengubah data penjualan harian menjadi grafik interaktif serta menghasilkan dokumen laporan keuangan digital yang siap unduh dan cetak, sehingga Anda tidak perlu lagi menghabiskan waktu berjam-jam untuk rekapitulasi manual.
+RestoPulse adalah sistem informasi dasbor analitik dan laporan digital (E-Report) berbasis web untuk pemilik restoran. Sistem ini mengubah data penjualan harian menjadi grafik interaktif, mencatat pengeluaran bulanan dan pesanan catering, menghasilkan laporan keuangan digital siap cetak, serta memberikan ringkasan bisnis otomatis berbasis AI.
 
 ## Cara Login
 
-Buka URL aplikasi RestoPulse di browser Anda. Pada halaman login, masukkan username dan password yang telah didaftarkan sebelumnya. Klik tombol **Login**, dan Anda akan diarahkan secara otomatis ke halaman Dasbor Utama. Jika belum memiliki akun, Anda dapat mendaftar terlebih dahulu melalui halaman register yang tersedia di bawah formulir login.
+Buka URL aplikasi RestoPulse di browser Anda. Pada halaman login, masukkan username dan password yang telah didaftarkan sebelumnya. Klik tombol **Login**, dan Anda akan diarahkan secara otomatis ke halaman Dasbor Utama. Jika belum memiliki akun, Anda dapat mendaftar melalui halaman register.
 
 ## Melihat Dasbor
 
-Setelah login, Anda akan masuk ke halaman **Dasbor Utama**. Di bagian atas, Anda dapat memilih rentang tanggal dengan preset **7 Hari**, **30 Hari**, **90 Hari**, atau mengatur tanggal kustom sesuai kebutuhan. Dasbor menampilkan **Line Chart Tren Omset Harian** yang menunjukkan perubahan pendapatan dari waktu ke waktu, serta **Pie Chart Menu Terlaris** yang memperlihatkan persentase kontribusi setiap menu terhadap total penjualan. Sentuh atau arahkan kursor ke titik pada grafik untuk melihat tooltip detail nominal dan nama menu.
+Setelah login, Anda akan masuk ke halaman **Dasbor Utama** yang menampilkan:
 
-## Mengekspor Laporan
+- **Kartu Ringkasan**: Total Omset, Hari Tercatat, Rata-rata Harian, Total Pengeluaran
+- **Kartu Laba/Rugi**: Selisih pemasukan dikurangi pengeluaran (hijau/kuning = untung, merah = rugi)
+- **Ringkasan Catering**: Total nilai dan jumlah pesanan per status
+- **Line Chart Tren Omset Harian** — sentuh titik grafik untuk melihat tooltip detail
+- **Pie Chart Menu Terlaris** — persentase kontribusi setiap menu
 
-Untuk menghasilkan laporan keuangan, buka halaman **E-Report** melalui menu navigasi di sidebar. Pilih rentang tanggal laporan yang diinginkan menggunakan filter tanggal yang tersedia. Setelah data ringkasan muncul di layar, klik tombol **Export PDF** untuk mengunduh laporan dalam format PDF siap cetak, atau klik **Export CSV** untuk mengunduh data mentah dalam format CSV yang dapat dibuka di Excel. File akan diunduh secara otomatis ke perangkat Anda.
+Di pojok kanan atas, gunakan tombol **Ringkasan AI** untuk mendapatkan analisis bisnis otomatis dalam Bahasa Indonesia oleh Google Gemini AI.
 
-## Menyuntik Data Demo
+Gunakan filter tanggal (7 Hari / 30 Hari / 90 Hari / Custom) di bagian atas dasbor.
 
-Jika Anda ingin mencoba fitur dasbor dan laporan dengan data simulasi, buka halaman **Data Entry** melalui menu navigasi. Gulir ke bagian bawah halaman hingga menemukan bagian **Suntik Data Simulasi**. Tentukan jumlah hari data yang ingin dibuat (maksimal 365 hari). Centang kotak konfirmasi dengan tulisan *"Saya mengerti bahwa data simulasi akan digunakan untuk keperluan demo"*. Setelah dicentang, tombol **Suntik Data Simulasi** akan aktif. Klik tombol tersebut dan tunggu hingga muncul notifikasi sukses yang menampilkan jumlah hari data yang berhasil dibuat.
+## Data Management
 
-### Skenario Demo
+Buka **Data Management** melalui sidebar untuk mengelola data restoran:
 
-Berikut adalah alur lengkap yang dapat Anda ikuti untuk presentasi demo:
+### Run Simulation
+Generate data historis realistis untuk demonstrasi. Tentukan jumlah hari dan tanggal mulai. Mencakup revenue harian, menu sales, pengeluaran bulanan, dan pesanan catering. Jika data simulasi sudah ada, sistem akan meminta konfirmasi sebelum mengganti.
 
-1. Daftarkan akun baru melalui halaman login, atau gunakan akun yang sudah ada.
-2. Login dan perhatikan Dasbor Utama dalam kondisi kosong atau minimal.
-3. Buka halaman **Data Entry**, gulir ke bagian **Suntik Data Simulasi**, tentukan jumlah hari, centang kotak konfirmasi, lalu klik tombol **Suntik Data Simulasi**.
-4. Tunggu notifikasi sukses muncul, lalu kembali ke halaman **Dasbor**.
-5. Perhatikan bahwa **Line Chart Tren Omset Harian** dan **Pie Chart Menu Terlaris** kini menampilkan data simulasi sesuai jumlah hari yang dipilih.
-6. Buka halaman **E-Report**, pilih rentang tanggal **Bulanan**, lalu klik **Export PDF** untuk mendemonstrasikan hasil laporan.
+### Manual Entry
+Tiga tab untuk entri manual:
+- **Daily Sales**: Tanggal, Omset, Best-selling Menu
+- **Monthly Expenses**: Kategori (Bahan Baku/Gaji/Operasional/Lainnya), Nominal, Bulan, Tahun
+- **Catering Orders**: Nama Klien, Tanggal, Nominal, Status (Pending/Confirmed/Done), Catatan
 
-> **Catatan teknis:** Fitur suntik data mengirimkan permintaan `POST /api/admin/dummy-inject` dengan parameter `days` (jumlah hari) dan `confirm: true` setelah pengguna memberikan persetujuan melalui kotak centang konfirmasi.
+### Reset Data
+Menghapus semua data transaksional. Memerlukan konfirmasi dua tingkat. Data yang dihapus tidak dapat dipulihkan.
+
+## Catering Management
+
+Buka **Catering** melalui sidebar untuk melihat dan mengelola semua pesanan catering. Tabel menampilkan nama klien, tanggal, nominal, status, dan catatan. Status hanya bisa maju: Pending → Confirmed → Done. Cari klien berdasarkan nama dan filter berdasarkan status.
+
+## E-Report
+
+Buka **E-Report** melalui sidebar untuk menghasilkan laporan keuangan. Pilih rentang tanggal (Harian/Mingguan/Bulanan/Custom). Laporan menampilkan:
+
+- **Ringkasan Penjualan**: Total Omset, Hari Tercatat, Total Pengeluaran, Laba/Rugi, Menu Terlaris
+- **Detail Penjualan Harian**: Tabel per hari
+- **Ringkasan Keuangan**: Pengeluaran per kategori dan laba/rugi
+- **Ringkasan Catering**: Revenue catering dan pesanan per status
+
+Klik **Export PDF** untuk mengunduh laporan siap cetak, atau **Export CSV** untuk data mentah yang dapat dibuka di Excel.
+
+## AI Business Summary
+
+Klik tombol **Ringkasan AI** di dashboard untuk mendapatkan analisis otomatis performa bisnis dalam Bahasa Indonesia. Ringkasan mencakup: analisis pendapatan, analisis pengeluaran, analisis catering, rekomendasi bisnis, dan potensi risiko.
+
+Jika Gemini API tidak tersedia, sistem menampilkan ringkasan demo dan dashboard tetap berfungsi normal.
 
 ## Verifikasi Deployment
 
-Anda dapat memverifikasi bahwa aplikasi RestoPulse berjalan dengan normal menggunakan perintah curl berikut:
-
 ```bash
-# Verifikasi health check backend
+# Health check
 curl -s https://<backend-url>/health
 
-# Contoh respons yang diharapkan:
-# {"status":"ok","timestamp":"2026-06-27T00:00:00.000Z","version":"1.0.0","environment":"production"}
+# Response: {"status":"ok","timestamp":"...","version":"1.1.0","environment":"production"}
 
-# Verifikasi endpoint autentikasi (register)
+# Register
 curl -s -X POST https://<backend-url>/api/auth/register \
   -H "Content-Type: application/json" \
-  -d '{"username":"demo_user","password":"demo_pass123","outlet_name":"Resto Demo"}'
+  -d '{"username":"demo_user","password":"demo_pass123"}'
 ```
 
-Ganti `<backend-url>` dengan URL backend RestoPulse Anda (contoh: `https://restopulse-api.onrender.com`).
+Ganti `<backend-url>` dengan URL backend RestoPulse Anda (contoh: `https://restopulse-api.up.railway.app`).
 
 ---
 
-*Panduan ini ditulis untuk pemilik restoran. Untuk dokumentasi teknis pengembangan, silakan merujuk ke tim pengembang RestoPulse.*
+*Panduan ini ditulis untuk pemilik restoran. Untuk dokumentasi teknis, lihat `implementation-plan.md`.*

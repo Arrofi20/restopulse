@@ -76,12 +76,20 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
             <span>E-Report</span>
           </NavLink>
           <NavLink
-            to="/data-entry"
+            to="/data"
             onClick={onClose}
             className={({ isActive }) => navLinkClass(isActive)}
           >
-            <span aria-hidden="true">➕</span>
-            <span>Input Data</span>
+            <span aria-hidden="true">🗂️</span>
+            <span>Data Management</span>
+          </NavLink>
+          <NavLink
+            to="/catering"
+            onClick={onClose}
+            className={({ isActive }) => navLinkClass(isActive)}
+          >
+            <span aria-hidden="true">🍽️</span>
+            <span>Catering</span>
           </NavLink>
         </nav>
 

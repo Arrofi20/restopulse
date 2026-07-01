@@ -76,9 +76,20 @@ export async function post<T>(endpoint: string, body: unknown): Promise<T> {
   });
 }
 
+export async function put<T>(endpoint: string, body: unknown): Promise<T> {
+  return apiClient<T>(endpoint, {
+    method: 'PUT',
+    body: JSON.stringify(body),
+  });
+}
+
 export async function patch<T>(endpoint: string, body: unknown): Promise<T> {
   return apiClient<T>(endpoint, {
     method: 'PATCH',
     body: JSON.stringify(body),
   });
+}
+
+export async function del<T>(endpoint: string): Promise<T> {
+  return apiClient<T>(endpoint, { method: 'DELETE' });
 }

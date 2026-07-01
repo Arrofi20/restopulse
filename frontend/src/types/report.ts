@@ -1,24 +1,23 @@
-// TypeScript contracts for the E-Report API.
-// Mirrors the backend GET /api/report response shape
-// (ReportController -> ReportService -> ReportRepository aggregating
-// SalesTrend revenue + menu_popularity and DailySales per-day presence).
+import type { DashboardSummary } from './dashboard';
 
 export interface ReportRow {
-  date: string; // ISO date string (YYYY-MM-DD)
+  date: string;
   revenue: number;
-  topMenu: string; // highest-count item name for that day, or "-" if empty
-  dayCount: number; // 1 if a DailySales record exists for that date, else 0
+  topMenu: string;
+  dayCount: number;
+}
+
+export interface ExpenseCategoryTotal {
+  category: string;
+  total: number;
 }
 
 export interface ReportData {
   outlet: { name: string };
   period: { start: string; end: string };
-  summary: {
-    totalRevenue: number;
-    dayCount: number;
-    topItems: string[]; // top 3 menu names by summed count across the range
-  };
+  summary: DashboardSummary;
   rows: ReportRow[];
+  expenseByCategory: ExpenseCategoryTotal[];
 }
 
 export interface ReportResponse {
@@ -26,6 +25,4 @@ export interface ReportResponse {
   data: ReportData;
 }
 
-// Re-export DateRange from dashboard for convenience so report consumers
-// have a single import path for the shared date-range contract.
 export type { DateRange } from './dashboard';

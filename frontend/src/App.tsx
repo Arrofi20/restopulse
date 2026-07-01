@@ -19,7 +19,8 @@ import { useAuth } from './contexts/AuthContext';
 import { LoginPage } from './pages/LoginPage';
 import { RegisterPage } from './pages/RegisterPage';
 import { EReportPage } from './pages/EReportPage';
-import { DataEntryPage } from './pages/DataEntryPage';
+import { DataManagementPage } from './pages/DataManagementPage';
+import { CateringPage } from './pages/CateringPage';
 import DashboardPage from './pages/DashboardPage';
 import { DashboardLayout } from './components/layout/DashboardLayout';
 
@@ -54,14 +55,23 @@ export default function App() {
           }
         />
         <Route
-          path="/data-entry"
+          path="/data"
           element={
             <ProtectedRoute>
-              <DataEntryPage />
+              <DataManagementPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/catering"
+          element={
+            <ProtectedRoute>
+              <CateringPage />
             </ProtectedRoute>
           }
         />
         <Route path="/" element={<Navigate to="/dashboard" replace />} />
+        <Route path="/data-entry" element={<Navigate to="/data" replace />} />
         <Route path="*" element={<Navigate to="/dashboard" replace />} />
       </Routes>
     </BrowserRouter>

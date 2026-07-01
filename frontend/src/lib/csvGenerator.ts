@@ -1,100 +1,92 @@
-// Client-side CSV report generator (Plan 03-04).
-//
-// Produces an Excel-compatible, Indonesian-locale CSV (UTF-8 BOM + semicolon
-// delimiter + Windows CRLF line endings) from the supplied ReportData and
-// triggers a browser download. Generation runs entirely in the browser
-// (D-36) — no server round-trip, no server storage.
-//
-// No external CSV library is used — a custom generator is ~30 LOC and
-// sufficient (RESEARCH.md recommendation). Columns: Tanggal, Omset (Rp),
-// Menu Terlaris, Hari Tercatat (D-26). Filename follows D-29:
-// `Laporan_{OutletName}_{Start}_{End}.csv` with the outlet name sanitized
-// (T-03-11 mitigate).
-//
-// Threats (see PLAN.md threat_model):
-//   T-03-11 (Tampering, filename)        — sanitize outlet name before filename.
-//   T-03-12 (Tampering, formula injection) — prefix leading =, +, -, @ with tab.
-//   T-03-14 (DoS, ObjectURL memory leak) — always revokeObjectURL after download.
-
 import { formatRupiah } from './format';
+import { CATEGORY_LABELS } from '../types/expense';
 import type { ReportData } from '../types/report';
 
-const CSV_HEADERS = ['Tanggal', 'Omset (Rp)', 'Menu Terlaris', 'Hari Tercatat'];
-
-// Characters that, when they appear at the start of a CSV cell, Excel treats
-// as a formula introduction (RESEARCH.md Security Domain). We prefix such
-// cells with a tab character so Excel renders them as text instead of
-// evaluating a formula (T-03-12 mitigate).
 const FORMULA_INJECTION_PREFIXES = ['=', '+', '-', '@'];
 
-/**
- * Escape a single CSV cell value per RFC 4180 with two hardening extensions:
- *
- * 1. **Formula-injection mitigation (T-03-12):** if the textual value starts
- *    with `=`, `+`, `-`, or `@`, prepend a tab character (`\t`) so Excel does
- *    not interpret the cell as a formula. The tab is invisible when the CSV
- *    is opened in a spreadsheet but neutralizes the formula trigger.
- * 2. **RFC 4180 quoting:** if the value contains the delimiter (`;`), a
- *    double quote (`"`), or a newline (`\n`), wrap it in double quotes and
- *    double any internal double quotes.
- *
- * Otherwise the value is returned as-is (no unnecessary quoting).
- */
 function escapeCell(value: unknown): string {
   let str = value == null ? '' : String(value);
-
-  // Formula-injection mitigation — must run BEFORE quoting so the leading
-  // character test sees the original first character.
   if (str.length > 0 && FORMULA_INJECTION_PREFIXES.includes(str[0])) {
     str = `\t${str}`;
   }
-
   if (str.includes(';') || str.includes('"') || str.includes('\n')) {
     str = `"${str.replace(/"/g, '""')}"`;
   }
-
   return str;
 }
 
-/**
- * Generate and download a CSV report from the supplied ReportData.
- *
- * - One row per day, columns: Tanggal, Omset (Rp), Menu Terlaris, Jumlah
- *   Transaksi.
- * - UTF-8 BOM prefix so Excel opens the file with the correct encoding
- *   (Indonesian diacritics and the Rupiah-style figures render correctly).
- * - Semicolon delimiter (Indonesian/Excel-locale convention).
- * - Windows CRLF line endings for Excel compatibility.
- * - Browser download triggered via a synthetic anchor + ObjectURL, with the
- *   ObjectURL revoked immediately after the click (T-03-14 mitigate).
- */
 export function generateReportCSV(data: ReportData): void {
-  const rows = data.rows.map((r) =>
-    [r.date, formatRupiah(r.revenue), r.topMenu, String(r.dayCount)]
-      .map(escapeCell)
-      .join(';'),
-  );
+  const lines: string[] = [];
 
-  const csvContent = [CSV_HEADERS.join(';'), ...rows].join('\r\n');
+  // Header
+  lines.push(`E-Report: ${data.outlet.name}`);
+  lines.push(`Periode: ${data.period.start} s/d ${data.period.end}`);
+  lines.push('');
 
-  // UTF-8 BOM so Excel detects UTF-8 encoding (Indonesian diacritics etc.).
+  // Section 1: Sales Summary
+  lines.push('--- Ringkasan Penjualan ---');
+  lines.push(['Metrik', 'Nilai'].map(escapeCell).join(';'));
+  lines.push(['Total Omset', formatRupiah(data.summary.totalRevenue)].map(escapeCell).join(';'));
+  lines.push(['Hari Tercatat', String(data.summary.dayCount)].map(escapeCell).join(';'));
+  lines.push(['Rata-rata Harian', formatRupiah(data.summary.averageDaily)].map(escapeCell).join(';'));
+  lines.push(['Menu Terlaris', data.summary.topMenuItems?.slice(0, 3).map(m => m.name).join(', ') || '-'].map(escapeCell).join(';'));
+  lines.push('');
+
+  // Section 2: Daily Sales
+  lines.push('--- Detail Penjualan Harian ---');
+  lines.push(['Tanggal', 'Omset (Rp)', 'Menu Terlaris', 'Hari Tercatat'].map(escapeCell).join(';'));
+  for (const row of data.rows) {
+    lines.push([row.date, formatRupiah(row.revenue), row.topMenu, String(row.dayCount)].map(escapeCell).join(';'));
+  }
+  lines.push('');
+
+  // Section 3: Financial Summary
+  lines.push('--- Ringkasan Keuangan ---');
+  lines.push(['Metrik', 'Nilai'].map(escapeCell).join(';'));
+  lines.push(['Total Pengeluaran', formatRupiah(data.summary.totalExpenses)].map(escapeCell).join(';'));
+  const plLabel = data.summary.isLoss ? 'Rugi' : data.summary.profitLoss === 0 ? 'Break Even' : 'Untung';
+  lines.push(['Laba/Rugi', `${formatRupiah(data.summary.profitLoss)} (${plLabel})`].map(escapeCell).join(';'));
+  lines.push('');
+
+  if (data.expenseByCategory && data.expenseByCategory.length > 0) {
+    lines.push('Pengeluaran per Kategori');
+    lines.push(['Kategori', 'Total'].map(escapeCell).join(';'));
+    for (const e of data.expenseByCategory) {
+      lines.push([CATEGORY_LABELS[e.category] ?? e.category, formatRupiah(e.total)].map(escapeCell).join(';'));
+    }
+    lines.push('');
+  }
+
+  // Section 4: Catering Summary
+  lines.push('--- Ringkasan Catering ---');
+
+  if (data.summary.catering && data.summary.catering.totalCount > 0) {
+    lines.push(['Metrik', 'Nilai'].map(escapeCell).join(';'));
+    lines.push(['Total Revenue Catering', formatRupiah(data.summary.catering.totalAmount)].map(escapeCell).join(';'));
+    lines.push(['Jumlah Pesanan', String(data.summary.catering.totalCount)].map(escapeCell).join(';'));
+    lines.push('');
+    lines.push(['Status', 'Jumlah', 'Total Nilai'].map(escapeCell).join(';'));
+    for (const s of data.summary.catering.byStatus) {
+      lines.push([s.status, String(s.count), formatRupiah(s.total)].map(escapeCell).join(';'));
+    }
+    lines.push(['Total', String(data.summary.catering.totalCount), formatRupiah(data.summary.catering.totalAmount)].map(escapeCell).join(';'));
+  } else {
+    lines.push('(Belum ada pesanan catering)');
+  }
+
+  lines.push('');
+  lines.push(`Dibuat pada: ${new Date().toLocaleString('id-ID')}`);
+
   const BOM = '\uFEFF';
-  const blob = new Blob([BOM + csvContent], { type: 'text/csv;charset=utf-8;' });
+  const blob = new Blob([BOM + lines.join('\r\n')], { type: 'text/csv;charset=utf-8;' });
 
   const url = URL.createObjectURL(blob);
   const link = document.createElement('a');
   link.href = url;
-
-  // Sanitize outlet name for filename: non-alphanumerics -> '_' (T-03-11).
-  // Same pattern as pdfGenerator.ts; falls back to 'Outlet' if empty.
   const safeName = data.outlet.name.replace(/[^a-zA-Z0-9]/g, '_') || 'Outlet';
   link.download = `Laporan_${safeName}_${data.period.start}_${data.period.end}.csv`;
-
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
-
-  // Always revoke the ObjectURL after the click to prevent memory leaks
-  // (T-03-14 mitigate / RESEARCH.md Pitfall 4).
   URL.revokeObjectURL(url);
 }

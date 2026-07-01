@@ -1,55 +1,52 @@
-import { ReportRepository } from '../repositories';
+import { ReportRepository, MonthlyExpenseRepository } from '../repositories';
+import { AnalyticsService } from './AnalyticsService';
 import { dateRangeSchema } from '../validation/sales.schema';
-import prisma from '../lib/prisma';
 
-/**
- * ReportService validates inputs, orchestrates ReportRepository queries,
- * resolves the outlet name, and formats the structured report response.
- *
- * Per D-31 (summary from SalesTrend + detailed breakdown from DailySales)
- * and D-33b (live queries — no caching layer). Reuses the existing
- * dateRangeSchema (DRY, shared with the dashboard + sales verticals).
- */
 export class ReportService {
   private reportRepo: ReportRepository;
+  private analyticsService: AnalyticsService;
+  private expenseRepo: MonthlyExpenseRepository;
 
-  constructor(reportRepo: ReportRepository) {
-    this.reportRepo = reportRepo;
+  constructor(
+    reportRepo?: ReportRepository,
+    analyticsService?: AnalyticsService,
+    expenseRepo?: MonthlyExpenseRepository
+  ) {
+    this.reportRepo = reportRepo ?? new ReportRepository();
+    this.analyticsService = analyticsService ?? new AnalyticsService();
+    this.expenseRepo = expenseRepo ?? new MonthlyExpenseRepository();
   }
 
   async getReport(outlet_id: string, start: string, end: string) {
-    // 1. Validate date range (reuses existing schema — format + start<=end)
     dateRangeSchema.parse({ start, end });
 
-    // 2. Parse UTC day boundaries (matches DashboardService pattern)
     const startDate = new Date(start + 'T00:00:00Z');
     const endDate = new Date(end + 'T23:59:59.999Z');
 
-    // 3. Query repository for daily rows + period top items
-    const { rows, topItems } = await this.reportRepo.getReportData(
-      outlet_id,
-      startDate,
-      endDate
-    );
+    const [analytics, { rows }, expenses] = await Promise.all([
+      this.analyticsService.getAggregatedData(outlet_id, start, end),
+      this.reportRepo.getReportData(outlet_id, startDate, endDate),
+      this.expenseRepo.findByDateRange(outlet_id, startDate, endDate),
+    ]);
 
-    // 4. Compute period aggregates
-    const totalRevenue = rows.reduce((sum, r) => sum + r.revenue, 0);
-    const dayCount = rows.reduce(
-      (sum, r) => sum + r.dayCount,
-      0
-    );
-
-    // 5. Resolve outlet name for the report header (same pattern as DashboardService)
-    const outlet = await prisma.outlet.findUnique({
-      where: { id: outlet_id },
-      select: { name: true },
-    });
+    const expenseByCategory = this.groupExpensesByCategory(expenses);
 
     return {
-      outlet: { name: outlet?.name ?? '' },
+      outlet: analytics.outlet,
       period: { start, end },
-      summary: { totalRevenue, dayCount, topItems },
+      summary: analytics.summary,
       rows,
+      expenseByCategory,
     };
+  }
+
+  private groupExpensesByCategory(expenses: { category: string; amount: number; month: number; year: number }[]) {
+    const grouped: Record<string, number> = {};
+    for (const e of expenses) {
+      grouped[e.category] = (grouped[e.category] ?? 0) + e.amount;
+    }
+    return Object.entries(grouped)
+      .map(([category, total]) => ({ category, total }))
+      .sort((a, b) => b.total - a.total);
   }
 }

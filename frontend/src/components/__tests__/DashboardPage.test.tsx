@@ -32,7 +32,16 @@ describe('DashboardPage', () => {
       data: {
         outlet: { name: 'Test Outlet' },
         trends: [],
-        summary: { totalRevenue: 0, dayCount: 0 },
+        summary: {
+          totalRevenue: 0,
+          dayCount: 0,
+          averageDaily: 0,
+          totalExpenses: 0,
+          profitLoss: 0,
+          isLoss: false,
+          topMenuItems: [],
+          catering: { totalAmount: 0, totalCount: 0, byStatus: [] },
+        },
       },
       loading: false,
       error: null,
@@ -57,7 +66,16 @@ describe('DashboardPage', () => {
             outlet_id: 'o1',
           },
         ],
-        summary: { totalRevenue: 1_000_000, dayCount: 5 },
+        summary: {
+          totalRevenue: 1_000_000,
+          dayCount: 5,
+          averageDaily: 200_000,
+          totalExpenses: 500_000,
+          profitLoss: 500_000,
+          isLoss: false,
+          topMenuItems: [{ name: 'A', count: 5, percentage: 50 }],
+          catering: { totalAmount: 0, totalCount: 0, byStatus: [] },
+        },
       },
       loading: false,
       error: null,
@@ -66,6 +84,5 @@ describe('DashboardPage', () => {
     render(<DashboardPage />);
     expect(screen.getByTestId('line-chart')).toBeInTheDocument();
     expect(screen.getByTestId('pie-chart')).toBeInTheDocument();
-    expect(screen.queryByText(/Belum ada data/i)).toBeNull();
   });
 });

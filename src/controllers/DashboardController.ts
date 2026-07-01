@@ -1,20 +1,18 @@
 import { Response } from 'express';
 import { AuthenticatedRequest } from '../middleware/authMiddleware';
 import { DashboardService } from '../services/DashboardService';
-import { SalesTrendRepository } from '../repositories';
+import { AnalyticsService } from '../services/AnalyticsService';
 import { ZodError } from 'zod';
 
 export class DashboardController {
   private dashboardService: DashboardService;
 
-  constructor(dashboardService: DashboardService) {
-    this.dashboardService = dashboardService;
+  constructor(dashboardService?: DashboardService) {
+    this.dashboardService = dashboardService ?? new DashboardService(new AnalyticsService());
   }
 
   static getInstance(): DashboardController {
-    return new DashboardController(
-      new DashboardService(new SalesTrendRepository())
-    );
+    return new DashboardController();
   }
 
   async getDashboard(req: AuthenticatedRequest, res: Response) {

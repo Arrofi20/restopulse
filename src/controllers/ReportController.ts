@@ -1,18 +1,17 @@
 import { Response } from 'express';
 import { AuthenticatedRequest } from '../middleware/authMiddleware';
 import { ReportService } from '../services/ReportService';
-import { ReportRepository } from '../repositories';
 import { ZodError } from 'zod';
 
 export class ReportController {
   private reportService: ReportService;
 
-  constructor(reportService: ReportService) {
-    this.reportService = reportService;
+  constructor(reportService?: ReportService) {
+    this.reportService = reportService ?? new ReportService();
   }
 
   static getInstance(): ReportController {
-    return new ReportController(new ReportService(new ReportRepository()));
+    return new ReportController();
   }
 
   async getReport(req: AuthenticatedRequest, res: Response) {

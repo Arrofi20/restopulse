@@ -90,7 +90,7 @@ export function ReportDateFilter({ value, onChange }: ReportDateFilterProps) {
   };
 
   return (
-    <div className="mb-4 flex flex-wrap items-center gap-2">
+    <div className="flex flex-wrap items-center gap-2">
       {/* Preset buttons (D-19) */}
       {PRESETS.map((preset) => {
         const isActive = activePreset?.label === preset.label;

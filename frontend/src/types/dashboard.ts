@@ -1,8 +1,3 @@
-// TypeScript contracts for the dashboard API.
-// Mirrors the backend GET /api/dashboard response shape
-// (DashboardController -> DashboardService -> SalesTrend rows with
-// menu_popularity stored as a JSON string, parsed by the service).
-
 export interface MenuPopularityItem {
   name: string;
   count: number;
@@ -11,22 +6,43 @@ export interface MenuPopularityItem {
 
 export interface SalesTrendItem {
   id: string;
-  date: string; // ISO date string from API
+  date: string;
   revenue: number;
-  menu_popularity: { items: MenuPopularityItem[] }; // parsed from JSON
+  menu_popularity: { items: MenuPopularityItem[] };
   outlet_id: string;
+}
+
+export interface CateringStatusSummary {
+  status: string;
+  count: number;
+  total: number;
+}
+
+export interface CateringSummary {
+  totalAmount: number;
+  totalCount: number;
+  byStatus: CateringStatusSummary[];
+}
+
+export interface DashboardSummary {
+  totalRevenue: number;
+  dayCount: number;
+  averageDaily: number;
+  totalExpenses: number;
+  profitLoss: number;
+  isLoss: boolean;
+  topMenuItems: MenuPopularityItem[];
+  catering: CateringSummary;
 }
 
 export interface DashboardData {
   outlet: { name: string };
+  period: { start: string; end: string };
   trends: SalesTrendItem[];
-  summary: {
-    totalRevenue: number;
-    dayCount: number;
-  };
+  summary: DashboardSummary;
 }
 
 export interface DateRange {
-  start: string; // YYYY-MM-DD
-  end: string; // YYYY-MM-DD
+  start: string;
+  end: string;
 }

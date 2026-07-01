@@ -168,18 +168,18 @@ describe('Sales API', () => {
     expect(res.body.error.code).toBe('UNAUTHORIZED');
   });
 
-  // DATA-01: Dummy inject
-  it('POST /api/admin/dummy-inject — creates dummy data and returns success', async () => {
+  // DATA-01: Simulation inject
+  it('POST /api/admin/simulate — creates dummy data and returns success', async () => {
     const token = getAuthToken(ownerId, outletId);
     const res = await request(app)
-      .post('/api/admin/dummy-inject')
+      .post('/api/admin/simulate')
       .set('Authorization', `Bearer ${token}`)
-      .send({ days: 7, confirm: true });
+      .send({ days: 7 });
 
     expect(res.status).toBe(200);
     expect(res.body.success).toBe(true);
     expect(res.body.data).toBeDefined();
-    expect(res.body.data.inserted).toBeGreaterThan(0);
+    expect(res.body.data.daysGenerated).toBeGreaterThan(0);
   });
 
   // GET /api/sales — list sales

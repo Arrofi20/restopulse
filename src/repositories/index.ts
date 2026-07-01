@@ -5,3 +5,6 @@ export { StatusLogRepository } from './StatusLogRepository';
 export { DailyReportRepository } from './DailyReportRepository';
 export { ReportRepository } from './ReportRepository';
 export type { ReportRow, ReportData } from './ReportRepository';
+export { MonthlyExpenseRepository } from './MonthlyExpenseRepository';
+export { CateringOrderRepository, CATERING_STATUSES } from './CateringOrderRepository';
+export type { CateringStatus } from './CateringOrderRepository';

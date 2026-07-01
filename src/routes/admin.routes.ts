@@ -1,14 +1,26 @@
 import { Router } from 'express';
-import { DummyController } from '../controllers/DummyController';
+import { DataManagementController } from '../controllers/DataManagementController';
 import { authMiddleware } from '../middleware/authMiddleware';
 
 const router = Router();
-const dummyController = DummyController.getInstance();
+const dataMgmtController = DataManagementController.getInstance();
 
 router.post(
-  '/dummy-inject',
+  '/reset-data',
   authMiddleware,
-  dummyController.injectDummyData.bind(dummyController)
+  dataMgmtController.resetData.bind(dataMgmtController)
+);
+
+router.post(
+  '/simulate',
+  authMiddleware,
+  dataMgmtController.simulate.bind(dataMgmtController)
+);
+
+router.get(
+  '/simulate/check',
+  authMiddleware,
+  dataMgmtController.checkSimulation.bind(dataMgmtController)
 );
 
 export default router;

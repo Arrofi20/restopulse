@@ -22,10 +22,12 @@ model Outlet {
   timezone   String   @default("Asia/Jakarta")
   created_at DateTime @default(now())
 
-  owner_accounts OwnerAccount[]
-  daily_sales    DailySales[]
-  sales_trends   SalesTrend[]
-  daily_reports  DailySalesReport[]
+  owner_accounts   OwnerAccount[]
+  daily_sales      DailySales[]
+  sales_trends     SalesTrend[]
+  daily_reports    DailySalesReport[]
+  monthly_expenses MonthlyExpense[]
+  catering_orders  CateringOrder[]
 }
 
 model DailySales {
@@ -84,4 +86,33 @@ model DailySalesReport {
   outlet Outlet @relation(fields: [outlet_id], references: [id])
 
   @@index([outlet_id, period_start, period_end])
+}
+
+model MonthlyExpense {
+  id         String   @id @default(uuid())
+  outlet_id  String
+  category   String   // BAHAN_BAKU | GAJI | OPERASIONAL | LAINNYA
+  amount     Float
+  month      Int      // 1-12
+  year       Int      // e.g., 2026
+  created_at DateTime @default(now())
+
+  outlet Outlet @relation(fields: [outlet_id], references: [id])
+
+  @@index([outlet_id, month, year])
+}
+
+model CateringOrder {
+  id           String   @id @default(uuid())
+  outlet_id    String
+  client_name  String
+  order_date   DateTime
+  total_amount Float
+  status       String   // PENDING | CONFIRMED | DONE
+  notes        String?
+  created_at   DateTime @default(now())
+
+  outlet Outlet @relation(fields: [outlet_id], references: [id])
+
+  @@index([outlet_id, order_date])
 }
