@@ -7,31 +7,36 @@ RestoPulse adalah sistem informasi dasbor analitik dan laporan digital (E-Report
 ```bash
 git clone <repository-url>
 cd restopulse
-
-# Backend
 npm install
-npm run dev          # http://localhost:3000
-
-# Frontend (terminal terpisah)
-cd frontend
-npm install
-npm run dev          # http://localhost:5173
+npm run dev
 ```
 
-Setelah `npm install`:
-- Prisma Client otomatis di-generate (via `postinstall`)
-- Database SQLite dev.db otomatis dibuat (via `predev` migration)
-- `.env` otomatis dibuat dari `.env.example` jika belum ada
+That's it. Both backend (port 3000) and frontend (port 5173) start with a single command.
 
-Tidak perlu menjalankan `npx prisma generate` atau `npx prisma migrate` secara manual.
+What happens automatically:
+- **`npm install`**: Installs all backend + frontend dependencies (via npm workspaces), generates Prisma Client (`postinstall`), approves native build scripts (bcrypt, prisma engines)
+- **`npm run dev`**: Creates `.env` from `.env.example` if missing (`predev`), applies database migrations (`predev`), starts both backend and frontend concurrently
 
-Untuk menjalankan semua test:
+No manual `prisma generate`, `prisma migrate`, or `cd frontend && npm install` required.
+
+### Gemini API Key (optional)
+
+To enable AI Business Summary, add your Gemini API key in `.env`:
+
+```env
+GEMINI_API_KEY=your_key_here
+```
+
+Or configure it from the **Settings** page in the web UI after starting the app.
+Get a free key at https://aistudio.google.com/app/apikey
+
+### Running Tests
 
 ```bash
-# Backend
+# Backend tests
 npx vitest run --config vitest.config.ts
 
-# Frontend
+# Frontend tests
 cd frontend && npx vitest run
 ```
 
