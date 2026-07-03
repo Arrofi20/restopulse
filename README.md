@@ -33,7 +33,7 @@ Sistem informasi dasbor analitik dan laporan digital (E-Report) berbasis web unt
 | **Validation** | Zod |
 | **AI** | Google Generative AI (gemini-2.5-flash / gemini-2.5-pro) |
 | **Testing** | Vitest, Supertest, React Testing Library, k6 |
-| **Deployment** | Railway (Web Service + PostgreSQL + Static Site) |
+
 
 ---
 
