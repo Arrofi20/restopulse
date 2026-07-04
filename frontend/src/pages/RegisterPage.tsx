@@ -53,6 +53,7 @@ export function RegisterPage() {
     <div className="flex min-h-screen items-center justify-center bg-gray-950 px-4">
       <div className="w-full max-w-sm rounded-lg border border-gray-800 bg-gray-900 p-8">
         <div className="mb-6 text-center">
+          <img src="/logo.png" alt="RestoPulse" className="mx-auto mb-2 block h-20 w-auto" />
           <h1 className="text-3xl font-bold text-amber-400">RestoPulse</h1>
           <p className="mt-1 text-lg text-gray-300">Buat Akun Baru</p>
         </div>

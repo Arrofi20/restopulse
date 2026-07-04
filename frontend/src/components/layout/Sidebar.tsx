@@ -46,7 +46,10 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
       >
         {/* Brand + mobile close button */}
         <div className="flex h-16 items-center justify-between border-b border-gray-800 px-4">
-          <span className="text-lg font-bold text-amber-400">RestoPulse</span>
+          <div className="flex items-center gap-2">
+            <img src="/logo.png" alt="RestoPulse" className="h-8 w-auto" />
+            <span className="text-lg font-bold text-amber-400">RestoPulse</span>
+          </div>
           <button
             type="button"
             onClick={onClose}
