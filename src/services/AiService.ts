@@ -4,28 +4,34 @@ import { SettingsService } from './SettingsService';
 
 const AI_TIMEOUT_MS = 60000;
 
-const MOCK_SUMMARY = `## Ringkasan Eksekutif
-Berdasarkan data yang tersedia, performa bisnis restoran menunjukkan tren yang perlu diperhatikan.
+const MOCK_SUMMARY = `📊 Ringkasan Eksekutif
 
-## Analisis Pendapatan
-Omset harian menunjukkan fluktuasi wajar dengan peningkatan pada akhir pekan. Fluktuasi ini normal untuk bisnis restoran.
+Minggu ini bisnis berjalan stabil dengan catatan positif di akhir pekan. Momentum bagus untuk terus ditingkatkan, terutama dengan potensi catering yang mulai terlihat.
 
-## Analisis Pengeluaran
-Pengeluaran bulanan tercatat per kategori. Pastikan rasio pengeluaran terhadap pendapatan tetap di bawah 50% untuk menjaga profitabilitas.
+💰 Analisis Pendapatan
 
-## Analisis Catering
-Pesanan catering merupakan sumber pendapatan tambahan yang signifikan. Pantau status pesanan agar tidak ada yang terlewat.
+Omset harian cukup stabil dan ada peningkatan di akhir pekan — tanda baik. Coba perhatikan faktor yang bikin hari ramai biar bisa diterapkan di hari biasa.
 
-## Rekomendasi Bisnis
-1. Pertahankan konsistensi menu terlaris dan pastikan stok bahan baku selalu tersedia.
-2. Evaluasi menu dengan penjualan rendah untuk promo atau penggantian.
-3. Tingkatkan promosi catering untuk acara kantor dan perayaan.
+💸 Analisis Pengeluaran
 
-## Potensi Risiko
-1. Fluktuasi pendapatan di hari biasa vs akhir pekan perlu diantisipasi dengan manajemen stok yang tepat.
-2. Ketergantungan pada menu tertentu dapat menjadi risiko jika terjadi kenaikan harga bahan baku.
+Pengeluaran masih dalam batas wajar. Tips kecil: jaga rasio pengeluaran vs pendapatan tetap di bawah 50% supaya margin tetap sehat.
 
-_Catatan: Ringkasan ini dihasilkan dalam mode demo (mock). Hubungkan GEMINI_API_KEY untuk mendapatkan analisis AI yang sebenarnya._`;
+🍱 Analisis Catering
+
+Pesanan catering lumayan, jangan sampai ada yang kelewat pantauannya. Masih ada ruang untuk ekspansi ke kantor atau acara.
+
+💡 Rekomendasi Bisnis
+
+• Stok bahan untuk menu terlaris jangan sampai habis
+• Menu yang sepi peminat bisa dipromosikan atau diganti
+• Catering cocok buat diandalkan ke kantor & acara
+
+⚠️ Potensi Risiko
+
+• Jangan terlalu bergantung ke 1–2 menu saja, variasi itu penting
+• Manajemen stok jangan kendor pas hari sepi vs ramai
+
+Ini contoh ringkasan demo. Hubungkan API key Gemini di pengaturan untuk analisis nyata berdasarkan data restoran kamu.`
 
 function formatRupiah(amount: number): string {
   return new Intl.NumberFormat('id-ID', {
@@ -225,9 +231,44 @@ export class AiService {
       .map((t) => `- ${t.date.slice(0, 10)}: ${formatRupiah(t.revenue)}`)
       .join('\n');
 
-    return `Anda adalah asisten analisis bisnis restoran kecil-menengah di Indonesia. Berikan analisis dalam Bahasa Indonesia yang mudah dipahami.
+    return `Kamu adalah partner bisnis restoran yang santai tapi paham angka. Tugas kamu: baca data restoran di bawah, lalu bikin ringkasan yang enak dibaca di aplikasi dashboard — bukan laporan kantor yang kaku.
 
-## Data Restoran
+Aturan penulisan (WAJIB diikuti):
+1. Gunakan Bahasa Indonesia yang ramah dan natural, seperti ngobrol sama rekan bisnis. Hindari kata-kata kaku seperti "Berdasarkan data yang tersedia", "tercatat", "disarankan", "optimalisasi", "implementasi", "efisiensi", "strategi", "maksimalisasi".
+2. Setiap section cukup pakai emoji di depan judul, tulis judulnya di baris sendiri. JANGAN gunakan bold markdown (**) atau heading markdown (##).
+3. Tiap poin cukup 1–2 kalimat pendek. Jangan paragraf panjang. Gunakan bullet point (•) tanpa indentasi, bukan angka.
+4. Kalau ada angka, sertakan dan jelaskan dengan bahasa manusiawi. Misalnya: "Omset naik 20% dari minggu lalu — naik nih!" atau "Pengeluaran hampir 60% dari omset, perlu diperhatiin ya."
+5. Kasih 1–2 emoji relevan di dalam isi kalau pas, jangan berlebihan.
+6. Jangan pakai tabel, jangan pakai indentasi aneh.
+7. Total panjang ringkasan maksimal 25–30 baris.
+8. Gunakan bahasa yang membangun semangat owner restoran, jangan nge-judge atau bikin panik.
+9. Penjelasan tiap section harus profesional, tidak terlalu singkat dan tidak terlalu panjang. Cukup 3–5 kalimat yang padat dan berbobot, langsung ngasih insight yang bisa ditindaklanjuti.
+
+Format section yang diharapkan (urutannya harus sama):
+
+📊 Ringkasan Eksekutif
+Judul di baris sendiri. Tulis 3–5 kalimat yang menggambarkan kondisi bisnis secara keseluruhan: performa omset, tren pengeluaran, dan catatan penting lainnya. Berikan gambaran singkat tapi berbobot, dan tutup dengan semangat untuk periode berikutnya.
+
+💰 Analisis Pendapatan
+Bahas omset total, rata-rata harian, dan tren naik/turun periode ini. Jelaskan faktor apa yang mungkin mempengaruhi, misalnya hari ramai, menu populer, atau promo. Bahasa santai tapi tetap profesional.
+
+💸 Analisis Pengeluaran
+Bahas total pengeluaran, rasio pengeluaran terhadap pendapatan, serta kondisi laba atau rugi. Berikan konteks angkanya dalam bahasa manusiawi, misalnya margin masih sehat atau perlu diperketat.
+
+🍱 Analisis Catering
+Sebut total pesanan catering, status distribusi, dan kontribusinya terhadap omset. Kalau volumenya masih kecil, sampaikan sebagai peluang yang terbuka lebar, bukan kekurangan.
+
+💡 Rekomendasi Bisnis
+4–5 bullet point konkret dan bisa langsung dikerjain. Bukan teori, tapi langkah praktis yang sesuai dengan data saat ini.
+
+⚠️ Potensi Risiko
+3–4 bullet point yang menyoroti hal perlu diwaspadai, tanpa membuat panik. Fokus pada antisipasi, bukan kritik.
+
+Menu terlaris boleh disinggung di Ringkasan Eksekutif atau Analisis Pendapatan kalau relevan, tidak usah dibuatkan section sendiri.
+
+---
+
+Data Restoran:
 - Nama: ${outlet.name}
 - Periode: ${period.start} s/d ${period.end}
 - Total Omset: ${formatRupiah(summary.totalRevenue)}
@@ -236,24 +277,19 @@ export class AiService {
 - Total Pengeluaran: ${formatRupiah(summary.totalExpenses)}
 - Laba/Rugi: ${formatRupiah(summary.profitLoss)} (${summary.isLoss ? 'RUGI' : 'UNTUNG'})
 
-## Tren Pendapatan (5 hari terbaru)
+Tren Pendapatan (5 hari terbaru):
 ${revenueTrendStr || '- Tidak ada data'}
 
-## Menu Terlaris
+Menu Terlaris:
 ${topMenuStr || '- Tidak ada data menu'}
 
-## Pesanan Catering
+Pesanan Catering:
 - Total: ${formatRupiah(summary.catering?.totalAmount ?? 0)}
 - Jumlah: ${summary.catering?.totalCount ?? 0} pesanan
 ${cateringStr}
 
-Berdasarkan data di atas, buatlah ringkasan performa bisnis dengan format:
+---
 
-## Ringkasan Eksekutif
-## Analisis Pendapatan
-## Analisis Pengeluaran
-## Analisis Catering
-## Rekomendasi Bisnis
-## Potensi Risiko`;
+Sekarang tulis ringkasan sesuai aturan di atas. Langsung isi, jangan ada salam pembuka atau penutup formal.`;
   }
 }
