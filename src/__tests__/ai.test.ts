@@ -189,13 +189,12 @@ describe('AiService Prompt Builder', () => {
     });
 
     expect(prompt).toContain('Bahasa Indonesia');
-    expect(prompt).toContain('📊 Ringkasan Mingguan');
-    expect(prompt).toContain('💰 Pendapatan');
-    expect(prompt).toContain('💸 Pengeluaran');
-    expect(prompt).toContain('🍽️ Menu Terlaris');
-    expect(prompt).toContain('🍱 Catering');
-    expect(prompt).toContain('💡 Saran Praktis');
-    expect(prompt).toContain('⚠️ Hal yang Perlu Diwaspadai');
+    expect(prompt).toContain('Ringkasan Eksekutif');
+    expect(prompt).toContain('Analisis Pendapatan');
+    expect(prompt).toContain('Analisis Pengeluaran');
+    expect(prompt).toContain('Analisis Catering');
+    expect(prompt).toContain('Rekomendasi Bisnis');
+    expect(prompt).toContain('Potensi Risiko');
     expect(prompt).toContain('Nasi Goreng');
     expect(prompt).toContain('UNTUNG');
     expect(prompt).toContain('Test Resto');

@@ -46,6 +46,13 @@ export function useAiSummary() {
         message: 'The configured Gemini API key is invalid or has expired. Please update the API key in Settings.',
       };
     }
+    if (msg.includes('model') || msg.includes('not found') || msg.includes('404') || msg.includes('unsupported')) {
+      return {
+        kind: 'invalid_key',
+        title: 'Gemini Model Unavailable',
+        message: 'The selected Gemini model is not available. Please choose another model in Settings.',
+      };
+    }
     if (msg.includes('network') || msg.includes('fetch') || msg.includes('connect') || msg.includes('unreachable')) {
       return {
         kind: 'network',

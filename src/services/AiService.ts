@@ -204,6 +204,13 @@ export class AiService {
     ) {
       return 'Akses Gemini API ditolak. Periksa konfigurasi API key.';
     }
+    if (
+      error.message?.includes('NOT_FOUND') ||
+      error.message?.includes('model') ||
+      error.message?.includes('404')
+    ) {
+      return 'Model Gemini tidak ditemukan atau tidak tersedia. Pilih model lain di Settings.';
+    }
     if (error.message?.includes('SAFETY')) {
       return 'Konten respons AI diblokir oleh filter keamanan. Silakan coba lagi.';
     }

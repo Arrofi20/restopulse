@@ -3,7 +3,8 @@ import { GoogleGenerativeAI } from '@google/generative-ai';
 import { SettingsRepository } from '../repositories/SettingsRepository';
 
 const ENCRYPTION_KEY = process.env.JWT_SECRET || 'default-secret-key-change-me';
-const GEMINI_MODELS = ['gemini-2.5-flash', 'gemini-2.5-pro'] as const;
+const GEMINI_MODELS = ['gemini-3.1-flash-lite', 'gemini-3-flash', 'gemini-3.1-pro'] as const;
+const DEFAULT_MODEL = 'gemini-3.1-flash-lite';
 
 function encrypt(text: string): string {
   const key = crypto.createHash('sha256').update(ENCRYPTION_KEY).digest();
@@ -64,7 +65,7 @@ export class SettingsService {
       maskedKey = maskKey(process.env.GEMINI_API_KEY);
     }
 
-    const model = modelSetting?.value || 'gemini-2.5-flash';
+    const model = modelSetting?.value || DEFAULT_MODEL;
 
     return {
       configured: source !== 'none',
@@ -104,7 +105,7 @@ export class SettingsService {
 
   async getGeminiModel(outlet_id: string): Promise<string> {
     const setting = await this.repo.get(outlet_id, 'gemini_model');
-    return setting?.value || 'gemini-2.5-flash';
+    return setting?.value || DEFAULT_MODEL;
   }
 
   async testConnection(outlet_id: string): Promise<GeminiTestResult> {

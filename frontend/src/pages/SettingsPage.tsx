@@ -122,7 +122,7 @@ export function SettingsPage() {
           </div>
           <div>
             <div className="text-gray-400">Model</div>
-            <div className="mt-1 font-medium text-white">{config?.model || 'gemini-2.5-flash'}</div>
+            <div className="mt-1 font-medium text-white">{config?.model || 'gemini-3.1-flash-lite'}</div>
           </div>
           <div>
             <div className="text-gray-400">Terakhir Diperbarui</div>
@@ -148,7 +148,7 @@ export function SettingsPage() {
       <div className="rounded-xl border border-gray-800 bg-gray-900 p-6 space-y-4">
         <h3 className="text-sm font-semibold text-white">Model Gemini</h3>
         <select
-          value={selectedModel || config?.model || 'gemini-2.5-flash'}
+          value={selectedModel || config?.model || 'gemini-3.1-flash-lite'}
           onChange={(e) => handleModelChange(e.target.value)}
           className="w-full rounded border border-gray-700 bg-gray-800 px-3 py-2.5 text-sm text-white min-h-[44px]"
         >
@@ -157,7 +157,7 @@ export function SettingsPage() {
           ))}
         </select>
         <p className="text-xs text-gray-500">
-          gemini-2.5-flash: Cepat dan hemat kuota. gemini-2.5-pro: Lebih akurat tetapi lebih lambat.
+          gemini-3.1-flash-lite: Cepat dan hemat kuota (default). gemini-3-flash: Seimbang. gemini-3.1-pro: Paling akurat tetapi lebih lambat.
         </p>
       </div>
 

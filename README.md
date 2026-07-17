@@ -31,7 +31,7 @@ Sistem informasi dasbor analitik dan laporan digital (E-Report) berbasis web unt
 | **ORM** | Prisma 7 (SQLite for dev, PostgreSQL for production) |
 | **Auth** | bcrypt, jsonwebtoken (JWT) |
 | **Validation** | Zod |
-| **AI** | Google Generative AI (gemini-2.5-flash / gemini-2.5-pro) |
+| **AI** | Google Generative AI (gemini-3.1-flash-lite / gemini-3-flash / gemini-3.1-pro) |
 | **Testing** | Vitest, Supertest, React Testing Library, k6 |
 
 

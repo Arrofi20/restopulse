@@ -42,7 +42,7 @@ describe('Settings API', () => {
       expect(res.body.success).toBe(true);
       expect(res.body.data.configured).toBe(false);
       expect(res.body.data.source).toBe('none');
-      expect(res.body.data.model).toBe('gemini-2.5-flash');
+      expect(res.body.data.model).toBe('gemini-3.1-flash-lite');
     });
 
     it('returns env source when GEMINI_API_KEY is set', async () => {
@@ -132,7 +132,7 @@ describe('Settings API', () => {
       const res = await request(app)
         .post('/api/settings/gemini/model')
         .set('Authorization', `Bearer ${token}`)
-        .send({ model: 'gemini-2.5-pro' });
+        .send({ model: 'gemini-3.1-pro' });
 
       expect(res.status).toBe(200);
 
@@ -140,7 +140,7 @@ describe('Settings API', () => {
         .get('/api/settings/gemini')
         .set('Authorization', `Bearer ${token}`);
 
-      expect(configRes.body.data.model).toBe('gemini-2.5-pro');
+      expect(configRes.body.data.model).toBe('gemini-3.1-pro');
     });
 
     it('rejects invalid model', async () => {
@@ -160,8 +160,8 @@ describe('Settings API', () => {
         .set('Authorization', `Bearer ${token}`);
 
       expect(res.status).toBe(200);
-      expect(res.body.data).toContain('gemini-2.5-flash');
-      expect(res.body.data).toContain('gemini-2.5-pro');
+      expect(res.body.data).toContain('gemini-3.1-flash-lite');
+      expect(res.body.data).toContain('gemini-3.1-pro');
     });
   });
 
