@@ -49,7 +49,7 @@ app.use('/api/settings', settingsRoutes);
 
 // Serve frontend (React build)
 app.use(express.static(path.join(__dirname, '../frontend/dist')));
-app.get('/{*splat}', (req, res) => {
+app.use((req, res) => {
   res.sendFile(path.join(__dirname, '../frontend/dist/index.html'));
 });
 
