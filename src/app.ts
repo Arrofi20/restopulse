@@ -1,6 +1,7 @@
 import express, { Application } from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import path from 'path';
 import authRoutes from './routes/auth.routes';
 import salesRoutes from './routes/sales.routes';
 import adminRoutes from './routes/admin.routes';
@@ -15,7 +16,6 @@ import { errorHandler } from './middleware/errorHandler';
 import { authRateLimiter } from './middleware/rateLimiter';
 
 dotenv.config();
-
 export const app: Application = express();
 
 app.use(
@@ -26,10 +26,6 @@ app.use(
 );
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
-app.get('/', (req, res) => {
-  res.status(200).json({ message: 'RestoPulse API is running', version: '1.1.0' });
-});
 
 app.get('/health', (req, res) => {
   res.status(200).json({
@@ -50,5 +46,11 @@ app.use('/api/ai', aiRoutes);
 app.use('/api/expenses', expenseRoutes);
 app.use('/api/catering', cateringRoutes);
 app.use('/api/settings', settingsRoutes);
+
+// Serve frontend (React build)
+app.use(express.static(path.join(__dirname, '../frontend/dist')));
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../frontend/dist/index.html'));
+});
 
 app.use(errorHandler);
