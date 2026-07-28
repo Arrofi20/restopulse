@@ -85,24 +85,26 @@ restopulse/
 │   ├── server.ts                 # Entry point, port, env warnings
 │   ├── controllers/              # Request/response handling (10 controllers)
 │   ├── services/                 # Business logic (11 services)
-│   ├── repositories/             # Database access layer (11 repositories)
+│   ├── repositories/             # Database access layer (9 repositories)
 │   ├── routes/                   # Route definitions (10 route files)
-│   ├── middleware/                # Auth, error handler, rate limiter
+│   ├── middleware/                # Auth JWT, error handler, rate limiter
 │   ├── validation/               # Zod schemas (auth, sales, data mgmt)
 │   ├── lib/                      # Prisma client, JWT utilities
-│   └── __tests__/                # Backend tests (11 files, 118 tests)
+│   └── __tests__/                # Backend tests (11 test files, 118 tests)
 ├── frontend/                     # Frontend (React 19 + Vite + Tailwind)
 │   └── src/
-│       ├── pages/                # 8 page components
+│       ├── pages/                # 7 page components
 │       ├── components/           # Reusable UI (dashboard, report, catering, expense, layout, ui)
+│       │   └── __tests__/        # 4 test files
 │       ├── hooks/                # 7 custom hooks
+│       │   └── __tests__/        # 3 test files
 │       ├── types/                # 5 type definition files
 │       ├── lib/                  # PDF/CSV generators, chart config, formatter
 │       ├── api/                  # API client (fetch wrapper with JWT)
 │       ├── contexts/             # Auth context
-│       └── __tests__/            # Frontend tests (7 files, 32 tests)
+│       └── test/                 # Vitest setup
 ├── prisma/                       # Database
-│   ├── schema.prisma             # SQLite dev schema (10 models)
+│   ├── schema.prisma             # SQLite dev schema (9 models)
 │   ├── schema.postgresql.prisma  # PostgreSQL production schema
 │   └── migrations/               # 4 migrations
 ├── scripts/                      # Utility scripts (seed, env setup, health check)
